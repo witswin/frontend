@@ -34,8 +34,8 @@ const RenderNavbarDropdown = () => {
 }
 
 type NavbarDropdownProps = {
-  className: string
-  closeDropdown: Function
+  className?: string
+  closeDropdown?: Function
 }
 
 const navItems = [
@@ -95,7 +95,7 @@ const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
             as={Link}
             key={item.name}
             href={item.link}
-            onClick={() => closeDropdown()}
+            onClick={() => closeDropdown?.()}
             className={`mb-2 flex h-11 w-52 cursor-pointer items-center justify-between rounded-lg border-2 bg-gray30 px-4 transition-all duration-75 ${
               path === item.route
                 ? "mb-2 rounded-lg border-gray100 bg-gray10 px-4"
@@ -117,7 +117,7 @@ const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
       })}
 
       <Link
-        onClick={() => closeDropdown()}
+        onClick={() => closeDropdown?.()}
         href={RoutePath.NFT}
         className={`navbar-dropdown__item relative z-10 mt-12 flex !h-auto cursor-pointer items-center justify-between overflow-hidden rounded-xl border-gray00 bg-gray00 bg-g-primary p-1 py-2.5 pl-4 pr-2 transition-all duration-75 before:absolute before:inset-[2px] before:-z-10 before:block before:rounded-lg before:bg-gray00 before:content-[''] hover:bg-gray20`}
       >
