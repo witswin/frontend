@@ -193,7 +193,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
             </ClaimAndEnrollButton>
           ) : isEnrolled ? (
             enterState === 1 ? (
-              <Link href={`/${competition.id}`}>
+              <Link href={`/quiztap/${competition.id}`}>
                 <ClaimAndEnrollButton
                   height="48px"
                   $fontSize="14px"
