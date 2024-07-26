@@ -1,39 +1,42 @@
-"use client";
+"use client"
 
-import { useOutsideClick } from "@/utils/hooks/dom";
-import RoutePath from "@/utils/routes";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React, { useRef } from "react";
-import { useState } from "react";
+import { useOutsideClick } from "@/utils/hooks/dom"
+import RoutePath from "@/utils/routes"
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import React, { useRef } from "react"
+import {
+  Button,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/react"
 
 const RenderNavbarDropdown = () => {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
   return (
     <span className="ml-auto cursor-pointer">
-      <Image
-        src="/assets/images/navbar/navbar-dropdown-icon.svg"
-        width={31}
-        height={31}
-        alt="unitap menu"
-        onClick={() => setIsDropdownVisible(!isDropdownVisible)}
-      />
-      {isDropdownVisible && (
-        <NavbarDropdown
-          closeDropdown={() => setIsDropdownVisible(false)}
-          className="navbar__dropdown__component"
-        />
-      )}
+      <Popover placement="bottom">
+        <PopoverTrigger>
+          <Image
+            src="/assets/images/navbar/navbar-dropdown-icon.svg"
+            width={31}
+            height={31}
+            alt="unitap menu"
+          />
+        </PopoverTrigger>
+        <PopoverContent className="cursor-default rounded-lg border-2 border-gray00 bg-gray20 px-3 pb-1 pt-2.5">
+          <NavbarDropdown />
+        </PopoverContent>
+      </Popover>
     </span>
-  );
-};
+  )
+}
 
 type NavbarDropdownProps = {
-  className: string;
-  closeDropdown: Function;
-};
+  className: string
+  closeDropdown: Function
+}
 
 const navItems = [
   {
@@ -77,25 +80,19 @@ const navItems = [
     iconHeight: "auto",
     route: RoutePath.PROVIDERDASHBOARD,
   },
-];
+]
 
 const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
-  const path = usePathname();
+  const path = usePathname()
 
-  const ref = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(ref, () => closeDropdown());
+  const ref = useRef<HTMLDivElement>(null)
 
   return (
-    <div
-      ref={ref}
-      className={`absolute right-8 top-14 z-30 cursor-default rounded-lg border-2 border-gray00 bg-gray20 px-3 pb-1 pt-2.5 ${
-        className ? className : ""
-      }`}
-    >
+    <div ref={ref} className={` ${className ? className : ""}`}>
       {navItems.map((item) => {
         return (
-          <Link
+          <Button
+            as={Link}
             key={item.name}
             href={item.link}
             onClick={() => closeDropdown()}
@@ -115,8 +112,8 @@ const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
               {item.name}
             </p>
             <Image alt={item.name} src={item.icon} width={20} height={28} />
-          </Link>
-        );
+          </Button>
+        )
       })}
 
       <Link
@@ -134,7 +131,7 @@ const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
         />
       </Link>
     </div>
-  );
-};
+  )
+}
 
-export default RenderNavbarDropdown;
+export default RenderNavbarDropdown

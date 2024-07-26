@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 const Header = () => {
   return (
@@ -29,18 +29,18 @@ const Header = () => {
                 y2="27.812"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stopColor="#4BF2A2" stop-opacity="0.16" />
+                <stop stopColor="#4BF2A2" stopOpacity="0.16" />
                 <stop
                   offset="0.380208"
                   stopColor="#A89FE7"
-                  stop-opacity="0.35"
+                  stopOpacity="0.35"
                 />
                 <stop
                   offset="0.669499"
                   stopColor="#E1C4F4"
-                  stop-opacity="0.31"
+                  stopOpacity="0.31"
                 />
-                <stop offset="1" stopColor="#DD40CD" stop-opacity="0.31" />
+                <stop offset="1" stopColor="#DD40CD" stopOpacity="0.31" />
               </linearGradient>
               <linearGradient
                 id="paint1_linear_11015_109915"
@@ -62,7 +62,7 @@ const Header = () => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
