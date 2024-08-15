@@ -23,7 +23,6 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   ]
   const peopleEnrolled = 1398
   const maxUserEntry = 1400
-  const title = "Optimism Quiz Tap"
 
   const [loading, setLoading] = useState(false)
   const [enterState, setEnterState] = useState(0)
@@ -65,7 +64,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
         <div className="top mb-3 flex flex-col items-start justify-between gap-3 lg:mb-0 lg:flex-row lg:gap-0">
           <div className="title-wrap flex flex-col justify-center gap-1 md:flex-row md:items-center">
             <div className="title flex items-center gap-1 text-base font-semibold leading-5 text-white">
-              {title}
+              {competition.title}
               <div className="h-1 w-1 rounded-full bg-[#D9D9D9]"></div>
             </div>
             <div className="text-sm font-normal leading-5 text-gray100">
@@ -115,53 +114,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
             {competition.prizeAmount + " " + competition.token}{" "}
           </p>
         </div>
-        <div className="requirements mt-4 flex h-[22px] gap-2">
-          {(showAllPermissions ? constraints : constraints)
-            // .filter((permission) => permission.type === "VER")
-            // .slice(0, 6)
-            .map((permission, key) => (
-              <Tooltip
-                // onClick={openEnrollModal.bind(null, raffle, "Verify")}
-                onClick={() => {
-                  console.log("")
-                }}
-                className={
-                  "rounded-lg border border-gray70 bg-gray50 px-3 py-2 transition-colors hover:bg-gray10 "
-                }
-                key={key}
-                // text={replacePlaceholders(
-                // 	(permission.isReversed
-                // 		? permission.negativeDescription
-                // 		: permission.description)!,
-                // 	params[permission.name],
-                // )}
-                text={""}
-              >
-                <div className="flex items-center gap-3">
-                  {/* {permission.isReversed && "Not "} */}
-                  {/* {permission.title} */}
-                </div>
-              </Tooltip>
-            ))}
-
-          {constraints.length > 6 && (
-            <button
-              onClick={setShowAllPermissions.bind(null, !showAllPermissions)}
-              className="z-10 flex items-center rounded-lg border border-gray70 bg-gray60 px-3 py-2 transition-colors"
-            >
-              <span>{showAllPermissions ? "Show less" : "Show more"}</span>
-              <Image
-                width={12}
-                height={7}
-                alt="angle down"
-                src="/assets/images/token-tap/angle-down.svg"
-                className={`ml-2 ${
-                  showAllPermissions ? "rotate-180" : ""
-                } transition-transform`}
-              />
-            </button>
-          )}
-        </div>
+        <div className="requirements mt-4 flex h-[22px] gap-2"></div>
 
         <div className="footer mt-3 flex w-full flex-col justify-between gap-4 lg:flex-row lg:items-center ">
           <div className="counter flex w-full max-w-[520px] flex-col justify-between rounded-xl border-2 border-gray60 bg-gray10 px-4 py-2 md:flex-row md:items-center md:p-0 md:pl-16 md:pr-12">
@@ -214,18 +167,12 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
                 height="48px"
                 $fontSize="14px"
               >
-                <div className="relative flex w-full">
-                  <span
-                    className={`bg-g-primary bg-clip-text text-transparent`}
+                <div className="relative">
+                  <div
+                    className={`bg-g-primary text-center bg-clip-text text-transparent`}
                   >
                     Enrolled
-                  </span>
-                  <Icon
-                    className="absolute right-0 top-[-2px]"
-                    iconSrc="/assets/images/prize-tap/enrolled-ticket.svg"
-                    width="27px"
-                    height="24px"
-                  />
+                  </div>
                 </div>
               </EnrolledButton>
             )

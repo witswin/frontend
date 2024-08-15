@@ -1,8 +1,8 @@
 import QuizTapListProvider from "@/context/quiztapListProvider"
 import { fetchQuizzesApi } from "@/utils/api"
 import { FC } from "react"
-
-import QuizTapMain from "./components/main"
+import Header from "./components/header"
+import QuizRaffleList from "./components/quizRaffleList"
 
 const QuizListPage: FC = async () => {
   const res = await fetchQuizzesApi()
@@ -14,7 +14,8 @@ const QuizListPage: FC = async () => {
       nextInitial={res.next}
       previousInitial={res.previous}
     >
-      <QuizTapMain />
+      <Header />
+      <QuizRaffleList />
     </QuizTapListProvider>
   )
 }

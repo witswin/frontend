@@ -1,55 +1,55 @@
-import { Competition, CompetitionStatus, QuestionResponse } from "@/types";
-import { WithPagination } from "../pagination";
-import { serverFetch } from ".";
-import { axiosInstance } from "./base";
+import { Competition, CompetitionStatus, QuestionResponse } from "@/types"
+import { WithPagination } from "../pagination"
+import { serverFetch } from "."
+import { axiosInstance } from "./base"
 
 export const fetchQuizzesApi = async (
-  pageIndex?: number,
+  pageIndex?: number
 ): Promise<WithPagination<Competition>> => {
   const response: WithPagination<Competition> = await serverFetch(
-    "/api/quiztap/competitions/" + (pageIndex ? `?page=${pageIndex}` : ""),
-  );
+    "/api/quiz/competitions/" + (pageIndex ? `?page=${pageIndex}` : "")
+  )
 
-  return response;
-};
+  return response
+}
 
 export const fetchQuizQuestionApi = async (questionId: number) => {
   const response = await axiosInstance.get<QuestionResponse>(
-    "/api/quiztap/questions/" + questionId,
-  );
+    "/api/quiz/questions/" + questionId
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const submitAnswerApi = async (
   questionId: number,
   userEnrollmentPk: number,
-  choicePk: number,
+  choicePk: number
 ) => {
   const response = await axiosInstance.post(
-    "/api/quiztap/competitions/submit-answer/",
+    "/api/quiz/competitions/submit-answer/",
     {
       userCompetition: userEnrollmentPk,
       selectedChoice: choicePk,
       question: questionId,
-    },
-  );
+    }
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const enrollQuizApi = async (id: number) => {
   const response: { id: number; competition: Competition } = (
-    await axiosInstance.post("/api/quiztap/competitions/enroll/", {
+    await axiosInstance.post("/api/quiz/competitions/enroll/", {
       competition: id,
     })
-  ).data;
+  ).data
 
-  return response;
-};
+  return response
+}
 
 export const fetchQuizApi = async (id: number): Promise<Competition> => {
-  return (await fetchQuizzesApi()).results.find((item) => item.id == id)!;
+  return (await fetchQuizzesApi()).results.find((item) => item.id == id)!
 
   // return {
   //   title: "Optimism Quiz Tap",
@@ -88,28 +88,28 @@ export const fetchQuizApi = async (id: number): Promise<Competition> => {
   //   },
   //   details: "Get ready for a fun ride into the future",
   // };
-};
+}
 
 export const fetchUserQuizEnrollment = async (
   userToken: string,
-  competitionPk: number,
+  competitionPk: number
 ) => {
-  const res = await axiosInstance.get<WithPagination<{ id: number }>>(
-    "/api/quiztap/competitions/enroll/?competition_pk=" + competitionPk,
+  const res = await axiosInstance.get<{ id: number }[]>(
+    "/api/quiz/competitions/enroll/?competition_pk=" + competitionPk,
     {
       headers: {
         Authorization: `TOKEN ${userToken}`,
       },
-    },
-  );
+    }
+  )
 
-  return res.data.results[0].id;
-};
+  return res.data[0].id
+}
 
 export const fetchUsersQuizEnrollments = async () => {
   const res = await axiosInstance.get<
-    WithPagination<{ id: number; competition: Competition }>
-  >("/api/quiztap/competitions/enroll/");
+    { id: number; competition: Competition }[]
+  >("/api/quiz/competitions/enroll/")
 
-  return res.data.results;
-};
+  return res.data
+}

@@ -1,10 +1,12 @@
-"use client";
+"use client"
 
-import { useQuizTapListContext } from "@/context/quiztapListProvider";
-import QuizCard from "./quizCard";
+import { useQuizTapListContext } from "@/context/quiztapListProvider"
+import QuizCard from "./quizCard"
 
 const QuizRaffleList = () => {
-  const { quizList } = useQuizTapListContext();
+  const { quizList } = useQuizTapListContext()
+
+  console.log(quizList)
 
   return (
     <div>
@@ -12,7 +14,7 @@ const QuizRaffleList = () => {
         <QuizCard key={index} competition={quiz} />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default QuizRaffleList;
+export default QuizRaffleList
