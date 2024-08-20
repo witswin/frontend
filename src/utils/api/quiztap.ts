@@ -49,7 +49,11 @@ export const enrollQuizApi = async (id: number) => {
 }
 
 export const fetchQuizApi = async (id: number): Promise<Competition> => {
-  return (await fetchQuizzesApi()).results.find((item) => item.id == id)!
+  const response: Competition = await serverFetch(
+    "/api/quiz/competitions/" + id + "/"
+  )
+
+  return response
 
   // return {
   //   title: "Optimism Quiz Tap",

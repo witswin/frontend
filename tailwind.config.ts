@@ -78,6 +78,8 @@ const config: Config = {
         "dark-primary":
           "linear-gradient(to right, #22222f, #21232e, #242130, #231f2f)",
         "dark-primary-2": "url('/assets/images/token-tap/bg-primary-dark.svg')",
+        "primary-gradient":
+          "linear-gradient(92.08deg, #4097CF -2.6%, #487DC3 44.42%, #5355D6 99.71%)",
         // "dark-primary-2":
         //   "radial-gradient(174.04% 3217.67% at 17.05% 37.02%, #2A3837 0%, #3F2B44 42.19%, #322837 100%)",
         primaryGradient:

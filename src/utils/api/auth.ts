@@ -1,6 +1,9 @@
-import { UserProfile } from "@/types";
-import { axiosInstance } from "./base";
-import { AxiosError } from "axios";
+import { UserProfile } from "@/types"
+import axios, { AxiosError } from "axios"
+
+export const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_AUTHENTICATION_URL,
+})
 
 export async function getUserProfile(address: string, signature: string) {
   const response = await axiosInstance.post<UserProfile>(
@@ -8,17 +11,17 @@ export async function getUserProfile(address: string, signature: string) {
     {
       username: address,
       password: signature,
-    },
-  );
-  return response.data;
+    }
+  )
+  return response.data
 }
 
 export async function createUserProfile(address: string) {
   const response = await axiosInstance.post<UserProfile>(
     `/api/gastap/user/create/`,
-    { address },
-  );
-  return response.data;
+    { address }
+  )
+  return response.data
 }
 
 export async function checkUsernameValid(username: string, token: string) {
@@ -31,10 +34,10 @@ export async function checkUsernameValid(username: string, token: string) {
       headers: {
         Authorization: `token ${token}`,
       },
-    },
-  );
+    }
+  )
 
-  return response.data;
+  return response.data
 }
 
 export async function checkUserExists(walletAddress: string): Promise<boolean> {
@@ -42,16 +45,16 @@ export async function checkUserExists(walletAddress: string): Promise<boolean> {
     "/api/auth/user/check-exists/",
     {
       walletAddress,
-    },
-  );
+    }
+  )
 
-  return response.data.exists;
+  return response.data.exists
 }
 
 export async function loginOrRegister(
   walletAddress: string,
   signature: string,
-  message: string,
+  message: string
 ) {
   const response = await axiosInstance.post<UserProfile>(
     "/api/auth/user/wallet-login/",
@@ -59,12 +62,12 @@ export async function loginOrRegister(
       walletAddress,
       signature,
       message,
-    },
-  );
+    }
+  )
 
-  response.data.username = response.data.username ?? `User${response.data?.pk}`;
+  response.data.username = response.data.username ?? `User${response.data?.pk}`
 
-  return response.data;
+  return response.data
 }
 
 export async function getUserProfileWithTokenAPI(token: string) {
@@ -74,18 +77,18 @@ export async function getUserProfileWithTokenAPI(token: string) {
       headers: {
         Authorization: `Token ${token}`,
       },
-    },
-  );
+    }
+  )
 
-  response.data.username = response.data.username ?? `User${response.data?.pk}`;
-  return response.data;
+  response.data.username = response.data.username ?? `User${response.data?.pk}`
+  return response.data
 }
 
 export async function sponsorAPI(address: string) {
   const response = await axiosInstance.post("/api/auth/user/sponsor/", {
     address: address,
-  });
-  return response.data;
+  })
+  return response.data
 }
 
 export async function setWalletAPI(
@@ -93,7 +96,7 @@ export async function setWalletAPI(
   wallet: string,
   walletType: string,
   message: string,
-  signedMessage: string,
+  signedMessage: string
 ) {
   const response = await axiosInstance.post(
     "/api/auth/user/wallets/",
@@ -107,9 +110,9 @@ export async function setWalletAPI(
       headers: {
         Authorization: `Token ${token}`,
       },
-    },
-  );
-  return response.data;
+    }
+  )
+  return response.data
 }
 
 export const setUsernameApi = async (username: string, userToken: string) => {
@@ -122,11 +125,11 @@ export const setUsernameApi = async (username: string, userToken: string) => {
       headers: {
         Authorization: `Token ${userToken}`,
       },
-    },
-  );
+    }
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const deleteWalletApi = async (userToken: string, walletId: number) => {
   const response = await axiosInstance.delete(
@@ -135,53 +138,53 @@ export const deleteWalletApi = async (userToken: string, walletId: number) => {
       headers: {
         Authorization: `token ${userToken}`,
       },
-    },
-  );
+    }
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const connectGitCoinPassport = async (address: string) => {
   const response = await axiosInstance.post(
     "api/auth/user/connect/gitcoin-passport/",
     {
       userWalletAddress: address,
-    },
-  );
+    }
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const connectDynamicConnection = async (
   connectionName: string,
-  address: string,
+  address: string
 ) => {
   const response = await axiosInstance.post(
     "api/auth/user/connect/" + connectionName + "/",
     {
       userWalletAddress: address,
-    },
-  );
+    }
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export const getTwitterOAuthUrlApi = async () => {
-  const res = await axiosInstance.get("/api/auth/twitter/");
+  const res = await axiosInstance.get("/api/auth/twitter/")
 
-  return res.data.url as string;
-};
+  return res.data.url as string
+}
 
 export const verifyTwitterApi = async (
   oauthToken: string,
-  oauthVerifier: string,
+  oauthVerifier: string
 ) => {
   const res = await axiosInstance.get(`/api/auth/twitter/callback/`, {
     params: {
       oauth_verifier: oauthVerifier,
       oauth_token: oauthToken,
     },
-  });
+  })
 
-  return res.data;
-};
+  return res.data
+}
