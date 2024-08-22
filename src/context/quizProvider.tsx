@@ -163,10 +163,10 @@ const QuizContextProvider: FC<
 
     socket.current.client.onopen = () => {
       loginUser(userToken, socket.current.client!)
-      interval = setInterval(() => {
-        previousPing = new Date()
-        socket.current.client?.send(JSON.stringify({ command: "PING" }))
-      }, 1000)
+      // interval = setInterval(() => {
+      //   previousPing = new Date()
+      //   socket.current.client?.send(JSON.stringify({ command: "PING" }))
+      // }, 1000)
     }
 
     socket.current.client.onerror = (e) => {

@@ -1,6 +1,9 @@
 import { Noto_Sans } from "next/font/google"
 
-const headerFont = Noto_Sans({})
+const headerFont = Noto_Sans({
+  preload: false,
+  subsets: ["latin"],
+})
 
 const Header = () => {
   return (

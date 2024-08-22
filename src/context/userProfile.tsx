@@ -23,7 +23,7 @@ import {
   useMediumRefresh,
   useRefreshWithInitial,
 } from "@/utils/hooks/refresh"
-import { IntervalType } from "@/constants"
+import { FAST_INTERVAL, IntervalType } from "@/constants"
 import { useWalletAccount } from "@/utils/wallet"
 import { NullCallback } from "@/utils"
 import { Address, isAddressEqual } from "viem"
@@ -137,26 +137,30 @@ export const UserContextProvider: FC<
     setUserProfile({ ...userProfile })
   }
 
-  useFastRefresh(() => {
-    const getUserProfileWithToken = async () => {
-      setUserProfileLoading(true)
-      try {
-        const userProfileWithToken: UserProfile =
-          await getUserProfileWithTokenAPI(userToken!)
-        setUserProfile(userProfileWithToken)
+  useRefreshWithInitial(
+    () => {
+      const getUserProfileWithToken = async () => {
+        setUserProfileLoading(true)
+        try {
+          const userProfileWithToken: UserProfile =
+            await getUserProfileWithTokenAPI(userToken!)
+          setUserProfile(userProfileWithToken)
 
-        document.cookie = `userToken=${userToken!};path=/;`
-      } finally {
-        setUserProfileLoading(false)
+          document.cookie = `userToken=${userToken!};path=/;`
+        } finally {
+          setUserProfileLoading(false)
+        }
       }
-    }
 
-    document.cookie = "userToken=" + userToken + ";path=/;"
+      document.cookie = "userToken=" + userToken + ";path=/;"
 
-    if (userToken) {
-      getUserProfileWithToken()
-    }
-  }, [userToken, userProfile, setUserProfile])
+      if (userToken) {
+        getUserProfileWithToken()
+      }
+    },
+    FAST_INTERVAL,
+    [userToken, userProfile, setUserProfile]
+  )
 
   const deleteWallet = async (address: Address) => {
     if (!userProfile || !userToken) return
