@@ -1,15 +1,17 @@
-"use client";
+"use client"
 
-import Icon from "@/components/ui/Icon";
-import Timer from "./components/timer";
-import QuestionsList from "./components/questionsList";
-import WaitingIdle from "./components/waitingIdle";
-import { useQuizContext } from "@/context/quizProvider";
-import QuestionPrompt from "./components/questionPrompt";
-import RestTime from "./components/restTime";
-import QuizFinished from "./components/finished";
+import Icon from "@/components/ui/Icon"
+import Timer from "./components/timer"
+import QuestionsList from "./components/questionsList"
+import WaitingIdle from "./components/waitingIdle"
+import { useQuizContext } from "@/context/quizProvider"
+import QuestionPrompt from "./components/questionPrompt"
+import RestTime from "./components/restTime"
+import QuizFinished from "./components/finished"
 
 const QuizItemPage = () => {
+  const { hint, stateIndex, ping } = useQuizContext()
+
   return (
     <div className="quiz-main-wrapper relative w-full">
       <main className="quiz-main-content h-full w-full flex-1 rounded-2xl p-3">
@@ -17,7 +19,7 @@ const QuizItemPage = () => {
           <p className="text-[#997EA4]">Quiz</p>
           <Timer />
 
-          {/* <button
+          <button
             disabled={hint <= 0 || stateIndex <= 0}
             className="flex items-center rounded-xl border-2 border-gray70 bg-gray00 px-2 text-gray100 disabled:opacity-60"
           >
@@ -30,29 +32,33 @@ const QuizItemPage = () => {
             />
             <span className="py-1">Hint</span>
             <span className="ml-4 border-l-2 border-gray70 py-1 pl-2">1</span>
-          </button> */}
+          </button>
         </div>
 
         <QuestionsList />
 
         <RenderQuizItemBody />
+
+        <div className="text-right text-sm mt-20">
+          <p className="text-[#997EA4]">Ping: {ping}</p>
+        </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
 const RenderQuizItemBody = () => {
-  const { stateIndex, isRestTime, finished } = useQuizContext();
+  const { stateIndex, isRestTime, finished } = useQuizContext()
 
-  if (finished) return <QuizFinished />;
+  if (finished) return <QuizFinished />
 
   if (stateIndex <= 0) {
-    return <WaitingIdle />;
+    return <WaitingIdle />
   }
 
-  if (isRestTime) return <RestTime />;
+  if (isRestTime) return <RestTime />
 
-  return <QuestionPrompt />;
-};
+  return <QuestionPrompt />
+}
 
-export default QuizItemPage;
+export default QuizItemPage

@@ -19,6 +19,7 @@ import {
   useState,
 } from "react"
 import { useUserProfileContext } from "./userProfile"
+import logger from "@/core/logger"
 
 export type QuizContextProps = {
   remainingPeople: number
@@ -39,6 +40,7 @@ export type QuizContextProps = {
   finished: boolean
   totalParticipantsCount: number
   amountWinPerUser: number
+  ping: number
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -59,11 +61,17 @@ export const QuizContext = createContext<QuizContextProps>({
   finished: false,
   totalParticipantsCount: 0,
   amountWinPerUser: 0,
+  ping: -1,
 })
 
 export const statePeriod = 15000
 export const restPeriod = 5000
 const totalPeriod = restPeriod + statePeriod
+
+const loginUser = (userToken: string, socket: WebSocket) => {
+  logger.log(userToken)
+  // socket.send(JSON.stringify({ command: "LOGIN", args: { token: userToken } }))
+}
 
 export const useQuizContext = () => useContext(QuizContext)
 
@@ -82,6 +90,8 @@ const QuizContextProvider: FC<
   const [stateIndex, setStateIndex] = useState(-1)
   const [previousQuestion, setPreviousQuestion] =
     useState<QuestionResponse | null>(null)
+
+  const [ping, setPing] = useState(-1)
 
   const [answersHistory, setAnswersHistory] = useState<(number | null)[]>(
     Array.from(new Array(quiz.questions.length).fill(null))
@@ -133,22 +143,59 @@ const QuizContextProvider: FC<
 
   useEffect(() => {
     if (!userToken) return
-    document.cookie = `userToken=${userToken};path=/;`
+    let isMounted = true
+
+    let interval: NodeJS.Timeout
+    let previousPing: Date | null
+
+    const reconnect = () => {
+      socket.current.client?.close()
+      socket.current.client = null
+      if (!isMounted) return
+      socket.current.client = new WebSocket(
+        process.env.NEXT_PUBLIC_API_URL! + "/ws/quiz/" + quiz.id + "/"
+      )
+    }
 
     socket.current.client = new WebSocket(
       process.env.NEXT_PUBLIC_API_URL! + "/ws/quiz/" + quiz.id + "/"
     )
 
     socket.current.client.onopen = () => {
-      setTimeout(() => {
+      loginUser(userToken, socket.current.client!)
+      interval = setInterval(() => {
+        previousPing = new Date()
         socket.current.client?.send(JSON.stringify({ command: "PING" }))
-      }, 300)
+      }, 1000)
     }
 
     socket.current.client.onerror = (e) => {
-      console.log("Error", e)
+      reconnect()
     }
-    socket.current.client.onmessage = console.log
+
+    socket.current.client.onmessage = (e) => {
+      if (e.data === "PONG") {
+        const now = new Date()
+        const timePassed = now.getTime() - previousPing!.getTime()
+        setPing(timePassed)
+        logger.log(timePassed)
+      } else {
+        const data = JSON.parse(e.data)
+
+        if (data.type === "new_question") {
+          setQuestion(data.question)
+        }
+
+        logger.log(data)
+      }
+    }
+
+    return () => {
+      isMounted = false
+      socket.current.client?.close()
+      socket.current.client = null
+      if (interval) clearInterval(interval)
+    }
   }, [userToken])
 
   const submitUserAnswer = useCallback(async () => {
@@ -312,6 +359,7 @@ const QuizContextProvider: FC<
         finished,
         totalParticipantsCount,
         amountWinPerUser,
+        ping,
       }}
     >
       {children}
