@@ -1,12 +1,8 @@
-import {
-  restPeriod,
-  statePeriod,
-  useQuizContext,
-} from "@/context/quizProvider";
-import { FC, Fragment, useEffect, useRef } from "react";
+import { restPeriod, statePeriod, useQuizContext } from "@/context/quizProvider"
+import { FC, Fragment, useEffect, useRef } from "react"
 
 const QuestionsList = () => {
-  const { quiz } = useQuizContext();
+  const { quiz } = useQuizContext()
   return (
     <div className="mt-10 flex justify-center rounded-xl border-2 border-gray50 bg-gray20 p-4">
       {quiz?.questions.map((question, index) => (
@@ -16,16 +12,16 @@ const QuestionsList = () => {
         </Fragment>
       ))}
     </div>
-  );
-};
+  )
+}
 
 const Separator: FC<{ index: number }> = ({ index }) => {
-  const { stateIndex, timer, isRestTime } = useQuizContext();
+  const { stateIndex, timer, isRestTime } = useQuizContext()
 
   const width =
     isRestTime && index === stateIndex
       ? Math.min((28 * (restPeriod - timer)) / restPeriod, restPeriod)
-      : 28;
+      : 28
 
   return (
     <div className="relative mx-2 my-auto h-[2px] w-7 rounded-lg bg-gray50">
@@ -34,70 +30,70 @@ const Separator: FC<{ index: number }> = ({ index }) => {
         style={{ width }}
       ></div>
     </div>
-  );
-};
+  )
+}
 
 const QuestionItem: FC<{ index: number }> = ({ index }) => {
   const { stateIndex, timer, isRestTime, answersHistory, userAnswersHistory } =
-    useQuizContext();
+    useQuizContext()
 
-  const ref = useRef<SVGRectElement>(null);
+  const ref = useRef<SVGRectElement>(null)
 
   useEffect(() => {
-    var progress: any = ref.current;
+    var progress: any = ref.current
 
-    if (!progress) return;
-    let frameCount = 0;
-    let anim: number;
+    if (!progress) return
+    let frameCount = 0
+    let anim: number
 
     const timeout = setTimeout(() => {
       var borderLen = progress.getTotalLength() + 5,
-        offset = borderLen;
-      progress.style.strokeDashoffset = borderLen;
-      progress.style.strokeDasharray = borderLen + "," + borderLen;
+        offset = borderLen
+      progress.style.strokeDashoffset = borderLen
+      progress.style.strokeDasharray = borderLen + "," + borderLen
 
       let durationInSeconds =
-        statePeriod / 1000 - (statePeriod / 1000 - timer / 1000);
+        statePeriod / 1000 - (statePeriod / 1000 - timer / 1000)
 
-      durationInSeconds += durationInSeconds / 4;
+      durationInSeconds += durationInSeconds / 5
 
-      const framesPerSecond = 60;
+      const framesPerSecond = 60
 
-      const totalFrames = durationInSeconds * framesPerSecond;
-      const decrementAmount = borderLen / totalFrames;
+      const totalFrames = durationInSeconds * framesPerSecond
+      const decrementAmount = borderLen / totalFrames
 
       function progressBar() {
-        offset -= decrementAmount;
-        progress.style.strokeDashoffset = offset;
-        frameCount++;
+        offset -= decrementAmount
+        progress.style.strokeDashoffset = offset
+        frameCount++
 
         // Stop animation when duration is reached
         if (frameCount < totalFrames) {
-          anim = window.requestAnimationFrame(progressBar);
+          anim = window.requestAnimationFrame(progressBar)
         } else {
-          window.cancelAnimationFrame(anim);
+          window.cancelAnimationFrame(anim)
         }
       }
 
       // Start animation
-      anim = window.requestAnimationFrame(progressBar);
-    }, 0);
+      anim = window.requestAnimationFrame(progressBar)
+    }, 0)
 
     // Clean up on component unmount or state change
     return () => {
-      window.cancelAnimationFrame(anim);
-      clearTimeout(timeout);
-    };
-  }, [stateIndex]);
+      window.cancelAnimationFrame(anim)
+      clearTimeout(timeout)
+    }
+  }, [stateIndex])
 
-  if (index > stateIndex || isRestTime)
+  if (stateIndex > index || isRestTime)
     return (
       <div
-        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
+        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
       >
         {index}
       </div>
-    );
+    )
 
   return (
     <div
@@ -127,7 +123,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
         </svg>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default QuestionsList;
+export default QuestionsList

@@ -189,11 +189,11 @@ export const RenderNavbarWalletAddress = () => {
   const { setIsWalletPromptOpen } = useGlobalContext()
   const { userProfile } = useUserProfileContext()
 
-  const EVMWallet = userProfile?.walletAddress
+  const evmWallet = userProfile?.walletAddress
 
   const { connection } = useUserWalletProvider()
 
-  let address = connection.isConnected ? connection.address : EVMWallet?.address
+  let address = connection.isConnected ? connection.address : evmWallet
 
   if (!userProfile || !address)
     return (

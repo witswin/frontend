@@ -183,7 +183,7 @@ const QuizContextProvider: FC<
         const data = JSON.parse(e.data)
 
         if (data.type === "new_question") {
-          setQuestion(data.question)
+          setQuestion(JSON.parse(data.question))
         }
 
         logger.log(data)

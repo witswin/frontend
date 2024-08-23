@@ -28,9 +28,7 @@ export const UserAuthStatus = () => {
               @ {userProfile?.username || `User${userProfile?.pk}`}
             </span>
 
-            <span className="text-gray90 hidden md:block ml-8 mr-5">
-              level: ?{" "}
-            </span>
+            <span className="text-gray90 hidden md:block ml-8 mr-5"></span>
             <RenderNavbarWalletAddress />
           </div>
 
