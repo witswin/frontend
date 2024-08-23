@@ -119,7 +119,7 @@ const QuizEditor = () => {
 
 const ContentCardsSection = () => {
   return (
-    <div className="grid grid-cols-2 mt-28 gap-5 flex-wrap justify-center">
+    <div className="grid grid-cols-3 mt-28 gap-5 flex-wrap justify-center">
       <CartItem
         icon={<FaMoneyCheckAlt size={30} />}
         description="Wits is your go-to platform where you can dive into interactive quizzes, earn rewards, and expand your knowledge of blockchain, cryptocurrencies, DeFi, and more. Challenge yourself and others to see who’s the ultimate Web3 expert!"
@@ -151,7 +151,7 @@ const CartItem: FC<{
         <div className="">{icon}</div>
         <h3>{title}</h3>
       </div>
-      <p className="text-gray100">{description}</p>
+      <p className="text-gray100 leading-loose">{description}</p>
       <CardFooter className="justify-end gap-4">
         <Button color="success" className="">
           Launch App

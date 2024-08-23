@@ -159,7 +159,7 @@ export const UserContextProvider: FC<
       }
     },
     FAST_INTERVAL,
-    [userToken, userProfile, setUserProfile]
+    [userToken, setUserProfile]
   )
 
   const deleteWallet = async (address: Address) => {
@@ -195,12 +195,7 @@ export const UserContextProvider: FC<
       return
     }
 
-    if (
-      isConnected &&
-      userProfile.wallets.find((wallet) =>
-        isAddressEqual(wallet.address, address!)
-      )
-    )
+    if (isConnected && isAddressEqual(userProfile.walletAddress, address!))
       return
 
     const timeout = setTimeout(() => {
