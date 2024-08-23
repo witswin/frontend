@@ -1,11 +1,13 @@
-import RoutePath from "@/utils/routes";
-import Image from "next/image";
-import Link from "next/link";
+"use client"
 
-import RenderNavbarDropdown from "./dropdown";
-import dynamic from "next/dynamic";
+import Image from "next/image"
+import Link from "next/link"
 
-const UserAuthStatus = dynamic(() => import("./auth"), { ssr: false });
+import dynamic from "next/dynamic"
+import { Button } from "@nextui-org/react"
+import { FaArrowRight } from "react-icons/fa"
+
+const UserAuthStatus = dynamic(() => import("./auth"), { ssr: false })
 
 const Header = () => {
   return (
@@ -24,10 +26,17 @@ const Header = () => {
       <div className="hidden flex-1 md:flex"></div>
 
       <div className="hidden md:flex">
-        <RenderNavbarDropdown />
+        <Button
+          endContent={<FaArrowRight />}
+          as={Link}
+          href="/quiz"
+          color="primary"
+        >
+          Launch Now!
+        </Button>
       </div>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

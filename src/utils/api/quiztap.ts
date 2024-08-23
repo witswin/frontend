@@ -7,7 +7,7 @@ export const fetchQuizzesApi = async (
   pageIndex?: number
 ): Promise<WithPagination<Competition>> => {
   const response: WithPagination<Competition> = await serverFetch(
-    "/api/quiz/competitions/" + (pageIndex ? `?page=${pageIndex}` : "")
+    "/quiz/competitions/" + (pageIndex ? `?page=${pageIndex}` : "")
   )
 
   return response
@@ -15,7 +15,7 @@ export const fetchQuizzesApi = async (
 
 export const fetchQuizQuestionApi = async (questionId: number) => {
   const response = await axiosInstance.get<QuestionResponse>(
-    "/api/quiz/questions/" + questionId
+    "/quiz/questions/" + questionId
   )
 
   return response.data
@@ -27,7 +27,7 @@ export const submitAnswerApi = async (
   choicePk: number
 ) => {
   const response = await axiosInstance.post(
-    "/api/quiz/competitions/submit-answer/",
+    "/quiz/competitions/submit-answer/",
     {
       userCompetition: userEnrollmentPk,
       selectedChoice: choicePk,
@@ -40,7 +40,7 @@ export const submitAnswerApi = async (
 
 export const enrollQuizApi = async (id: number) => {
   const response: { id: number; competition: Competition } = (
-    await axiosInstance.post("/api/quiz/competitions/enroll/", {
+    await axiosInstance.post("/quiz/competitions/enroll/", {
       competition: id,
     })
   ).data
@@ -50,7 +50,7 @@ export const enrollQuizApi = async (id: number) => {
 
 export const fetchQuizApi = async (id: number): Promise<Competition> => {
   const response: Competition = await serverFetch(
-    "/api/quiz/competitions/" + id + "/"
+    "/quiz/competitions/" + id + "/"
   )
 
   return response
@@ -99,7 +99,7 @@ export const fetchUserQuizEnrollment = async (
   competitionPk: number
 ) => {
   const res = await axiosInstance.get<{ id: number }[]>(
-    "/api/quiz/competitions/enroll/?competition_pk=" + competitionPk,
+    "/quiz/competitions/enroll/?competition_pk=" + competitionPk,
     {
       headers: {
         Authorization: `TOKEN ${userToken}`,
@@ -113,7 +113,7 @@ export const fetchUserQuizEnrollment = async (
 export const fetchUsersQuizEnrollments = async () => {
   const res = await axiosInstance.get<
     { id: number; competition: Competition }[]
-  >("/api/quiz/competitions/enroll/")
+  >("/quiz/competitions/enroll/")
 
   return res.data
 }

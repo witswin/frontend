@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import Icon from "@/components/ui/Icon";
-import { useUserProfileContext } from "@/context/userProfile";
-import { loginOrRegister } from "@/utils/api";
-import { useWalletAccount, useWalletNetwork } from "@/utils/wallet";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { useSignTypedData } from "wagmi";
-import { WalletState } from ".";
-import { ClaimButton } from "@/components/ui/Button/button";
+import Icon from "@/components/ui/Icon"
+import { useUserProfileContext } from "@/context/userProfile"
+import { loginOrRegister } from "@/utils/api"
+import { useWalletAccount, useWalletNetwork } from "@/utils/wallet"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
+import { useSignTypedData } from "wagmi"
+import { WalletState } from "."
+import { ClaimButton } from "@/components/ui/Button/button"
 
 const WalletConnecting: FC<{
-  imageUrl: string;
-  label?: string;
-  loadingImage: string;
-  error?: string;
-  setWalletState: (state: WalletState) => void;
-  isNewUser: boolean;
-  previousWalletState: WalletState | null;
+  imageUrl: string
+  label?: string
+  loadingImage: string
+  error?: string
+  setWalletState: (state: WalletState) => void
+  isNewUser: boolean
+  previousWalletState: WalletState | null
 }> = ({
   imageUrl,
   label,
@@ -25,36 +25,36 @@ const WalletConnecting: FC<{
   isNewUser,
   previousWalletState,
 }) => {
-  const { address, connector } = useWalletAccount();
-  const [error, setError] = useState("");
+  const { address, connector } = useWalletAccount()
+  const [error, setError] = useState("")
 
-  const { chain } = useWalletNetwork();
+  const { chain } = useWalletNetwork()
 
-  const chainId = chain?.id;
+  const chainId = chain?.id
 
-  const { userToken, userProfile, onWalletLogin } = useUserProfileContext();
+  const { userToken, userProfile, onWalletLogin } = useUserProfileContext()
 
-  const [now, setNow] = useState(new Date().toISOString());
+  const [now, setNow] = useState(new Date().toISOString())
 
-  const isMounted = useRef(false);
+  const isMounted = useRef(false)
 
   const onSuccess = useCallback(
     async (hashed: string) => {
-      if (!address) return;
+      if (!address) return
 
       const res = await loginOrRegister(
         address,
         hashed,
         JSON.stringify({
           message: {
-            message: "Unitap Sign In",
+            message: "Wits Sign In",
             URI: "https://unitap.app",
             IssuedAt: now,
           },
-          primaryType: "Unitap",
+          primaryType: "Wits",
           account: address,
           domain: {
-            name: "Unitap Connect",
+            name: "WITS Connect",
             version: "1",
             chainId: chainId ?? 1,
             verifyingContract: "0x0000000000000000000000000000000000000000",
@@ -74,17 +74,17 @@ const WalletConnecting: FC<{
           },
           onSuccess,
         })
-      );
+      )
 
-      onWalletLogin(res.token, res);
+      onWalletLogin(res.token, res)
 
       setWalletState(
         previousWalletState === WalletState.AddNewWallet
           ? WalletState.AddWalletSuccess
           : isNewUser
-          ? WalletState.SetUsername
-          : WalletState.LoggedIn
-      );
+            ? WalletState.SetUsername
+            : WalletState.LoggedIn
+      )
     },
     [
       address,
@@ -95,16 +95,16 @@ const WalletConnecting: FC<{
       previousWalletState,
       setWalletState,
     ]
-  );
+  )
 
-  const { isError, signTypedDataAsync } = useSignTypedData({});
+  const { isError, signTypedDataAsync } = useSignTypedData({})
 
   useEffect(() => {
-    if (isMounted.current) return;
+    if (isMounted.current) return
 
-    if (!address) return;
+    if (!address) return
 
-    console.log(connector);
+    console.log(connector)
 
     signTypedDataAsync({
       message: {
@@ -131,14 +131,14 @@ const WalletConnecting: FC<{
     })
       .then((res) => onSuccess(res))
       .catch((err) => {
-        console.warn(err);
-        setError(err.message);
-      });
+        console.warn(err)
+        setError(err.message)
+      })
 
-    isMounted.current = true;
+    isMounted.current = true
 
-    return () => {};
-  }, [address, chainId, connector, now, onSuccess, signTypedDataAsync]);
+    return () => {}
+  }, [address, chainId, connector, now, onSuccess, signTypedDataAsync])
 
   if (error)
     return (
@@ -154,9 +154,9 @@ const WalletConnecting: FC<{
 
           <ClaimButton
             onClick={() => {
-              setNow(new Date().toISOString());
-              isMounted.current = false;
-              setError("");
+              setNow(new Date().toISOString())
+              isMounted.current = false
+              setError("")
             }}
             className="mx-auto !w-full mt-7"
           >
@@ -164,7 +164,7 @@ const WalletConnecting: FC<{
           </ClaimButton>
         </div>
       </div>
-    );
+    )
 
   return (
     <div className="text-center">
@@ -185,7 +185,7 @@ const WalletConnecting: FC<{
         process.
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default WalletConnecting;
+export default WalletConnecting

@@ -7,7 +7,11 @@ const config: Config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {},
+    }),
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -80,6 +84,8 @@ const config: Config = {
         "dark-primary-2": "url('/assets/images/token-tap/bg-primary-dark.svg')",
         "primary-gradient":
           "linear-gradient(92.08deg, #4097CF -2.6%, #487DC3 44.42%, #5355D6 99.71%)",
+        "gray-dashboard":
+          "radial-gradient(41.18% 123.32% at 31.24% 50.09%, #1A1A2A 0%, #10101B 100%)",
         // "dark-primary-2":
         //   "radial-gradient(174.04% 3217.67% at 17.05% 37.02%, #2A3837 0%, #3F2B44 42.19%, #322837 100%)",
         primaryGradient:

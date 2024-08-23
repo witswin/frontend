@@ -1,6 +1,6 @@
-import Icon from "@/components/ui/Icon";
-import { useQuizContext } from "@/context/quizProvider";
-import { FC, useEffect } from "react";
+import Icon from "@/components/ui/Icon"
+import { useQuizContext } from "@/context/quizProvider"
+import { FC, useEffect } from "react"
 
 const QuestionPrompt: FC = () => {
   const {
@@ -9,30 +9,30 @@ const QuestionPrompt: FC = () => {
     question: currentQuestion,
     previousQuestion,
     isRestTime,
-  } = useQuizContext();
+  } = useQuizContext()
 
-  const question = isRestTime ? previousQuestion : currentQuestion;
+  const question = isRestTime ? previousQuestion : currentQuestion
 
   useEffect(() => {
     const onKeyPressed = (e: KeyboardEvent) => {
-      if (isRestTime || !question?.isEligible) return;
+      if (isRestTime || !question?.isEligible) return
       if (e.key === "A") {
-        answerQuestion(1);
+        answerQuestion(1)
       } else if (e.key === "B") {
-        answerQuestion(2);
+        answerQuestion(2)
       } else if (e.key === "C") {
-        answerQuestion(3);
+        answerQuestion(3)
       } else if (e.key === "D") {
-        answerQuestion(4);
+        answerQuestion(4)
       }
-    };
+    }
 
-    document.addEventListener("keypress", onKeyPressed);
+    document.addEventListener("keypress", onKeyPressed)
 
     return () => {
-      document.removeEventListener("keypress", onKeyPressed);
-    };
-  }, [answerQuestion, isRestTime, question?.isEligible]);
+      document.removeEventListener("keypress", onKeyPressed)
+    }
+  }, [answerQuestion, isRestTime, question?.isEligible])
 
   return (
     <div className="mt-10">
@@ -46,15 +46,15 @@ const QuestionPrompt: FC = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-const indexesToABC: Record<number, string> = {
+export const indexesToABC: Record<number, string> = {
   1: "A",
   2: "B",
   3: "C",
   4: "D",
-};
+}
 
 const QuestionChoice: FC<{ index: number; title: string }> = ({
   index,
@@ -66,7 +66,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
     question,
     isRestTime,
     answersHistory,
-  } = useQuizContext();
+  } = useQuizContext()
 
   return (
     <button
@@ -100,7 +100,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
         <span>{indexesToABC[index]}</span>
       </div>
     </button>
-  );
-};
+  )
+}
 
-export default QuestionPrompt;
+export default QuestionPrompt

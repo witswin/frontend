@@ -6,8 +6,6 @@ import QuizCard from "./quizCard"
 const QuizRaffleList = () => {
   const { quizList } = useQuizTapListContext()
 
-  console.log(quizList)
-
   return (
     <div>
       {quizList.map((quiz, index) => (

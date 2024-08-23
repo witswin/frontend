@@ -4,10 +4,9 @@ import { GlobalContextProvider } from "./globalProvider"
 import { UserContextProvider } from "./userProfile"
 import { Settings, UserProfile } from "@/types"
 import WalletProvider from "./walletProvider"
-import { parseFieldSetting, serverFetch, snakeToCamel } from "@/utils/api"
 import { cookies } from "next/headers"
 
-export const UnitapProvider: FC<PropsWithChildren> = async ({ children }) => {
+export const WitsProvider: FC<PropsWithChildren> = async ({ children }) => {
   let authProfile: UserProfile | null = null
 
   const cookieStorage = cookies()
@@ -15,7 +14,7 @@ export const UnitapProvider: FC<PropsWithChildren> = async ({ children }) => {
   try {
     if (cookieStorage.has("userToken"))
       authProfile = await fetch(
-        `${process.env.NEXT_PUBLIC_AUTHENTICATION_URL}/api/auth/user/info/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/info/`,
         {
           headers: {
             Authorization: `Token ${cookieStorage.get("userToken")?.value}`,
@@ -41,4 +40,4 @@ export const UnitapProvider: FC<PropsWithChildren> = async ({ children }) => {
   )
 }
 
-export default UnitapProvider
+export default WitsProvider

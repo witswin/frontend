@@ -1,34 +1,34 @@
-"use client";
+"use client"
 
-import { FC, useRef, useState } from "react";
-import { useOutsideClick } from "@/utils/hooks/dom";
-import { useUserProfileContext } from "@/context/userProfile";
-import { useUserWalletProvider, useWalletConnection } from "@/utils/wallet";
-import { shortenAddress } from "@/utils";
-import Image from "next/image";
-import { useGlobalContext } from "@/context/globalProvider";
+import { FC, useRef, useState } from "react"
+import { useOutsideClick } from "@/utils/hooks/dom"
+import { useUserProfileContext } from "@/context/userProfile"
+import { useUserWalletProvider, useWalletConnection } from "@/utils/wallet"
+import { shortenAddress } from "@/utils"
+import Image from "next/image"
+import { useGlobalContext } from "@/context/globalProvider"
 
-import Styles from "./auth.module.scss";
+import Styles from "./auth.module.scss"
 
-import { Noto_Sans_Mono } from "next/font/google";
-import Link from "next/link";
-import { useWalletManagementContext } from "@/context/walletProvider";
+import { Noto_Sans_Mono } from "next/font/google"
+import Link from "next/link"
+import { useWalletManagementContext } from "@/context/walletProvider"
 
 const NotoSansMono = Noto_Sans_Mono({
   weight: ["400", "500"],
   display: "swap",
   adjustFontFallback: false,
   subsets: ["latin"],
-});
+})
 
 export const UserAuthStatus = () => {
-  const divRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null)
 
-  const [dropDownActive, setDropDownActive] = useState(false);
+  const [dropDownActive, setDropDownActive] = useState(false)
 
-  useOutsideClick(divRef, () => setDropDownActive(false));
+  useOutsideClick(divRef, () => setDropDownActive(false))
 
-  const { userProfile } = useUserProfileContext();
+  const { userProfile } = useUserProfileContext()
 
   return (
     <div ref={divRef} className="md:relative ml-5">
@@ -36,8 +36,8 @@ export const UserAuthStatus = () => {
         <div className="cursor-pointer flex rounded-lg h-9 items-center justify-between bg-gray40">
           <div
             onClick={() => {
-              if (!userProfile) return;
-              setDropDownActive(!dropDownActive);
+              if (!userProfile) return
+              setDropDownActive(!dropDownActive)
             }}
             className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between bg-gray40"
           >
@@ -45,9 +45,7 @@ export const UserAuthStatus = () => {
               @ {userProfile?.username}
             </span>
 
-            <span className="text-gray90 hidden md:block ml-8 mr-5">
-              level: ?{" "}
-            </span>
+            <span className="text-gray90 hidden md:block ml-8 mr-5"></span>
             <RenderNavbarWalletAddress />
           </div>
 
@@ -57,27 +55,27 @@ export const UserAuthStatus = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const WalletItem = ({
   wallet,
   isActive,
 }: {
-  wallet: string;
-  isActive?: boolean;
+  wallet: string
+  isActive?: boolean
 }) => {
-  const [copyMessage, setCopyMessage] = useState("");
+  const [copyMessage, setCopyMessage] = useState("")
 
   const copyToClipboard = (address: string) => {
-    navigator.clipboard.writeText(address);
+    navigator.clipboard.writeText(address)
 
-    setCopyMessage("Copied");
+    setCopyMessage("Copied")
 
     setTimeout(() => {
-      if (setCopyMessage) setCopyMessage("");
-    }, 3000);
-  };
+      if (setCopyMessage) setCopyMessage("")
+    }, 3000)
+  }
 
   return (
     <div
@@ -110,18 +108,18 @@ const WalletItem = ({
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const ProfileDropdown: FC<{
-  setDropDownActive: (isActive: boolean) => void;
+  setDropDownActive: (isActive: boolean) => void
 }> = ({ setDropDownActive }) => {
-  const { userProfile, logout, setHoldUserLogout } = useUserProfileContext();
+  const { userProfile, logout, setHoldUserLogout } = useUserProfileContext()
 
-  const { connection } = useUserWalletProvider();
+  const { connection } = useUserWalletProvider()
 
   const { setIsAddModalOpen, setDuplicateWalletRaiseError } =
-    useWalletManagementContext();
+    useWalletManagementContext()
 
   return (
     <div className="absolute bg-gradient-to-l cursor-default from-[#de68d8] via-[#8c91c7] to-[#243a3c] to-70% left-5 rounded-xl bg-cover text-white p-[2px] z-20 top-full mt-2">
@@ -131,7 +129,7 @@ export const ProfileDropdown: FC<{
         >
           <Link
             onClick={() => {
-              setDropDownActive(false);
+              setDropDownActive(false)
             }}
             href="/profile"
             className="mb-1 font-semibold"
@@ -157,8 +155,8 @@ export const ProfileDropdown: FC<{
 
           <button
             onClick={() => {
-              setDropDownActive(false);
-              logout();
+              setDropDownActive(false)
+              logout()
             }}
             className="rounded-lg relative text-xs z-10 px-5 py-2"
           >
@@ -176,10 +174,10 @@ export const ProfileDropdown: FC<{
           ))}
           <button
             onClick={() => {
-              setDropDownActive(false);
-              setIsAddModalOpen(true);
-              setDuplicateWalletRaiseError(false);
-              setHoldUserLogout(true);
+              setDropDownActive(false)
+              setIsAddModalOpen(true)
+              setDuplicateWalletRaiseError(false)
+              setHoldUserLogout(true)
             }}
             className="bg-gray60 mt-auto w-full rounded-lg py-2"
           >
@@ -188,22 +186,20 @@ export const ProfileDropdown: FC<{
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const RenderNavbarWalletAddress = () => {
-  const { setIsWalletPromptOpen } = useGlobalContext();
-  const { userProfile } = useUserProfileContext();
+  const { setIsWalletPromptOpen } = useGlobalContext()
+  const { userProfile } = useUserProfileContext()
 
   const EVMWallet = userProfile?.wallets?.find(
     (wallet) => wallet.walletType === "EVM"
-  );
+  )
 
-  const { connection } = useUserWalletProvider();
+  const { connection } = useUserWalletProvider()
 
-  let address = connection.isConnected
-    ? connection.address
-    : EVMWallet?.address;
+  let address = connection.isConnected ? connection.address : EVMWallet?.address
 
   if (!userProfile || !address)
     return (
@@ -214,7 +210,7 @@ export const RenderNavbarWalletAddress = () => {
       >
         Connect Wallet
       </button>
-    );
+    )
 
   return (
     <>
@@ -226,15 +222,15 @@ export const RenderNavbarWalletAddress = () => {
           connection.isConnected && "btn--address--active"
         } !w-36 h-[28px] !py-0 ml-0 md:ml-3 align-baseline`}
         onClick={(e) => {
-          if (connection.isConnected) return;
-          e.stopPropagation();
-          setIsWalletPromptOpen(true);
+          if (connection.isConnected) return
+          e.stopPropagation()
+          setIsWalletPromptOpen(true)
         }}
       >
         {shortenAddress(address)}
       </button>
     </>
-  );
-};
+  )
+}
 
-export default UserAuthStatus;
+export default UserAuthStatus

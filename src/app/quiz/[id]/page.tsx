@@ -10,14 +10,14 @@ import RestTime from "./components/restTime"
 import QuizFinished from "./components/finished"
 
 const QuizItemPage = () => {
-  const { hint, stateIndex, ping } = useQuizContext()
+  const { hint, stateIndex, ping, timer } = useQuizContext()
 
   return (
     <div className="quiz-main-wrapper relative w-full">
       <main className="quiz-main-content h-full w-full flex-1 rounded-2xl p-3">
         <div className="mt-5 flex items-center justify-between px-5">
           <p className="text-[#997EA4]">Quiz</p>
-          <Timer />
+          <Timer timer={timer} />
 
           <button
             disabled={hint <= 0 || stateIndex <= 0}

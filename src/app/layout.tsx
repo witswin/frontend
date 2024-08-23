@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { config } from "@/utils/wallet/wagmi"
 import { Noto_Sans } from "next/font/google"
-import UnitapProvider from "@/context"
+import WitsProvider from "@/context"
 import Header from "@/components/layout/header"
 import Progressbar from "@/components/progress"
 import Footer from "@/components/layout/footer"
@@ -48,7 +48,7 @@ export default async function RootLayout({
         className={`dark:bg-gray10 min-h-screen dark:text-white ${notoSansFont}`}
       >
         <Providers initialState={initialState}>
-          <UnitapProvider>
+          <WitsProvider>
             <StyledJsxRegistry>
               <EventContextProvider>
                 <div id="app">
@@ -67,7 +67,7 @@ export default async function RootLayout({
               <ConnectWalletModal />
             </StyledJsxRegistry>
             <AxiosApiManager />
-          </UnitapProvider>
+          </WitsProvider>
         </Providers>
 
         <Progressbar />

@@ -1,28 +1,5 @@
 import { UserProfile } from "@/types"
-import axios, { AxiosError } from "axios"
-
-export const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_AUTHENTICATION_URL,
-})
-
-export async function getUserProfile(address: string, signature: string) {
-  const response = await axiosInstance.post<UserProfile>(
-    `/api/auth/user/login/`,
-    {
-      username: address,
-      password: signature,
-    }
-  )
-  return response.data
-}
-
-export async function createUserProfile(address: string) {
-  const response = await axiosInstance.post<UserProfile>(
-    `/api/gastap/user/create/`,
-    { address }
-  )
-  return response.data
-}
+import { axiosInstance } from "./base"
 
 export async function checkUsernameValid(username: string, token: string) {
   const response = await axiosInstance.post<{ exists: boolean }>(
@@ -57,9 +34,9 @@ export async function loginOrRegister(
   message: string
 ) {
   const response = await axiosInstance.post<UserProfile>(
-    "/api/auth/user/wallet-login/",
+    "/auth/authenticate/",
     {
-      walletAddress,
+      address: walletAddress,
       signature,
       message,
     }
@@ -71,14 +48,11 @@ export async function loginOrRegister(
 }
 
 export async function getUserProfileWithTokenAPI(token: string) {
-  const response = await axiosInstance.get<UserProfile>(
-    `/api/auth/user/info/`,
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    }
-  )
+  const response = await axiosInstance.get<UserProfile>(`/auth/info/`, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  })
 
   response.data.username = response.data.username ?? `User${response.data?.pk}`
   return response.data

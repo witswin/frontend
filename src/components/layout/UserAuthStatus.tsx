@@ -1,17 +1,17 @@
-"use client";
-import { useRef, useState } from "react";
-import { useOutsideClick } from "@/utils/hooks/dom";
-import { useUserProfileContext } from "@/context/userProfile";
-import { RenderNavbarWalletAddress, ProfileDropdown } from "./auth";
+"use client"
+import { useRef, useState } from "react"
+import { useOutsideClick } from "@/utils/hooks/dom"
+import { useUserProfileContext } from "@/context/userProfile"
+import { RenderNavbarWalletAddress, ProfileDropdown } from "./auth"
 
 export const UserAuthStatus = () => {
-  const divRef = useRef<HTMLDivElement>(null);
+  const divRef = useRef<HTMLDivElement>(null)
 
-  const [dropDownActive, setDropDownActive] = useState(false);
+  const [dropDownActive, setDropDownActive] = useState(false)
 
-  useOutsideClick(divRef, () => setDropDownActive(false));
+  useOutsideClick(divRef, () => setDropDownActive(false))
 
-  const { userProfile } = useUserProfileContext();
+  const { userProfile } = useUserProfileContext()
 
   return (
     <div ref={divRef} className="md:relative ml-5">
@@ -19,8 +19,8 @@ export const UserAuthStatus = () => {
         <div className="cursor-pointer flex rounded-lg h-9 items-center justify-between bg-gray40">
           <div
             onClick={() => {
-              if (!userProfile) return;
-              setDropDownActive(!dropDownActive);
+              if (!userProfile) return
+              setDropDownActive(!dropDownActive)
             }}
             className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between bg-gray40"
           >
@@ -40,5 +40,5 @@ export const UserAuthStatus = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

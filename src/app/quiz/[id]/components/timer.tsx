@@ -1,30 +1,33 @@
-"use client";
+"use client"
 
-import Icon from "@/components/ui/Icon";
-import { useQuizContext } from "@/context/quizProvider";
+import Icon from "@/components/ui/Icon"
+import { FC } from "react"
 
-const Timer = () => {
-  const { timer } = useQuizContext();
-
+const Timer: FC<{ timer: number; className?: string }> = ({
+  timer,
+  className,
+}) => {
   const formatTime = (time: number) => {
-    const totalSeconds = Math.floor(time / 1000);
-    const seconds = totalSeconds % 60;
-    const milliseconds = time % 60000;
+    const totalSeconds = Math.floor(time / 1000)
+    const seconds = totalSeconds % 60
+    const milliseconds = time % 60000
 
-    const formattedMilliseconds = String(milliseconds).padStart(2, "0");
-    const formattedSeconds = String(seconds).padStart(2, "0");
+    const formattedMilliseconds = String(milliseconds).padStart(2, "0")
+    const formattedSeconds = String(seconds).padStart(2, "0")
 
     return {
       seconds,
       formattedSeconds: formattedSeconds,
       formattedMilliSeconds: formattedMilliseconds.slice(-3, -1),
-    };
-  };
+    }
+  }
 
-  const time = formatTime(timer);
+  const time = formatTime(timer)
 
   return (
-    <div className="absolute left-1/2 top-5 flex -translate-x-1/2 items-center gap-3 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2">
+    <div
+      className={`absolute left-1/2 top-5 flex -translate-x-1/2 items-center gap-3 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2 ${className ?? ""}`}
+    >
       <Icon
         alt="timer"
         iconSrc="/assets/images/quizTap/timer.png"
@@ -38,7 +41,7 @@ const Timer = () => {
         {`${time.formattedSeconds}:${time.formattedMilliSeconds}`}
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default Timer;
+export default Timer
