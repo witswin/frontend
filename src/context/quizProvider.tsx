@@ -163,10 +163,10 @@ const QuizContextProvider: FC<
 
     socket.current.client.onopen = () => {
       loginUser(userToken, socket.current.client!)
-      // interval = setInterval(() => {
-      //   previousPing = new Date()
-      //   socket.current.client?.send(JSON.stringify({ command: "PING" }))
-      // }, 1000)
+      interval = setInterval(() => {
+        previousPing = new Date()
+        socket.current.client?.send(JSON.stringify({ command: "PING" }))
+      }, 5000)
     }
 
     socket.current.client.onerror = (e) => {
@@ -216,19 +216,11 @@ const QuizContextProvider: FC<
         userAnswersHistory[questionNumber]!
       )
 
-      setTimeout(() => {
-        if (!currentQuestion) return
+      setAnswersHistory((userAnswerHistory) => {
+        userAnswerHistory[questionNumber] = answerRes.isCorrect
 
-        fetchQuizQuestionApi(currentQuestion).then((res) => {
-          setAnswersHistory((userAnswerHistory) => {
-            userAnswerHistory[questionNumber] = res.choices.find(
-              (choice) => choice.isCorrect
-            )?.id!
-
-            return [...userAnswerHistory]
-          })
-        })
-      }, 1000)
+        return [...userAnswerHistory]
+      })
     }
   }, [
     getNextQuestionPk,
