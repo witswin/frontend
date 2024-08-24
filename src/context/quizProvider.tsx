@@ -1,6 +1,6 @@
 "use client"
 
-import { Competition, QuestionResponse } from "@/types"
+import { Competition, QuestionResponse, UserAnswer } from "@/types"
 import { NullCallback } from "@/utils"
 import {
   fetchQuizApi,
@@ -67,11 +67,6 @@ export const QuizContext = createContext<QuizContextProps>({
 export const statePeriod = 15000
 export const restPeriod = 5000
 const totalPeriod = restPeriod + statePeriod
-
-const loginUser = (userToken: string, socket: WebSocket) => {
-  logger.log(userToken)
-  // socket.send(JSON.stringify({ command: "LOGIN", args: { token: userToken } }))
-}
 
 export const useQuizContext = () => useContext(QuizContext)
 
@@ -152,25 +147,31 @@ const QuizContextProvider: FC<
       socket.current.client?.close()
       socket.current.client = null
       if (!isMounted) return
+
       socket.current.client = new WebSocket(
-        process.env.NEXT_PUBLIC_API_URL! + "/ws/quiz/" + quiz.id + "/"
+        process.env.NEXT_PUBLIC_WS_URL! + "/ws/quiz/" + quiz.id + "/"
       )
     }
 
     socket.current.client = new WebSocket(
-      process.env.NEXT_PUBLIC_API_URL! + "/ws/quiz/" + quiz.id + "/"
+      process.env.NEXT_PUBLIC_WS_URL! + "/ws/quiz/" + quiz.id + "/"
     )
 
     socket.current.client.onopen = () => {
-      loginUser(userToken, socket.current.client!)
       interval = setInterval(() => {
-        previousPing = new Date()
-        socket.current.client?.send(JSON.stringify({ command: "PING" }))
+        try {
+          previousPing = new Date()
+          socket.current.client?.send(JSON.stringify({ command: "PING" }))
+        } catch {
+          reconnect()
+        }
       }, 5000)
     }
 
-    socket.current.client.onerror = (e) => {
+    socket.current.client.onclose = (e) => {
+      logger.log(e)
       reconnect()
+      setPing(-1)
     }
 
     socket.current.client.onmessage = (e) => {
@@ -181,12 +182,29 @@ const QuizContextProvider: FC<
         logger.log(timePassed)
       } else {
         const data = JSON.parse(e.data)
+        logger.log(data)
 
         if (data.type === "new_question") {
-          setQuestion(JSON.parse(data.question))
+          setQuestion(
+            typeof data.question === "string"
+              ? JSON.parse(data.question)
+              : data.question
+          )
         }
 
-        logger.log(data)
+        if (data.type === "answers_history") {
+          const answers =
+            typeof data.data === "string" ? JSON.parse(data.data) : data.data
+
+          setAnswersHistory(
+            answers.map((item: any) =>
+              item.selectedChoice.isCorrect ? item.selectedChoice.id : -1
+            )
+          )
+          setUserAnswersHistory(
+            answers.map((item: any) => item.selectedChoice.id)
+          )
+        }
       }
     }
 
@@ -217,10 +235,22 @@ const QuizContextProvider: FC<
       )
 
       setAnswersHistory((userAnswerHistory) => {
-        userAnswerHistory[questionNumber] = answerRes.isCorrect
+        userAnswerHistory[questionNumber] = answerRes.selectedChoice.isCorrect
+          ? answerRes.selectedChoice.id
+          : -1
 
         return [...userAnswerHistory]
       })
+
+      // socket.current.client?.send(
+      //   JSON.stringify({
+      //     command: "ANSWER",
+      //     args: {
+      //       question_id: currentQuestionIndex,
+      //       selected_choice_id: userAnswersHistory[questionNumber]!,
+      //     },
+      //   })
+      // )
     }
   }, [
     getNextQuestionPk,
@@ -265,10 +295,10 @@ const QuizContextProvider: FC<
     [getNextQuestionPk]
   )
 
-  useEffect(() => {
-    if (question) return
-    getQuestion(stateIndex)
-  }, [getQuestion, question, stateIndex])
+  // useEffect(() => {
+  //   if (question) return
+  //   getQuestion(stateIndex)
+  // }, [getQuestion, question, stateIndex])
 
   useEffect(() => {
     const timerInterval = setInterval(() => {

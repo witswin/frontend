@@ -33,7 +33,34 @@
   height: 36px;
   width: 36px;
 }
+
 .progress svg {
   height: 100%;
   width: 100%;
+}
+
+
+.antenna::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 10px solid #4A90E2;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.antenna:nth-child(1)::before {
+    border-bottom-color: #4A90E2;
+}
+.antenna:nth-child(2)::before {
+    border-bottom-color: #4A90E2;
+    top: 10px;
+}
+.antenna:nth-child(3)::before {
+    border-bottom-color: #4A90E2;
+    top: 20px;
 }

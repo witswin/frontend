@@ -12,6 +12,9 @@ import QuizFinished from "./components/finished"
 const QuizItemPage = () => {
   const { hint, stateIndex, ping, timer } = useQuizContext()
 
+  const className =
+    ping <= 100 ? "bg-space-green" : ping <= 200 ? "bg-yellow-500" : "bg-error"
+
   return (
     <div className="quiz-main-wrapper relative w-full">
       <main className="quiz-main-content h-full w-full flex-1 rounded-2xl p-3">
@@ -40,7 +43,27 @@ const QuizItemPage = () => {
         <RenderQuizItemBody />
 
         <div className="text-right text-sm mt-20">
-          <p className="text-[#997EA4]">Ping: {ping}</p>
+          <span className="px-2 py-1 rounded-lg bg-gray30 border border-gray70 shadow-lg inline-flex items-center space-x-2">
+            <div className="flex gap-1 items-end">
+              <div
+                className={`${ping !== -1 && ping < 100 ? className : "bg-gray100"} w-1 rounded h-2`}
+              ></div>
+              <div
+                className={`${ping !== -1 && ping < 200 ? className : "bg-gray100"} w-1 rounded h-3`}
+              ></div>
+              <div
+                className={`${ping !== -1 && ping < 300 ? className : "bg-gray100"} w-1 rounded h-4`}
+              ></div>
+              <div
+                className={`${ping !== -1 && ping < 400 ? className : "bg-gray100"} w-1 rounded h-5`}
+              ></div>
+            </div>
+            {ping === -1 ? (
+              <p className="text-xs text-gray100">Reconnecting</p>
+            ) : (
+              <p className="text-sm text-gray100">{ping}</p>
+            )}
+          </span>
         </div>
       </main>
     </div>

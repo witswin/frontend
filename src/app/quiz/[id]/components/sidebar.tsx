@@ -1,35 +1,35 @@
-"use client";
+"use client"
 
-import Icon from "@/components/ui/Icon";
-import { useQuizContext } from "@/context/quizProvider";
-import { useNumberLinearInterpolate } from "@/utils/interpolate";
-import { FC, useEffect } from "react";
+import Icon from "@/components/ui/Icon"
+import { useQuizContext } from "@/context/quizProvider"
+import { useNumberLinearInterpolate } from "@/utils/interpolate"
+import { FC, useEffect } from "react"
 
 const QuizTapSidebar: FC = () => {
   const { totalParticipantsCount, remainingPeople, amountWinPerUser, quiz } =
-    useQuizContext();
+    useQuizContext()
 
   const amountWinCount = useNumberLinearInterpolate({
     duration: 6000,
     initial: amountWinPerUser,
-  });
+  })
 
   const { onChange, value } = useNumberLinearInterpolate({
     duration: 6000,
     initial: remainingPeople,
-  });
+  })
 
   useEffect(() => {
-    onChange(remainingPeople);
-  }, [remainingPeople]);
+    onChange(remainingPeople)
+  }, [remainingPeople])
 
   useEffect(() => {
-    amountWinCount.onChange(amountWinPerUser);
-  }, [amountWinPerUser]);
+    amountWinCount.onChange(amountWinPerUser)
+  }, [amountWinPerUser])
 
   return (
     <aside className="quiz-sidebar flex w-60 flex-col rounded-2xl p-1">
-      {/* <div className="flex items-center justify-between rounded-lg bg-gray10 p-5">
+      <div className="flex items-center justify-between rounded-lg bg-gray10 p-5">
         <p className="text-gray100">Health</p>
 
         <div className="flex items-center gap-4">
@@ -42,7 +42,7 @@ const QuizTapSidebar: FC = () => {
             alt="health"
           />
         </div>
-      </div> */}
+      </div>
 
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
         <div className="text-gray100">
@@ -84,8 +84,9 @@ const QuizTapSidebar: FC = () => {
           />
         </div>
       </div>
+      <div className="mt-3"></div>
 
-      <div className="mt-20 justify-self-end rounded-2xl bg-gray10 p-3">
+      <div className="mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
         <Icon
           className="mx-auto w-48"
           iconSrc="/assets/images/quizTap/sponsored.png"
@@ -120,7 +121,7 @@ const QuizTapSidebar: FC = () => {
         </div>
       </div>
     </aside>
-  );
-};
+  )
+}
 
-export default QuizTapSidebar;
+export default QuizTapSidebar

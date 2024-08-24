@@ -31,8 +31,8 @@ const notoSansFont = Noto_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "Unitap",
-  description: "Bright ID faucet",
+  title: "WITS",
+  description: "Who is the smartest",
 }
 
 export default async function RootLayout({
