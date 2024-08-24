@@ -51,30 +51,43 @@ const RestTime: FC<{}> = () => {
   }
 
   if (!didAnswerLastQuestion) {
-    ;<div className="mt-10 text-center">
-      <Icon
-        iconSrc="/assets/images/quizTap/spaceman-like.png"
-        alt="spaceman like"
-        width="68px"
-        height="68px"
-      />
-      <p className="text-lg font-semibold text-space-green">
-        Nice Job! thats right.
-      </p>
+    return (
+      <div className="mt-10 text-center">
+        <Icon
+          iconSrc="/assets/images/quizTap/spaceman-spectate.svg"
+          alt="spaceman like"
+          width="800px"
+          height="200px"
+        />
 
-      <p className="mt-5 text-gray100">
-        <strong className="text-white underline">21</strong>{" "}
-        <span>people lost the game in the previous round</span>
-      </p>
-      <p className="mt-3 text-sm text-gray90">
-        Next Questions in {seconds} seconds...
-      </p>
-    </div>
+        <p className="-mt-5 text-gray100">
+          <strong className="text-white underline">21</strong>{" "}
+          <span>people lost the game in the previous round</span>
+        </p>
+        <p className="mt-3 text-sm text-gray90">
+          Next Questions in {seconds} seconds...
+        </p>
+      </div>
+    )
   }
 
   if (isWonLastQuestion) {
     return (
-      <div className="mt-10 text-center">
+      <div className="mt-10 relative text-center">
+        <Icon
+          iconSrc="/assets/images/quizTap/like-hand.svg"
+          alt="spaceman like"
+          width="183"
+          className="absolute right-0 top-1/2 -translate-y-1/2 opacity-30"
+          height="176"
+        />
+        <Icon
+          iconSrc="/assets/images/quizTap/like-hand-left.svg"
+          alt="spaceman like"
+          width="183"
+          className="absolute left-0 top-1/2 -translate-y-1/2 opacity-30"
+          height="176"
+        />
         <Icon
           iconSrc="/assets/images/quizTap/spaceman-like.png"
           alt="spaceman like"
@@ -101,8 +114,8 @@ const RestTime: FC<{}> = () => {
       <Icon
         iconSrc="/assets/images/quizTap/spaceman-like.png"
         alt="spaceman like"
-        width="68px"
-        height="68px"
+        width="100px"
+        height="100px"
       />
       <p className="text-lg font-semibold text-error">Ohh! Game Over.</p>
 
