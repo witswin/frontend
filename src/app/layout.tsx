@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang="en" dir="ltr" className="dark">
       <body
-        className={`dark:bg-gray10 min-h-screen dark:text-white ${notoSansFont}`}
+        className={`dark:bg-background-main min-h-screen dark:text-white ${notoSansFont}`}
       >
         <Providers initialState={initialState}>
           <WitsProvider>

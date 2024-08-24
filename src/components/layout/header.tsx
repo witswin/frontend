@@ -13,7 +13,7 @@ const UserAuthStatus = dynamic(() => import("./auth"), { ssr: false })
 const Header = () => {
   const path = usePathname()
   return (
-    <header className="top-0 z-20 flex w-full items-center bg-gray10 px-8 py-3 text-xs">
+    <header className="top-0 z-20 flex w-full items-center px-8 py-3 text-xs">
       <Link href={"/"}>
         <Image
           src="/assets/images/navbar/logo.svg"

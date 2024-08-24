@@ -30,6 +30,8 @@ const config: Config = {
         "2xs": "0.625rem",
       },
       colors: {
+        "background-main": "#15161E",
+        neu90: "#373A4F",
         primary: "#EF476F",
         secondary: "#F59569",
         input: "#EFF3F8",

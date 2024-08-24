@@ -6,7 +6,7 @@ const Header = () => {
         Get ready for a fun ride into the future
       </p>
     </header>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

@@ -29,7 +29,7 @@ const Timer: FC<{ timer: number; className?: string }> = ({
       className={`absolute left-1/2 top-5 -translate-x-1/2 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2 ${className ?? ""}`}
     >
       <div
-        className={`flex items-center ${time.seconds < 3 && time.seconds !== 0 ? "timer-blink" : ""} gap-3`}
+        className={`flex items-center ${time.seconds < 3 && (time.seconds !== 0 || time.formattedMilliSeconds !== "0") ? "timer-blink" : ""} gap-3`}
       >
         <Icon
           alt="timer"
