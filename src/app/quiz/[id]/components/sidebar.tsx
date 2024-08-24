@@ -40,7 +40,7 @@ const QuizTapSidebar: FC = () => {
         <p className="text-gray100">Health</p>
 
         <div className="flex items-center gap-4">
-          <span className="text-lg">{1 - wrongAnswersCount}</span>
+          <span className="text-lg">{Math.max(1 - wrongAnswersCount, 0)}</span>
 
           <Icon
             width="30px"
