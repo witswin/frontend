@@ -6,8 +6,13 @@ import { useNumberLinearInterpolate } from "@/utils/interpolate"
 import { FC, useEffect } from "react"
 
 const QuizTapSidebar: FC = () => {
-  const { totalParticipantsCount, remainingPeople, amountWinPerUser, quiz } =
-    useQuizContext()
+  const {
+    totalParticipantsCount,
+    remainingPeople,
+    amountWinPerUser,
+    quiz,
+    wrongAnswersCount,
+  } = useQuizContext()
 
   const amountWinCount = useNumberLinearInterpolate({
     duration: 6000,
@@ -27,13 +32,15 @@ const QuizTapSidebar: FC = () => {
     amountWinCount.onChange(amountWinPerUser)
   }, [amountWinPerUser])
 
+  const isUserLost = wrongAnswersCount > 0
+
   return (
     <aside className="quiz-sidebar flex w-60 flex-col rounded-2xl p-1">
       <div className="flex items-center justify-between rounded-lg bg-gray10 p-5">
         <p className="text-gray100">Health</p>
 
         <div className="flex items-center gap-4">
-          <span className="text-lg">1</span>
+          <span className="text-lg">{1 - wrongAnswersCount}</span>
 
           <Icon
             width="30px"
@@ -71,7 +78,11 @@ const QuizTapSidebar: FC = () => {
             <strong className="text-white">
               {amountWinCount.value.toFixed(2)}
             </strong>{" "}
-            <span className="text-space-green">{quiz?.token}</span>
+            <span
+              className={`transition-colors ${isUserLost ? "text-error" : "text-space-green"}`}
+            >
+              {quiz?.token}
+            </span>
           </p>
         </div>
 

@@ -4,7 +4,7 @@ import { FC, Fragment, useEffect, useRef } from "react"
 const QuestionsList = () => {
   const { quiz } = useQuizContext()
   return (
-    <div className="mt-10 flex justify-center rounded-xl border-2 border-gray50 bg-gray20 p-4">
+    <div className="mt-10 flex overflow-x-auto justify-center rounded-xl border-2 border-gray50 bg-gray20/30 p-3">
       {quiz?.questions.map((question, index) => (
         <Fragment key={index}>
           <QuestionItem index={index + 1} />
@@ -24,9 +24,9 @@ const Separator: FC<{ index: number }> = ({ index }) => {
       : 28
 
   return (
-    <div className="relative mx-2 my-auto h-[2px] w-7 rounded-lg bg-gray50">
+    <div className="relative mx-2 my-auto h-[2px] w-7 rounded-2xl bg-gray50">
       <div
-        className="absolute bottom-0 left-0 top-0 h-[2px] bg-gray100"
+        className="absolute bottom-0 left-0 top-0 rounded-2xl h-[2px] bg-gray100"
         style={{ width }}
       ></div>
     </div>
@@ -55,7 +55,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
       let durationInSeconds =
         statePeriod / 1000 - (statePeriod / 1000 - timer / 1000)
 
-      durationInSeconds += durationInSeconds / 5
+      durationInSeconds += durationInSeconds / 18
 
       const framesPerSecond = 60
 
@@ -89,7 +89,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
   if (stateIndex > index || isRestTime)
     return (
       <div
-        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
+        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-mid-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
       >
         {index}
       </div>

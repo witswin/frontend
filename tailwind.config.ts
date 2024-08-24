@@ -60,6 +60,7 @@ const config: Config = {
         "light-gray-2": "#EDF2F3",
         "dark-gray": "#757575",
         "space-green": "#4CE6A1",
+        "mid-dark-space-green": "#2C6E59",
         "light-space-green": "#D5EBE1",
         "dark-grey-2": "#13131E",
         "blue-gray-light": "#E9EFF6",

@@ -41,6 +41,7 @@ export type QuizContextProps = {
   totalParticipantsCount: number
   amountWinPerUser: number
   ping: number
+  wrongAnswersCount: number
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -62,6 +63,7 @@ export const QuizContext = createContext<QuizContextProps>({
   totalParticipantsCount: 0,
   amountWinPerUser: 0,
   ping: -1,
+  wrongAnswersCount: 0,
 })
 
 export const statePeriod = 15000
@@ -103,6 +105,13 @@ const QuizContextProvider: FC<
   const [isRestTime, setIsRestTime] = useState(false)
 
   const startAt = useMemo(() => new Date(quiz.startAt), [quiz.startAt])
+
+  const wrongAnswersCount = useMemo(
+    () =>
+      userAnswersHistory.filter((item) => !answersHistory.includes(item))
+        .length,
+    [answersHistory, userAnswersHistory]
+  )
 
   const answerQuestion = useCallback(
     (choiceIndex: number) => {
@@ -165,7 +174,10 @@ const QuizContextProvider: FC<
         } catch {
           reconnect()
         }
-      }, 5000)
+      }, 3000)
+
+      previousPing = new Date()
+      socket.current.client?.send(JSON.stringify({ command: "PING" }))
     }
 
     socket.current.client.onclose = (e) => {
@@ -382,6 +394,7 @@ const QuizContextProvider: FC<
         totalParticipantsCount,
         amountWinPerUser,
         ping,
+        wrongAnswersCount,
       }}
     >
       {children}

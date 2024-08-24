@@ -28,13 +28,13 @@ const QuizItemPage = () => {
           >
             <Icon
               alt="hint"
-              className="py-1"
-              iconSrc="/assets/images/quizTap/hint.png"
+              className="py-1 mr-2"
+              iconSrc="/assets/images/quizTap/fifty-fifty.png"
               width="20px"
               height="20px"
             />
-            <span className="py-1">Hint</span>
-            <span className="ml-4 border-l-2 border-gray70 py-1 pl-2">1</span>
+            <span className="py-1">50% Hint</span>
+            <span className="ml-2 border-l-2 border-gray70 py-1 pl-2">1</span>
           </button>
         </div>
 

@@ -75,3 +75,32 @@ input {
   /* Firefox */
   -moz-appearance: textfield;
 }
+
+
+
+
+.quiz-main-content {
+  background: url("/assets/images/quizTap/main-bg.png");
+  background-color: #10101b;
+  background-size: contain;
+}
+
+
+.timer-blink {
+    animation: blink 0.5s infinite;
+}
+
+@keyframes blink {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

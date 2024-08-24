@@ -26,20 +26,24 @@ const Timer: FC<{ timer: number; className?: string }> = ({
 
   return (
     <div
-      className={`absolute left-1/2 top-5 flex -translate-x-1/2 items-center gap-3 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2 ${className ?? ""}`}
+      className={`absolute left-1/2 top-5 -translate-x-1/2 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2 ${className ?? ""}`}
     >
-      <Icon
-        alt="timer"
-        iconSrc="/assets/images/quizTap/timer.png"
-        width="30px"
-        height="31px"
-      />
-
-      <p
-        className={`font-digital-numbers text-2xl ${time.seconds > 5 ? "text-white" : time.seconds > 2 ? "text-warn" : "text-error"} `}
+      <div
+        className={`flex items-center ${time.seconds < 3 && time.seconds !== 0 ? "timer-blink" : ""} gap-3`}
       >
-        {`${time.formattedSeconds}:${time.formattedMilliSeconds}`}
-      </p>
+        <Icon
+          alt="timer"
+          iconSrc="/assets/images/quizTap/timer.png"
+          width="30px"
+          height="31px"
+        />
+
+        <p
+          className={`font-digital-numbers text-2xl ${time.seconds > 5 ? "text-white" : time.seconds > 2 ? "text-warn" : "text-error"} `}
+        >
+          {`${time.formattedSeconds}:${time.formattedMilliSeconds}`}
+        </p>
+      </div>
     </div>
   )
 }

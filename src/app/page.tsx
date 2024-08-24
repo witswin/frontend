@@ -62,7 +62,7 @@ const QuizEditor = () => {
   }, [])
   return (
     <div
-      className="border-2 relative transform-gpu w-[525px] min-h-32 border-gray50 bg-gray-dashboard rounded-lg p-6"
+      className="border-2 relative transform-gpu w-[525px] min-h-32 border-gray50 quiz-main-content rounded-lg p-6"
       style={{
         transform: "rotate3d(-21.5,-80.866,0,350deg) rotate(-1deg)",
         perspective: "700px",

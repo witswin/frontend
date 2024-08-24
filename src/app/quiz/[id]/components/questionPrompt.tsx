@@ -84,7 +84,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
         question &&
         answersHistory[question.id] === index &&
         activeQuestionChoiceIndex !== -1
-          ? "!border-space-green !bg-dark-space-green"
+          ? "!border-space-green text-space-green !bg-dark-space-green"
           : ""
       } ${activeQuestionChoiceIndex === index ? "!border-gray100 bg-gray60" : ""} `}
     >
