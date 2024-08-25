@@ -46,16 +46,16 @@ const QuizItemPage = () => {
           <span className="px-2 py-1 rounded-lg bg-gray30 border border-gray70 shadow-lg inline-flex items-center space-x-2">
             <div className="flex gap-1 items-end">
               <div
-                className={`${ping !== -1 && ping < 100 ? className : "bg-gray100"} w-1 rounded h-2`}
+                className={`${ping !== -1 && ping <= 500 ? className : "bg-gray100"} w-1 rounded h-2`}
               ></div>
               <div
-                className={`${ping !== -1 && ping < 200 ? className : "bg-gray100"} w-1 rounded h-3`}
+                className={`${ping !== -1 && ping <= 400 ? className : "bg-gray100"} w-1 rounded h-3`}
               ></div>
               <div
-                className={`${ping !== -1 && ping < 300 ? className : "bg-gray100"} w-1 rounded h-4`}
+                className={`${ping !== -1 && ping <= 300 ? className : "bg-gray100"} w-1 rounded h-4`}
               ></div>
               <div
-                className={`${ping !== -1 && ping < 400 ? className : "bg-gray100"} w-1 rounded h-5`}
+                className={`${ping !== -1 && ping <= 200 ? className : "bg-gray100"} w-1 rounded h-5`}
               ></div>
             </div>
             {ping === -1 ? (

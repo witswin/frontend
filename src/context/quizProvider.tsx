@@ -144,87 +144,96 @@ const QuizContextProvider: FC<
 
     return newState
   }, [startAt])
-
   useEffect(() => {
     if (!userToken) return
     let isMounted = true
 
-    let interval: NodeJS.Timeout
-    let previousPing: Date | null
+    let interval: NodeJS.Timeout | undefined
+    let previousPing: Date | null = null
 
-    const reconnect = () => {
-      socket.current.client?.close()
-      socket.current.client = null
+    const initializeWebSocket = () => {
       if (!isMounted) return
 
-      socket.current.client = new WebSocket(
+      const socketUrl =
         process.env.NEXT_PUBLIC_WS_URL! + "/ws/quiz/" + quiz.id + "/"
-      )
-    }
+      socket.current.client = new WebSocket(socketUrl)
 
-    socket.current.client = new WebSocket(
-      process.env.NEXT_PUBLIC_WS_URL! + "/ws/quiz/" + quiz.id + "/"
-    )
+      socket.current.client.onopen = () => {
+        previousPing = new Date()
+        socket.current.client?.send(JSON.stringify({ command: "PING" }))
+        interval = setInterval(() => {
+          try {
+            previousPing = new Date()
+            socket.current.client?.send(JSON.stringify({ command: "PING" }))
+          } catch (error) {
+            reconnect()
+          }
+        }, 3000)
+      }
 
-    socket.current.client.onopen = () => {
-      interval = setInterval(() => {
-        try {
-          previousPing = new Date()
-          socket.current.client?.send(JSON.stringify({ command: "PING" }))
-        } catch {
-          reconnect()
-        }
-      }, 3000)
+      socket.current.client.onclose = (e) => {
+        logger.log(e)
+        if (isMounted) reconnect() // Reconnect only if the component is still mounted
+        setPing(-1)
+      }
 
-      previousPing = new Date()
-      socket.current.client?.send(JSON.stringify({ command: "PING" }))
-    }
+      socket.current.client.onmessage = (e) => {
+        if (e.data === "PONG") {
+          const now = new Date()
+          const timePassed = previousPing
+            ? now.getTime() - previousPing.getTime()
+            : -1
+          setPing(timePassed)
+          logger.log(timePassed)
+        } else {
+          const data = JSON.parse(e.data)
+          logger.log(data)
 
-    socket.current.client.onclose = (e) => {
-      logger.log(e)
-      reconnect()
-      setPing(-1)
-    }
-
-    socket.current.client.onmessage = (e) => {
-      if (e.data === "PONG") {
-        const now = new Date()
-        const timePassed = now.getTime() - previousPing!.getTime()
-        setPing(timePassed)
-        logger.log(timePassed)
-      } else {
-        const data = JSON.parse(e.data)
-        logger.log(data)
-
-        if (data.type === "new_question") {
-          setQuestion(
-            typeof data.question === "string"
-              ? JSON.parse(data.question)
-              : data.question
-          )
-        }
-
-        if (data.type === "answers_history") {
-          const answers =
-            typeof data.data === "string" ? JSON.parse(data.data) : data.data
-
-          setAnswersHistory(
-            answers.map((item: any) =>
-              item.selectedChoice.isCorrect ? item.selectedChoice.id : -1
+          if (data.type === "new_question") {
+            setQuestion(
+              typeof data.question === "string"
+                ? JSON.parse(data.question)
+                : data.question
             )
-          )
-          setUserAnswersHistory(
-            answers.map((item: any) => item.selectedChoice.id)
-          )
+          }
+
+          if (data.type === "answers_history") {
+            const answers =
+              typeof data.data === "string" ? JSON.parse(data.data) : data.data
+
+            setAnswersHistory(
+              answers.map((item: any) =>
+                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1
+              )
+            )
+            setUserAnswersHistory(
+              answers.map((item: any) => item.selectedChoice.id)
+            )
+          }
         }
       }
     }
 
+    const reconnect = () => {
+      if (interval) clearInterval(interval) // Clear the existing interval before reconnecting
+      if (socket.current.client) {
+        socket.current.client.onclose = () => {} // Prevent the original onclose from firing during reconnect
+        socket.current.client.close()
+        socket.current.client = null
+      }
+      initializeWebSocket()
+    }
+
+    initializeWebSocket() // Initialize the WebSocket connection
+
     return () => {
       isMounted = false
-      socket.current.client?.close()
-      socket.current.client = null
-      if (interval) clearInterval(interval)
+      if (interval) clearInterval(interval) // Clean up the interval
+      if (socket.current.client) {
+        socket.current.client.onclose = () => {} // Prevent the onclose from firing during cleanup
+        socket.current.client.close()
+        socket.current.client = null
+      }
     }
   }, [userToken])
 
