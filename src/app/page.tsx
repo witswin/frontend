@@ -2,14 +2,14 @@
 import { FaMoneyCheckAlt } from "react-icons/fa"
 
 import { FC, useEffect, useState } from "react"
-import Timer from "./quiz/[id]/components/timer"
+import Timer from "./(app)/quiz/[id]/components/timer"
 import Icon from "@/components/ui/Icon"
-import { indexesToABC } from "./quiz/[id]/components/questionPrompt"
+import { indexesToABC } from "./(app)/quiz/[id]/components/questionPrompt"
 import { Button, Card, CardFooter } from "@nextui-org/react"
 
 const LandingPage = () => {
   return (
-    <div>
+    <div className="container mx-auto">
       <HeaderSection />
       <ContentCardsSection />
     </div>

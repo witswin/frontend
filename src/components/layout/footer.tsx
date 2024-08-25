@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { FC } from "react";
-import Icon from "../ui/Icon";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { FC } from "react"
+import Icon from "../ui/Icon"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const Footer: FC = () => {
-  const path = usePathname();
+  const path = usePathname()
 
-  if (path === "/") return null;
+  if (path === "/") return null
 
   return (
-    <footer className="hidden h-16 w-full items-center justify-center bg-gray10 p-3 md:flex">
+    <footer className="hidden h-16 w-full items-center justify-center p-3 md:flex">
       <Link href="https://t.me/unitap_app" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/telegram.svg"
@@ -68,7 +68,7 @@ const Footer: FC = () => {
         height="auto"
       ></Icon>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

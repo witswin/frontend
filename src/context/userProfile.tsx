@@ -68,9 +68,6 @@ export const UserContextProvider: FC<
   const { address, isConnected } = useWalletAccount()
   const { disconnect } = useDisconnect()
 
-  const { addError } = useContext(ErrorsContext)
-
-  const [remainingClaims, setRemainingClaims] = useState<number | null>(null)
   const [userProfileLoading, setUserProfileLoading] = useState(false)
   const [nonEVMWalletAddress, setNonEVMWalletAddress] = useState("")
 

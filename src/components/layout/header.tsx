@@ -13,14 +13,12 @@ const UserAuthStatus = dynamic(() => import("./auth"), { ssr: false })
 const Header = () => {
   const path = usePathname()
   return (
-    <header className="top-0 z-20 flex w-full items-center px-8 py-3 text-xs">
+    <header
+      id="header"
+      className="top-0 z-20 flex w-full items-center px-8 py-3 text-xs"
+    >
       <Link href={"/"}>
-        <Image
-          src="/assets/images/navbar/logo.svg"
-          width={40}
-          height={40}
-          alt="unitap"
-        />
+        <Image src="/logo.svg" width={40} height={40} alt="unitap" />
       </Link>
 
       <UserAuthStatus />
@@ -33,7 +31,7 @@ const Header = () => {
             endContent={<FaArrowRight />}
             as={Link}
             href="/quiz"
-            color="primary"
+            className="bg-space-green text-black"
           >
             Launch Now!
           </Button>
