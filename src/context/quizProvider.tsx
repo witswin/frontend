@@ -144,11 +144,13 @@ const QuizContextProvider: FC<
 
     return newState
   }, [startAt])
+
   useEffect(() => {
     if (!userToken) return
     let isMounted = true
 
     let interval: NodeJS.Timeout | undefined
+    let reconnectTimeout: NodeJS.Timeout | undefined
     let previousPing: Date | null = null
 
     const initializeWebSocket = () => {
@@ -184,10 +186,8 @@ const QuizContextProvider: FC<
             ? now.getTime() - previousPing.getTime()
             : -1
           setPing(timePassed)
-          logger.log(timePassed)
         } else {
           const data = JSON.parse(e.data)
-          logger.log(data)
 
           if (data.type === "new_question") {
             setQuestion(
@@ -200,6 +200,8 @@ const QuizContextProvider: FC<
           if (data.type === "answers_history") {
             const answers =
               typeof data.data === "string" ? JSON.parse(data.data) : data.data
+
+            console.log(answers)
 
             setAnswersHistory(
               answers.map((item: any) =>
@@ -216,12 +218,18 @@ const QuizContextProvider: FC<
 
     const reconnect = () => {
       if (interval) clearInterval(interval) // Clear the existing interval before reconnecting
+      if (reconnectTimeout) clearTimeout(reconnectTimeout) // Clear the existing timeout before setting a new one
       if (socket.current.client) {
         socket.current.client.onclose = () => {} // Prevent the original onclose from firing during reconnect
         socket.current.client.close()
         socket.current.client = null
       }
-      initializeWebSocket()
+
+      reconnectTimeout = setTimeout(() => {
+        if (isMounted) {
+          initializeWebSocket()
+        }
+      }, 5000) // Wait 5 seconds before attempting to reconnect
     }
 
     initializeWebSocket() // Initialize the WebSocket connection
@@ -229,6 +237,7 @@ const QuizContextProvider: FC<
     return () => {
       isMounted = false
       if (interval) clearInterval(interval) // Clean up the interval
+      if (reconnectTimeout) clearTimeout(reconnectTimeout) // Clean up the reconnect timeout
       if (socket.current.client) {
         socket.current.client.onclose = () => {} // Prevent the onclose from firing during cleanup
         socket.current.client.close()
