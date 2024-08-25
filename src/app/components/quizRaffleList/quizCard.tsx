@@ -49,9 +49,9 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
     ) !== -1
 
   return (
-    <div className="quiz_card_wrap bg-quiz-header-bg relative !mb-5 flex flex-col items-center justify-center rounded-2xl border-2 border-gray60 sm:flex-row lg:border-l-gray10 ">
-      <div className="left-side relative flex min-h-[175px] min-w-[165px] items-center rounded-br-[100px] rounded-tr-[100px] before:h-[21px] before:w-5 before:rounded-bl-[150px] before:rounded-tl-[150px] before:content-[''] after:absolute after:h-[23px] after:w-5 after:rounded-bl-[100px] after:rounded-tl-[100px] after:content-[''] lg:bg-[#10101B]  lg:shadow-[inset_-2px_0px_0_2px_#242431]  lg:before:absolute  lg:before:left-20  lg:before:top-[-18px]  lg:before:bg-[#1e1e273a]  lg:before:shadow-[-26px_-0px_0_15px_#10101B,inset_1px_1px_0_1px_#242431]  lg:after:bottom-[-19px]  lg:after:left-[80px]  lg:after:bg-[#1d1d273f]  lg:after:shadow-[-23px_-0px_0_15px_#10101B,inset_1px_0px_0_1px_#242431]">
-        <div className="relative h-[135px] w-[135px] rounded-[100%] content-[''] lg:before:absolute lg:before:bottom-[-45px] lg:before:h-[30px] lg:before:w-[60px] lg:before:bg-[#10101B] lg:before:content-[''] lg:after:absolute lg:after:top-[-45px] lg:after:h-[30px] lg:after:w-[60px] lg:after:bg-[#10101B]">
+    <div className="quiz_card_wrap bg-quiz-header-bg relative !mb-5 flex flex-col items-center justify-center rounded-2xl border-2 border-gray60 sm:flex-row lg:border-l-background-main">
+      <div className="left-side relative flex min-h-[175px] min-w-[165px] items-center rounded-br-[100px] rounded-tr-[100px] before:h-[21px] before:w-5 before:rounded-bl-[150px] before:rounded-tl-[150px] before:content-[''] after:absolute after:h-[23px] after:w-5 after:rounded-bl-[100px] after:rounded-tl-[100px] after:content-[''] lg:bg-background-main lg:shadow-[inset_-2px_0px_0_2px_#242431]  lg:before:absolute  lg:before:left-20  lg:before:top-[-18px]  lg:before:bg-[#1e1e273a]  lg:before:shadow-[-26px_-0px_0_15px_#10101B,inset_1px_1px_0_1px_#242431]  lg:after:bottom-[-19px] lg:after:left-[80px]  lg:after:bg-[#1d1d273f] lg:after:shadow-[-23px_-0px_0_15px_#10101B,inset_1px_0px_0_1px_#242431]">
+        <div className="relative h-[135px] w-[135px] rounded-[100%] content-[''] lg:before:absolute lg:before:bottom-[-45px] lg:before:h-[30px] lg:before:w-[60px] lg:before:bg-background-main lg:before:content-[''] lg:after:absolute lg:after:top-[-45px] lg:after:h-[30px] lg:after:w-[60px] lg:after:bg-background-main">
           <Image
             src={competition.imageUrl ?? "/assets/images/quizTap/usdt.svg"}
             alt={competition.prizeAmount + " " + competition.token}
@@ -106,7 +106,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
             <></>
           )}
         </div>
-        <div className="prize_amount  flex h-[30px] max-w-[149px] items-center justify-center gap-[10px] rounded-md border border-gray70 bg-gray50">
+        <div className="prize_amount flex h-[30px] max-w-[149px] items-center justify-center gap-[10px] rounded-md border border-gray70 bg-gray50">
           <p className="text-xs font-normal leading-[22px] text-gray100">
             Prize
           </p>
@@ -128,22 +128,20 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
           </div>
 
           {enterState === -1 ? (
-            <ClaimAndEnrollButton
-              disabled={true}
-              className="!w-full min-w-[552px] md:!w-[352px]"
-              height="48px"
-              $fontSize="14px"
+            <Link
+              href={`/quiz/${competition.id}`}
+              className="px-5 flex font-semibold gap-4 border-2 border-gray90 py-2 bg-gray40 rounded-xl items-center"
             >
               <div className="relative w-full">
-                <p> Closed</p>
-                <Icon
-                  className="absolute right-0 top-1/2 -translate-y-1/2"
-                  iconSrc="assets/images/prize-tap/header-prize-logo.svg"
-                  width="27px"
-                  height="24px"
-                />
+                <span className="text-gray100">Watch as spectator</span>
               </div>
-            </ClaimAndEnrollButton>
+              <Icon
+                className="opacity-70"
+                iconSrc="assets/images/provider-dashboard/ic_link_white.svg"
+                width="18px"
+                height="12px"
+              />
+            </Link>
           ) : isEnrolled ? (
             enterState === 1 ? (
               <Link href={`/quiz/${competition.id}`}>

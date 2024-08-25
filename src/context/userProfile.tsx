@@ -75,6 +75,7 @@ export const UserContextProvider: FC<
   const [nonEVMWalletAddress, setNonEVMWalletAddress] = useState("")
 
   const onWalletLogin = (userToken: string, userProfile: UserProfile) => {
+    document.cookie = "userToken=" + userToken + ";path=/;"
     setUserProfile(userProfile)
     setToken(userToken)
   }
@@ -136,7 +137,7 @@ export const UserContextProvider: FC<
       document.cookie = "userToken=;path=/;"
       setUserProfile(null)
       setToken("")
-    }, 100)
+    }, 200)
 
     return () => {
       clearTimeout(timeout)
