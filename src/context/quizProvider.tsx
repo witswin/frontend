@@ -276,10 +276,12 @@ const QuizContextProvider: FC<
       const currentQuestion = currentQuestionIndex
       const questionNumber = question.number - 1
 
+      if (!userAnswersHistory[questionNumber]!) return
+
       const answerRes = await submitAnswerApi(
         currentQuestionIndex!,
         userEnrollmentPk,
-        userAnswersHistory[questionNumber]!
+        userAnswersHistory[questionNumber]
       )
 
       setAnswersHistory((userAnswerHistory) => {
