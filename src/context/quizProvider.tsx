@@ -98,6 +98,7 @@ const QuizContextProvider: FC<
     questionId: number
     data: number[]
   } | null>(null)
+  const [winnersList, setWinnersList] = useState([])
 
   const [ping, setPing] = useState(-1)
 
@@ -338,7 +339,14 @@ const QuizContextProvider: FC<
       const newState = recalculateState()
       setStateIndex(newState)
 
-      if (newState > quiz.questions.length) {
+      const now = new Date().getTime()
+
+      let estimatedRemaining = totalPeriod * newState + startAt.getTime() - now
+
+      if (
+        newState > quiz.questions.length ||
+        (estimatedRemaining < restPeriod && newState === quiz.questions.length)
+      ) {
         setFinished(true)
         setTimer(0)
         return
@@ -352,12 +360,12 @@ const QuizContextProvider: FC<
       setTimer(() => {
         const now = new Date().getTime()
 
+        let estimatedRemaining =
+          totalPeriod * newState + startAt.getTime() - now
+
         if (newState <= 0) {
           return startAt.getTime() - now
         }
-
-        let estimatedRemaining =
-          totalPeriod * newState + startAt.getTime() - now
 
         if (estimatedRemaining < restPeriod) {
           setIsRestTime(true)
