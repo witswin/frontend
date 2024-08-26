@@ -71,36 +71,20 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
               {competition.details}
             </div>
           </div>
-          {true ? (
+          {competition.sponsors.length ? (
             <div className="sponsors flex h-[38px] items-center justify-between gap-5 rounded-xl bg-gray10 px-5">
               <p className="text-xs font-medium leading-[22px] text-gray90">
                 Sponsored By
               </p>
-              <Icon
-                className="h-5 w-5"
-                iconSrc="/assets/images/quizTap/polygon.png"
-                alt="polygon"
-              />
-              <Icon
-                className="h-5 w-5"
-                iconSrc="/assets/images/quizTap/gnosis.png"
-                alt="gnosis"
-              />
-              <Icon
-                className="h-5 w-5"
-                iconSrc="/assets/images/quizTap/vector.png"
-                alt="vector"
-              />
-              <Icon
-                className="h-5 w-5"
-                iconSrc="/assets/images/quizTap/ethereum.png"
-                alt="ethereum"
-              />
-              <Icon
-                className="h-5 w-5"
-                iconSrc="/assets/images/quizTap/celo.png"
-                alt="celo"
-              />
+              {competition.sponsors.map((sponsor, key) => (
+                <Link href={sponsor.link} key={key} target="_blank">
+                  <Icon
+                    className="h-5 w-5"
+                    iconSrc={sponsor.image}
+                    alt="polygon"
+                  />
+                </Link>
+              ))}
             </div>
           ) : (
             <></>

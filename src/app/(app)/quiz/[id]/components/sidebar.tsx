@@ -3,6 +3,7 @@
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import { useNumberLinearInterpolate } from "@/utils/interpolate"
+import Link from "next/link"
 import { FC, useEffect } from "react"
 
 const QuizTapSidebar: FC = () => {
@@ -97,41 +98,26 @@ const QuizTapSidebar: FC = () => {
         </div>
       </div>
       <div className="mt-3"></div>
-
-      <div className="mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
-        <Icon
-          className="mx-auto w-48"
-          iconSrc="/assets/images/quizTap/sponsored.png"
-          alt="health"
-        />
-        <div className="mt-4 flex items-center justify-center gap-3">
+      {!!quiz?.sponsors.length && (
+        <div className="mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
           <Icon
-            className="h-5 w-5"
-            iconSrc="/assets/images/quizTap/polygon.png"
-            alt="polygon"
+            className="mx-auto w-48"
+            iconSrc="/assets/images/quizTap/sponsored.png"
+            alt="health"
           />
-          <Icon
-            className="h-5 w-5"
-            iconSrc="/assets/images/quizTap/gnosis.png"
-            alt="gnosis"
-          />
-          <Icon
-            className="h-5 w-5"
-            iconSrc="/assets/images/quizTap/vector.png"
-            alt="vector"
-          />
-          <Icon
-            className="h-5 w-5"
-            iconSrc="/assets/images/quizTap/ethereum.png"
-            alt="ethereum"
-          />
-          <Icon
-            className="h-5 w-5"
-            iconSrc="/assets/images/quizTap/celo.png"
-            alt="celo"
-          />
+          <div className="mt-4 flex items-center justify-center gap-3">
+            {quiz?.sponsors.map((sponsor, key) => (
+              <Link href={sponsor.link} key={key} target="_blank">
+                <Icon
+                  className="h-5 w-5"
+                  iconSrc={sponsor.image}
+                  alt="polygon"
+                />
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   )
 }
