@@ -10,6 +10,7 @@ import RestTime from "./components/restTime"
 import QuizFinished from "./components/finished"
 import { useState } from "react"
 import LoseModal from "./components/modals/loseModal"
+import WinnerModal from "./components/modals/winnerModal"
 
 const QuizItemPage = () => {
   const {
@@ -67,6 +68,7 @@ const QuizItemPage = () => {
 
         <RenderQuizItemBody />
         <LoseModal />
+        <WinnerModal />
 
         <div className="text-right text-sm mt-20">
           <span className="px-2 py-1 rounded-lg bg-gray30 border border-gray70 shadow-lg inline-flex items-center space-x-2">

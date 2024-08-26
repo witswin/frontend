@@ -20,6 +20,7 @@ import {
 } from "react"
 import { useUserProfileContext } from "./userProfile"
 import logger from "@/core/logger"
+import { Address } from "viem"
 
 export type QuizContextProps = {
   remainingPeople: number
@@ -45,6 +46,7 @@ export type QuizContextProps = {
   socketInstance: WebSocket | null
   hintData: { questionId: number; data: number[] } | null
   previousRoundLosses: number
+  winners: Address[] | null
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -70,6 +72,7 @@ export const QuizContext = createContext<QuizContextProps>({
   socketInstance: null,
   hintData: null,
   previousRoundLosses: 0,
+  winners: null,
 })
 
 export const statePeriod = 15000
@@ -98,7 +101,7 @@ const QuizContextProvider: FC<
     questionId: number
     data: number[]
   } | null>(null)
-  const [winnersList, setWinnersList] = useState([])
+  const [winnersList, setWinnersList] = useState<Address[] | null>(null)
 
   const [ping, setPing] = useState(-1)
 
@@ -215,6 +218,8 @@ const QuizContextProvider: FC<
             setAmountWinPerUser(stats.prizeToWin)
             setTotalParticipantsCount(stats.totalParticipantsCount)
             setRemainingPeople(stats.usersParticipating)
+          } else if (data.type === "quiz_finish") {
+            setWinnersList(data.winnersList)
           } else if (data.type === "hint_question") {
             setHintData({
               data: data.data,
@@ -425,6 +430,7 @@ const QuizContextProvider: FC<
         socketInstance: socket.current.client,
         hintData,
         previousRoundLosses,
+        winners: winnersList,
       }}
     >
       {children}
