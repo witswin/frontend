@@ -9,6 +9,7 @@ const QuestionPrompt: FC = () => {
     question: currentQuestion,
     previousQuestion,
     isRestTime,
+    hintData,
   } = useQuizContext()
 
   const question = isRestTime ? previousQuestion : currentQuestion
@@ -42,7 +43,15 @@ const QuestionPrompt: FC = () => {
 
       <div className="mt-10 grid grid-cols-2 gap-5 font-semibold">
         {question?.choices.map((item, key) => (
-          <QuestionChoice title={item.text} index={item.id} key={key} />
+          <QuestionChoice
+            disabled={
+              hintData?.questionId === question.id &&
+              hintData.data.includes(item.id)
+            }
+            title={item.text}
+            index={item.id}
+            key={key}
+          />
         ))}
       </div>
     </div>
@@ -56,10 +65,11 @@ export const indexesToABC: Record<number, string> = {
   4: "D",
 }
 
-const QuestionChoice: FC<{ index: number; title: string }> = ({
-  index,
-  title,
-}) => {
+const QuestionChoice: FC<{
+  index: number
+  title: string
+  disabled?: boolean
+}> = ({ index, title, disabled }) => {
   const {
     answerQuestion,
     activeQuestionChoiceIndex,
@@ -70,6 +80,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
 
   return (
     <button
+      disabled={disabled}
       onClick={() =>
         isRestTime || !question?.isEligible || answerQuestion(index)
       }
@@ -78,7 +89,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
         answersHistory[question.id] &&
         answersHistory[question.id] !== index &&
         activeQuestionChoiceIndex === index
-          ? "!border-error !bg-error/40"
+          ? "!border-error !text-error/40 !bg-error/40"
           : ""
       } ${
         question &&
@@ -86,7 +97,7 @@ const QuestionChoice: FC<{ index: number; title: string }> = ({
         activeQuestionChoiceIndex !== -1
           ? "!border-space-green text-space-green !bg-dark-space-green"
           : ""
-      } ${activeQuestionChoiceIndex === index ? "!border-gray100 bg-gray60" : ""} `}
+      } ${activeQuestionChoiceIndex === index ? "!border-gray100 bg-gray60" : ""} ${disabled ? "opacity-20" : ""}`}
     >
       <span>{title}</span>
 

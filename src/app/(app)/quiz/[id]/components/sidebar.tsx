@@ -15,13 +15,14 @@ const QuizTapSidebar: FC = () => {
   } = useQuizContext()
 
   const amountWinCount = useNumberLinearInterpolate({
-    duration: 6000,
+    duration: 1000,
     initial: amountWinPerUser,
   })
 
   const { onChange, value } = useNumberLinearInterpolate({
-    duration: 6000,
+    duration: 1000,
     initial: remainingPeople,
+    isInt: true,
   })
 
   useEffect(() => {

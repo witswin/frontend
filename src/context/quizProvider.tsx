@@ -42,6 +42,8 @@ export type QuizContextProps = {
   amountWinPerUser: number
   ping: number
   wrongAnswersCount: number
+  socketInstance: WebSocket | null
+  hintData: { questionId: number; data: number[] } | null
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -64,6 +66,8 @@ export const QuizContext = createContext<QuizContextProps>({
   amountWinPerUser: 0,
   ping: -1,
   wrongAnswersCount: 0,
+  socketInstance: null,
+  hintData: null,
 })
 
 export const statePeriod = 15000
@@ -87,6 +91,10 @@ const QuizContextProvider: FC<
   const [stateIndex, setStateIndex] = useState(-1)
   const [previousQuestion, setPreviousQuestion] =
     useState<QuestionResponse | null>(null)
+  const [hintData, setHintData] = useState<{
+    questionId: number
+    data: number[]
+  } | null>(null)
 
   const [ping, setPing] = useState(-1)
 
@@ -195,9 +203,19 @@ const QuizContextProvider: FC<
                 ? JSON.parse(data.question)
                 : data.question
             )
-          }
+          } else if (data.type === "quiz_stats") {
+            const stats = data.data
 
-          if (data.type === "answers_history") {
+            setHint(stats.hintCount)
+            setAmountWinPerUser(stats.prizeToWin)
+            setTotalParticipantsCount(stats.totalParticipantsCount)
+            setRemainingPeople(stats.usersParticipating)
+          } else if (data.type === "hint_question") {
+            setHintData({
+              data: data.data,
+              questionId: data.questionId,
+            })
+          } else if (data.type === "answers_history") {
             const answers =
               typeof data.data === "string" ? JSON.parse(data.data) : data.data
 
@@ -301,35 +319,6 @@ const QuizContextProvider: FC<
     setRemainingPeople(res.winnerCount)
   }, [quiz.id])
 
-  const getQuestion = useCallback(
-    async (stateIndex: number) => {
-      const questionIndex = getNextQuestionPk(stateIndex)
-      if (!questionIndex) {
-        return
-      }
-
-      const res = await fetchQuizQuestionApi(questionIndex)
-
-      setRemainingPeople(res.remainParticipantsCount)
-      setTotalParticipantsCount(res.totalParticipantsCount)
-      setAmountWinPerUser(res.amountWonPerUser)
-
-      setQuestion((prev) => {
-        if (prev) {
-          setPreviousQuestion(prev)
-        }
-
-        return res
-      })
-    },
-    [getNextQuestionPk]
-  )
-
-  // useEffect(() => {
-  //   if (question) return
-  //   getQuestion(stateIndex)
-  // }, [getQuestion, question, stateIndex])
-
   useEffect(() => {
     const timerInterval = setInterval(() => {
       const newState = recalculateState()
@@ -338,7 +327,6 @@ const QuizContextProvider: FC<
       if (newState > quiz.questions.length) {
         setFinished(true)
         setTimer(0)
-        // fetchFinalResults();
         return
       }
 
@@ -372,7 +360,6 @@ const QuizContextProvider: FC<
       clearInterval(timerInterval)
     }
   }, [
-    getQuestion,
     question,
     quiz.questions.length,
     recalculateState,
@@ -413,6 +400,8 @@ const QuizContextProvider: FC<
         amountWinPerUser,
         ping,
         wrongAnswersCount,
+        socketInstance: socket.current.client,
+        hintData,
       }}
     >
       {children}

@@ -1,41 +1,54 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState, useRef } from "react"
 
-const baseUnitTime = 1000; // ms
-
-const FPS = 60;
-
+const baseUnitTime = 1000 // ms
+const FPS = 60
 export const useNumberLinearInterpolate = ({
   initial,
   duration,
+  isInt = false, // Default to false if not specified
 }: {
-  initial: number;
-  duration: number;
+  initial: number
+  duration: number
+  isInt?: boolean
 }) => {
-  const [number, setNumber] = useState(initial);
+  const [number, setNumber] = useState(initial)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const onChange = (value: number) => {
-    const frames = (duration * FPS) / baseUnitTime;
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+    }
 
-    const increment = (value - number) / frames;
+    const frames = (duration * FPS) / baseUnitTime
+    const increment = (value - number) / frames
 
-    const minIncrement =
-      Math.sign(increment) * Math.max(Math.abs(increment), 1);
+    intervalRef.current = setInterval(() => {
+      setNumber((prevNumber) => {
+        let nextNumber = prevNumber + increment
 
-    let currentNumber = number;
-    const interval = setInterval(() => {
-      currentNumber += minIncrement;
-      setNumber(currentNumber);
-      if (Math.abs(currentNumber - value) < Math.abs(minIncrement)) {
-        clearInterval(interval);
-        setNumber(value);
-      }
-    }, baseUnitTime / FPS);
-  };
+        if (isInt) {
+          nextNumber = Math.floor(nextNumber)
+        } else {
+          nextNumber = Math.round(nextNumber * 100) / 100
+        }
+
+        if (
+          (increment > 0 && nextNumber >= value) ||
+          (increment < 0 && nextNumber <= value)
+        ) {
+          clearInterval(intervalRef.current!)
+          return isInt ? Math.round(value) : value
+        }
+
+        return nextNumber
+      })
+    }, baseUnitTime / FPS)
+  }
 
   return {
     value: number,
     onChange,
-  };
-};
+  }
+}

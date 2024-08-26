@@ -8,9 +8,20 @@ import { useQuizContext } from "@/context/quizProvider"
 import QuestionPrompt from "./components/questionPrompt"
 import RestTime from "./components/restTime"
 import QuizFinished from "./components/finished"
+import { useState } from "react"
 
 const QuizItemPage = () => {
-  const { hint, stateIndex, ping, timer } = useQuizContext()
+  const {
+    hint,
+    stateIndex,
+    ping,
+    timer,
+    isRestTime,
+    socketInstance,
+    question,
+  } = useQuizContext()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const className =
     ping <= 100 ? "bg-space-green" : ping <= 200 ? "bg-yellow-500" : "bg-error"
@@ -23,7 +34,18 @@ const QuizItemPage = () => {
           <Timer timer={timer} />
 
           <button
-            disabled={hint <= 0 || stateIndex <= 0}
+            onClick={() => {
+              setIsLoading(true)
+              socketInstance?.send(
+                JSON.stringify({
+                  command: "GET_HINT",
+                  args: {
+                    question_id: question?.id,
+                  },
+                })
+              )
+            }}
+            disabled={isLoading || hint <= 0 || stateIndex <= 0 || isRestTime}
             className="flex items-center rounded-xl border-2 border-gray70 bg-gray00 px-2 text-gray100 disabled:opacity-60"
           >
             <Icon
@@ -34,7 +56,9 @@ const QuizItemPage = () => {
               height="20px"
             />
             <span className="py-1">50% Hint</span>
-            <span className="ml-2 border-l-2 border-gray70 py-1 pl-2">1</span>
+            <span className="ml-2 border-l-2 border-gray70 py-1 pl-2">
+              {hint}
+            </span>
           </button>
         </div>
 
