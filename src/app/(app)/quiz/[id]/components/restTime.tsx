@@ -2,6 +2,7 @@
 
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
+import logger from "@/core/logger"
 import { FC, useMemo } from "react"
 
 const isArrayEqual = (array1: any[], array2: any[]) => {
@@ -15,8 +16,13 @@ const isArrayEqual = (array1: any[], array2: any[]) => {
 }
 
 const RestTime: FC<{}> = () => {
-  const { timer, userAnswersHistory, answersHistory, stateIndex } =
-    useQuizContext()
+  const {
+    timer,
+    userAnswersHistory,
+    answersHistory,
+    stateIndex,
+    previousRoundLosses,
+  } = useQuizContext()
 
   const totalSeconds = Math.floor(timer / 1000)
   const seconds = totalSeconds % 60
@@ -31,7 +37,7 @@ const RestTime: FC<{}> = () => {
   const didAnswerLastQuestion = useMemo(() => {
     return (
       answersHistory.length === userAnswersHistory.length &&
-      !!userAnswersHistory.at(-1)
+      userAnswersHistory.length === stateIndex
     )
   }, [answersHistory, userAnswersHistory])
 
@@ -61,7 +67,9 @@ const RestTime: FC<{}> = () => {
         />
 
         <p className="-mt-5 text-gray100">
-          <strong className="text-white underline">21</strong>{" "}
+          <strong className="text-white underline">
+            {previousRoundLosses}
+          </strong>{" "}
           <span>people lost the game in the previous round</span>
         </p>
         <p className="mt-3 text-sm text-gray90">
@@ -99,7 +107,9 @@ const RestTime: FC<{}> = () => {
         </p>
 
         <p className="mt-5 text-gray100">
-          <strong className="text-white underline">21</strong>{" "}
+          <strong className="text-white underline">
+            {previousRoundLosses}
+          </strong>{" "}
           <span>people lost the game in the previous round</span>
         </p>
         <p className="mt-3 text-sm text-gray90">
@@ -120,7 +130,7 @@ const RestTime: FC<{}> = () => {
       <p className="text-lg font-semibold text-error">Ohh! Game Over.</p>
 
       <p className="mt-5 text-gray100">
-        <strong className="text-white underline">21</strong>{" "}
+        <strong className="text-white underline">{previousRoundLosses}</strong>{" "}
         <span>people lost the game in the previous round.</span>
       </p>
       <p className="mt-3 text-sm text-gray90">Next Questions in 5 seconds...</p>

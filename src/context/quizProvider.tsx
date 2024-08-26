@@ -44,6 +44,7 @@ export type QuizContextProps = {
   wrongAnswersCount: number
   socketInstance: WebSocket | null
   hintData: { questionId: number; data: number[] } | null
+  previousRoundLosses: number
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -68,6 +69,7 @@ export const QuizContext = createContext<QuizContextProps>({
   wrongAnswersCount: 0,
   socketInstance: null,
   hintData: null,
+  previousRoundLosses: 0,
 })
 
 export const statePeriod = 15000
@@ -91,6 +93,7 @@ const QuizContextProvider: FC<
   const [stateIndex, setStateIndex] = useState(-1)
   const [previousQuestion, setPreviousQuestion] =
     useState<QuestionResponse | null>(null)
+  const [previousRoundLosses, setPreviousRoundLosses] = useState(0)
   const [hintData, setHintData] = useState<{
     questionId: number
     data: number[]
@@ -114,12 +117,13 @@ const QuizContextProvider: FC<
 
   const startAt = useMemo(() => new Date(quiz.startAt), [quiz.startAt])
 
-  const wrongAnswersCount = useMemo(
-    () =>
-      userAnswersHistory.filter((item) => !answersHistory.includes(item))
-        .length,
-    [answersHistory, userAnswersHistory]
-  )
+  const wrongAnswersCount = useMemo(() => {
+    const userAnswerHistoryCount = userAnswersHistory.filter((item) =>
+      answersHistory.includes(item)
+    ).length
+
+    return answersHistory.length - userAnswerHistoryCount
+  }, [answersHistory, userAnswersHistory, stateIndex])
 
   const answerQuestion = useCallback(
     (choiceIndex: number) => {
@@ -182,7 +186,6 @@ const QuizContextProvider: FC<
       }
 
       socket.current.client.onclose = (e) => {
-        logger.log(e)
         if (isMounted) reconnect() // Reconnect only if the component is still mounted
         setPing(-1)
       }
@@ -207,6 +210,7 @@ const QuizContextProvider: FC<
             const stats = data.data
 
             setHint(stats.hintCount)
+            setPreviousRoundLosses(stats.previousRoundLosses)
             setAmountWinPerUser(stats.prizeToWin)
             setTotalParticipantsCount(stats.totalParticipantsCount)
             setRemainingPeople(stats.usersParticipating)
@@ -218,8 +222,6 @@ const QuizContextProvider: FC<
           } else if (data.type === "answers_history") {
             const answers =
               typeof data.data === "string" ? JSON.parse(data.data) : data.data
-
-            console.log(answers)
 
             setAnswersHistory(
               answers.map((item: any) =>
@@ -267,7 +269,11 @@ const QuizContextProvider: FC<
   const submitUserAnswer = useCallback(async () => {
     const currentQuestionIndex = getNextQuestionPk(stateIndex)
 
-    if (!question?.isEligible) return
+    if (!question?.isEligible) {
+      setAnswersHistory((prev) => [...prev, -1])
+
+      return
+    }
 
     if (
       userAnswersHistory[question.number - 1] !== -1 &&
@@ -276,7 +282,13 @@ const QuizContextProvider: FC<
       const currentQuestion = currentQuestionIndex
       const questionNumber = question.number - 1
 
-      if (!userAnswersHistory[questionNumber]!) return
+      if (
+        userAnswersHistory[questionNumber] === null ||
+        userAnswersHistory[questionNumber] === undefined
+      ) {
+        setAnswersHistory((prev) => [...prev, -1])
+        return
+      }
 
       const answerRes = await submitAnswerApi(
         currentQuestionIndex!,
@@ -404,6 +416,7 @@ const QuizContextProvider: FC<
         wrongAnswersCount,
         socketInstance: socket.current.client,
         hintData,
+        previousRoundLosses,
       }}
     >
       {children}
