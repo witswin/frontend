@@ -37,7 +37,7 @@ export const UserAuthStatus = () => {
           <div
             onClick={() => {
               if (!userProfile) return
-              // setDropDownActive(!dropDownActive)
+              setDropDownActive(!dropDownActive)
             }}
             className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between bg-gray40"
           >
@@ -131,7 +131,7 @@ export const ProfileDropdown: FC<{
             onClick={() => {
               setDropDownActive(false)
             }}
-            href="/profile"
+            href="#"
             className="mb-1 font-semibold"
           >
             <button className="relative text-left px-2 h-8 flex items-center w-40 z-10 text-white">
