@@ -221,6 +221,7 @@ const QuizContextProvider: FC<
           } else if (data.type === "quiz_finish") {
             setWinnersList(data.winnersList)
           } else if (data.type === "hint_question") {
+            setHint((prev) => prev - 1)
             setHintData({
               data: data.data,
               questionId: data.questionId,
@@ -352,6 +353,8 @@ const QuizContextProvider: FC<
         newState > quiz.questions.length ||
         (estimatedRemaining < restPeriod && newState === quiz.questions.length)
       ) {
+        submitUserAnswer()
+
         setFinished(true)
         setTimer(0)
         return
