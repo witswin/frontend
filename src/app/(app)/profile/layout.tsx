@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   FC,
@@ -7,26 +7,25 @@ import {
   createContext,
   useContext,
   useState,
-} from "react";
-import DeleteWalletModal from "./components/deleteWalletModal";
-import { NullCallback } from "@/utils";
-import { Address } from "viem";
+} from "react"
+import { NullCallback } from "@/utils"
+import { Address } from "viem"
 
 export const ProfileEditContext = createContext<{
-  focusedWalletDeleteAddress: Address | null;
-  setFocusedWalletDeleteAddress: (walletPk: Address | null) => void;
+  focusedWalletDeleteAddress: Address | null
+  setFocusedWalletDeleteAddress: (walletPk: Address | null) => void
 }>({
   focusedWalletDeleteAddress: null,
   setFocusedWalletDeleteAddress: NullCallback,
-});
+})
 
-export const useProfileEditContext = () => useContext(ProfileEditContext);
+export const useProfileEditContext = () => useContext(ProfileEditContext)
 
 const ProfileEditLayout: FC<
   PropsWithChildren & { socialAccounts: ReactNode }
 > = ({ children, socialAccounts }) => {
   const [focusedWalletDeleteAddress, setFocusedWalletDeleteAddress] =
-    useState<Address | null>(null);
+    useState<Address | null>(null)
 
   return (
     <ProfileEditContext.Provider
@@ -37,9 +36,8 @@ const ProfileEditLayout: FC<
     >
       {children}
       {socialAccounts}
-      <DeleteWalletModal />
     </ProfileEditContext.Provider>
-  );
-};
+  )
+}
 
-export default ProfileEditLayout;
+export default ProfileEditLayout
