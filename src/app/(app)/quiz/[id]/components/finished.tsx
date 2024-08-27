@@ -33,7 +33,7 @@ const QuizFinished: FC<{}> = () => {
             ))}
             {!!winners.length || (
               <p className="text-center text-gray90">
-                There where no winners for this raffle
+                There were no winners for this raffle
               </p>
             )}
           </span>
