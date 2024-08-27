@@ -1,18 +1,11 @@
-"use client"
-
 import { FC } from "react"
 import Icon from "../ui/Icon"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 
 const Footer: FC = () => {
-  const path = usePathname()
-
-  if (path === "/") return null
-
   return (
-    <footer className="hidden h-16 w-full items-center justify-center p-3 md:flex">
-      <Link href="https://t.me/unitap_app" target="_blank">
+    <footer className="hidden h-16 w-full items-center justify-center p-3 gap-4 md:flex">
+      <Link href="https://t.me/WitsWin" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/telegram.svg"
           width="34px"
@@ -22,7 +15,7 @@ const Footer: FC = () => {
         ></Icon>
       </Link>
 
-      <Link href="http://twitter.com/unitap_app" target="_blank">
+      <Link href="https://twitter.com/WitsWin" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/twitter.svg"
           width="34px"
@@ -41,7 +34,7 @@ const Footer: FC = () => {
           hoverable
         ></Icon>
       </Link>
-      <Link href="https://discord.gg/unitap" target="_blank">
+      <Link href="https://discord.com/invite/JGM7thc5" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/discord.svg"
           width="34px"
@@ -51,22 +44,12 @@ const Footer: FC = () => {
         ></Icon>
       </Link>
       <Link
-        href="https://www.youtube.com/@UnitapApp?sub_confirmation=1"
+        className="!absolute right-10"
         target="_blank"
+        href="https://unitap.app"
       >
-        <Icon
-          iconSrc="/assets/images/footer/youtube.svg"
-          width="34px"
-          height="auto"
-          hoverable
-        ></Icon>
+        <Icon iconSrc="/PoweredbyUnitap.svg" width="160px" height="auto"></Icon>
       </Link>
-      <Icon
-        className="!absolute right-10 hidden md:static"
-        iconSrc="/Poweredbybright.svg"
-        width="160px"
-        height="auto"
-      ></Icon>
     </footer>
   )
 }

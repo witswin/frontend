@@ -6,6 +6,7 @@ import Timer from "./(app)/quiz/[id]/components/timer"
 import Icon from "@/components/ui/Icon"
 import { indexesToABC } from "./(app)/quiz/[id]/components/questionPrompt"
 import { Button, Card, CardFooter } from "@nextui-org/react"
+import Link from "next/link"
 
 const LandingPage = () => {
   return (
@@ -149,7 +150,7 @@ const CartItem: FC<{
   return (
     <Card
       shadow="none"
-      className={`p-10 flex gap-5 justify-between flex-col rounded-lg bg-background-main bg-cover bg-no-repeat ${className ?? ""} bg-[url('/assets/images/landing/card-bg.svg')]`}
+      className={`p-10 flex gap-5 justify-between bg-contain flex-col rounded-lg bg-no-repeat ${className ?? ""}`}
     >
       <div className="flex gap-4 items-center">
         <div className="">{icon}</div>
@@ -157,7 +158,7 @@ const CartItem: FC<{
       </div>
       <p className="text-gray100 leading-loose">{description}</p>
       <CardFooter className="justify-end gap-4">
-        <Button color="success" className="">
+        <Button className="bg-space-green text-black" as={Link} href="/quiz">
           Launch App
         </Button>
       </CardFooter>

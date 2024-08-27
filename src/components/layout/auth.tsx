@@ -37,7 +37,7 @@ export const UserAuthStatus = () => {
           <div
             onClick={() => {
               if (!userProfile) return
-              setDropDownActive(!dropDownActive)
+              // setDropDownActive(!dropDownActive)
             }}
             className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between bg-gray40"
           >
