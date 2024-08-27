@@ -3,10 +3,10 @@ import { useEffect, useState } from "react"
 export const setCookie = (key: string, value: string) => {
   if (process.env.NODE_ENV === "development") {
     document.cookie = `${key}=${value}; Path=/;`
-    document.cookie = `${key}=${value}; Path=/;domain=api.wits.win; secure`
+    // document.cookie = `${key}=${value}; Path=/;domain=api.wits.win; secure`
   } else {
     document.cookie = `${key}=${value}; Path=/; secure`
-    document.cookie = `${key}=${value}; Path=/;domain=api.wits.win`
+    // document.cookie = `${key}=${value}; Path=/;domain=api.wits.win`
   }
 }
 
