@@ -21,8 +21,9 @@ const QuizLayout: FC<PropsWithChildren & { params: { id: string } }> = async ({
       cookieStorage.get("userToken")?.value!,
       Number(params.id)
     )
-  } catch {
-    redirect("/")
+  } catch (e) {
+    console.log(e)
+    redirect("/quiz")
   }
 
   return (

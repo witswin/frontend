@@ -107,7 +107,7 @@ export const fetchUserQuizEnrollment = async (
     }
   )
 
-  return res.data[0].id
+  return res.data[0]?.id
 }
 
 export const fetchUsersQuizEnrollments = async () => {

@@ -2,7 +2,7 @@
 
 import { APIErrorsSource, Settings, UserProfile } from "@/types"
 import { deleteWalletApi, getUserProfileWithTokenAPI } from "@/utils/api/auth"
-import useLocalStorageState from "@/utils/hooks"
+import useLocalStorageState, { setCookie } from "@/utils/hooks"
 import {
   FC,
   PropsWithChildren,
@@ -72,7 +72,7 @@ export const UserContextProvider: FC<
   const [nonEVMWalletAddress, setNonEVMWalletAddress] = useState("")
 
   const onWalletLogin = (userToken: string, userProfile: UserProfile) => {
-    document.cookie = `userToken=${userToken!};path=/;`
+    setCookie("userToken", userToken)
     setUserProfile(userProfile)
     setToken(userToken)
   }
@@ -92,14 +92,12 @@ export const UserContextProvider: FC<
           const userProfileWithToken: UserProfile =
             await getUserProfileWithTokenAPI(userToken!)
           setUserProfile(userProfileWithToken)
-
-          document.cookie = `userToken=${userToken!};path=/;`
+          setCookie("userToken", userToken!)
         } finally {
           setUserProfileLoading(false)
         }
       }
-
-      document.cookie = "userToken=" + userToken + ";path=/;"
+      setCookie("userToken", userToken!)
 
       if (userToken) {
         getUserProfileWithToken()
@@ -112,7 +110,8 @@ export const UserContextProvider: FC<
   const logout = () => {
     disconnect?.()
     localStorage.clear()
-    document.cookie = "userToken=;path=/;"
+    setCookie("userToken", "")
+
     setUserProfile(null)
     setToken("")
   }
@@ -131,7 +130,8 @@ export const UserContextProvider: FC<
     const timeout = setTimeout(() => {
       disconnect?.()
       localStorage.removeItem("userToken")
-      document.cookie = "userToken=;path=/;"
+      setCookie("userToken", "")
+
       setUserProfile(null)
       setToken("")
     }, 200)
