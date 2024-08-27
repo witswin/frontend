@@ -210,6 +210,14 @@ const QuizContextProvider: FC<
                 ? JSON.parse(data.question)
                 : data.question
             )
+          } else if (data.type === "add_answer") {
+            const answerData = data.data
+            setAnswersHistory((userAnswerHistory) => {
+              userAnswerHistory[answerData.questionId] = answerData.isCorrect
+                ? data.answer.selectedChoice.id
+                : -1
+              return [...userAnswerHistory]
+            })
           } else if (data.type === "quiz_stats") {
             const stats = data.data
 
@@ -297,6 +305,16 @@ const QuizContextProvider: FC<
         return
       }
 
+      // socket.current.client?.send(
+      //   JSON.stringify({
+      //     command: "ANSWER",
+      //     args: {
+      //       questionId: currentQuestionIndex,
+      //       selectedChoiceId: userAnswersHistory[questionNumber]!,
+      //     },
+      //   })
+      // )
+
       const answerRes = await submitAnswerApi(
         currentQuestionIndex!,
         userEnrollmentPk,
@@ -310,16 +328,6 @@ const QuizContextProvider: FC<
 
         return [...userAnswerHistory]
       })
-
-      // socket.current.client?.send(
-      //   JSON.stringify({
-      //     command: "ANSWER",
-      //     args: {
-      //       question_id: currentQuestionIndex,
-      //       selected_choice_id: userAnswersHistory[questionNumber]!,
-      //     },
-      //   })
-      // )
     }
   }, [
     getNextQuestionPk,
@@ -353,9 +361,11 @@ const QuizContextProvider: FC<
         newState > quiz.questions.length ||
         (estimatedRemaining < restPeriod && newState === quiz.questions.length)
       ) {
-        submitUserAnswer()
+        setFinished((prev) => {
+          if (!prev) submitUserAnswer()
 
-        setFinished(true)
+          return true
+        })
         setTimer(0)
         return
       }
