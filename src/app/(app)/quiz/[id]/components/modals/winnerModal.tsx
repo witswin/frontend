@@ -24,7 +24,7 @@ const WinnerModal: FC = () => {
 
   return (
     <Modal
-      className="bg-gray20"
+      className="bg-gray20 border-2 border-gray80"
       isOpen={
         !dismissWinnerModal &&
         finished &&
