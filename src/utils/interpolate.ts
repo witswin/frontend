@@ -17,6 +17,8 @@ export const useNumberLinearInterpolate = ({
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const onChange = (value: number) => {
+    const isIncreamentMode = value > number
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
@@ -28,10 +30,10 @@ export const useNumberLinearInterpolate = ({
       setNumber((prevNumber) => {
         let nextNumber = prevNumber + increment
 
-        if (isInt) {
-          nextNumber = Math.floor(nextNumber)
+        if (isIncreamentMode) {
+          nextNumber = Math.round(nextNumber)
         } else {
-          nextNumber = Math.round(nextNumber * 100) / 100
+          nextNumber = Math.floor(nextNumber)
         }
 
         if (
@@ -39,7 +41,11 @@ export const useNumberLinearInterpolate = ({
           (increment < 0 && nextNumber <= value)
         ) {
           clearInterval(intervalRef.current!)
-          return isInt ? Math.round(value) : value
+          return isInt
+            ? isIncreamentMode
+              ? Math.round(value)
+              : Math.floor(value)
+            : value
         }
 
         return nextNumber

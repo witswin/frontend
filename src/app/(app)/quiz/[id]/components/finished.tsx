@@ -18,21 +18,25 @@ const QuizFinished: FC<{}> = () => {
         <div>
           <h3 className="text-left">Winners List</h3>
 
-          <div className="mt-5 h-80 overflow-y-auto text-sm bg-gray20 p-5 rounded-lg">
+          <span className="mt-5 h-80 overflow-y-auto text-sm bg-gray20 p-5 inline-block rounded-lg">
             {winners.map((item, key) => (
-              <div
+              <span
                 key={key}
-                className="px-4 py-3 rounded-lg border border-gray70 bg-gray30 text-white font-mono"
+                className="px-4 py-3 inline-flex gap-10 items-center text-gray100 font-sans rounded-xl bg-gray60"
               >
                 {shortenAddress(item)}
-              </div>
+
+                <span className="bg-gray50 border-2 border-gray70 rounded-lg px-4 py-2 text-xs ml-auto text-gray80">
+                  Not Claimed by the winner yet
+                </span>
+              </span>
             ))}
             {!!winners.length || (
               <p className="text-center text-gray90">
                 There where no winners for this raffle
               </p>
             )}
-          </div>
+          </span>
         </div>
       )}
     </div>
