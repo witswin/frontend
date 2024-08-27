@@ -15,7 +15,7 @@ const LoseModal: FC = () => {
     <Modal
       className="bg-gray20"
       isOpen={!watchAsSpectator && !finished && wrongAnswersCount > 0}
-      onClick={() => setWatchAsSpectator(true)}
+      onOpenChange={() => setWatchAsSpectator(true)}
     >
       <ModalContent>
         <ModalHeader className="justify-center">Quiz Over</ModalHeader>
