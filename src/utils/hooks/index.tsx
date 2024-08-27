@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
 
 export const setCookie = (key: string, value: string) => {
-  if (process.env.NODE_ENV === "development")
+  if (process.env.NODE_ENV === "development") {
     document.cookie = `${key}=${value}; Path=/;`
-  else document.cookie = `${key}=${value}; Path=/; secure`
+    document.cookie = `${key}=${value}; Path=/;domain=api.wits.win; secure`
+  } else {
+    document.cookie = `${key}=${value}; Path=/; secure`
+    document.cookie = `${key}=${value}; Path=/;domain=api.wits.win`
+  }
 }
 
 const useLocalStorageState = (
