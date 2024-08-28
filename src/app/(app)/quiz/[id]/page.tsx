@@ -26,6 +26,7 @@ const QuizItemPage = () => {
     socketInstance,
     question,
     hintData,
+    wrongAnswersCount,
   } = useQuizContext()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -57,7 +58,8 @@ const QuizItemPage = () => {
               hint <= 0 ||
               stateIndex <= 0 ||
               isRestTime ||
-              hintData?.questionId === question?.id
+              hintData?.questionId === question?.id ||
+              wrongAnswersCount > 0
             }
             className="flex items-center rounded-xl border-2 border-gray70 bg-gray00 px-2 text-gray100 disabled:opacity-60"
           >
