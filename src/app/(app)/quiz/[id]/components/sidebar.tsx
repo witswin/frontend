@@ -5,6 +5,7 @@ import { useQuizContext } from "@/context/quizProvider"
 import { useNumberLinearInterpolate } from "@/utils/interpolate"
 import Link from "next/link"
 import { FC, useEffect } from "react"
+import NubmerInterpolate from "./number-interpolate"
 
 const QuizTapSidebar: FC = () => {
   const {
@@ -14,25 +15,6 @@ const QuizTapSidebar: FC = () => {
     quiz,
     wrongAnswersCount,
   } = useQuizContext()
-
-  const amountWinCount = useNumberLinearInterpolate({
-    duration: 1000,
-    initial: amountWinPerUser,
-  })
-
-  const { onChange, value } = useNumberLinearInterpolate({
-    duration: 1000,
-    initial: remainingPeople,
-    isInt: true,
-  })
-
-  useEffect(() => {
-    onChange(remainingPeople)
-  }, [remainingPeople])
-
-  useEffect(() => {
-    amountWinCount.onChange(amountWinPerUser)
-  }, [amountWinPerUser])
 
   const isUserLost = wrongAnswersCount > 0
 
@@ -58,8 +40,10 @@ const QuizTapSidebar: FC = () => {
           <p>In game people</p>
 
           <p className="mt-2">
-            <strong className="text-white">{value}</strong> /{" "}
-            {totalParticipantsCount}
+            <strong className="text-white">
+              <NubmerInterpolate value={remainingPeople} />
+            </strong>{" "}
+            / {totalParticipantsCount}
           </p>
         </div>
 
@@ -78,7 +62,7 @@ const QuizTapSidebar: FC = () => {
 
           <p className="mt-2">
             <strong className="text-white">
-              {amountWinCount.value.toFixed(2)}
+              <NubmerInterpolate value={amountWinPerUser} decimals={2} />
             </strong>{" "}
             <span
               className={`transition-colors ${isUserLost ? "text-error" : "text-space-green"}`}

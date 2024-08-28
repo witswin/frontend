@@ -5762,6 +5762,11 @@ duplexify@^4.1.2:
     readable-stream "^3.1.1"
     stream-shift "^1.0.2"
 
+eases@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/eases/-/eases-1.0.8.tgz#f1f5069a6b6ed2ea510f9c6110398d63efe9aee6"
+  integrity sha512-U8TwgFYPktV07tV9yxoIu9TIWsXHGOuDJNXlyihWEMnGMXaoh2kkfWf0N1itbCjHWrgs+/leubuG7m+OgkfA0Q==
+
 eastasianwidth@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
@@ -9328,6 +9333,13 @@ react-native-webview@^11.26.0:
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
+
+react-number-easing@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-number-easing/-/react-number-easing-1.0.2.tgz#b37d5948dafcf0d548dec9df7150e429a2c1edc6"
+  integrity sha512-md5vahNBxXv9EFMt/V+YO5ojwSxf3kcgL6Bxe1ZIGUgK9CaO5OCGYG/s6nBf8GhQNKAIJ8wySEo2nlT5v8YZZQ==
+  dependencies:
+    eases "^1.0.8"
 
 react-qrcode-logo@^2.9.0:
   version "2.10.0"
