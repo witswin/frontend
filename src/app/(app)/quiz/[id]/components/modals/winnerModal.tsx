@@ -29,7 +29,9 @@ const WinnerModal: FC = () => {
         !dismissWinnerModal &&
         finished &&
         !!address &&
-        !!winners?.find((winner) => isAddressEqual(address, winner))
+        !!winners?.find((winner) =>
+          isAddressEqual(address, winner.userProfile_WalletAddress)
+        )
       }
       onOpenChange={() => setDissmissWinnerModal(true)}
     >
