@@ -4,7 +4,11 @@ import Icon from "@/components/ui/Icon"
 import Timer from "./components/timer"
 import QuestionsList from "./components/questionsList"
 import WaitingIdle from "./components/waitingIdle"
-import { useQuizContext } from "@/context/quizProvider"
+import {
+  restPeriod,
+  seeResultDuration,
+  useQuizContext,
+} from "@/context/quizProvider"
 import QuestionPrompt from "./components/questionPrompt"
 import RestTime from "./components/restTime"
 import QuizFinished from "./components/finished"
@@ -21,12 +25,13 @@ const QuizItemPage = () => {
     isRestTime,
     socketInstance,
     question,
+    hintData,
   } = useQuizContext()
 
   const [isLoading, setIsLoading] = useState(false)
 
   const className =
-    ping <= 100 ? "bg-space-green" : ping <= 200 ? "bg-yellow-500" : "bg-error"
+    ping <= 100 ? "bg-space-green" : ping <= 300 ? "bg-yellow-500" : "bg-error"
 
   return (
     <div className="quiz-main-wrapper relative w-full">
@@ -47,7 +52,13 @@ const QuizItemPage = () => {
                 })
               )
             }}
-            disabled={isLoading || hint <= 0 || stateIndex <= 0 || isRestTime}
+            disabled={
+              isLoading ||
+              hint <= 0 ||
+              stateIndex <= 0 ||
+              isRestTime ||
+              hintData?.questionId === question?.id
+            }
             className="flex items-center rounded-xl border-2 border-gray70 bg-gray00 px-2 text-gray100 disabled:opacity-60"
           >
             <Icon
@@ -99,15 +110,16 @@ const QuizItemPage = () => {
 }
 
 const RenderQuizItemBody = () => {
-  const { stateIndex, isRestTime, finished } = useQuizContext()
+  const { stateIndex, isRestTime, finished, timer, quiz } = useQuizContext()
 
-  if (finished) return <QuizFinished />
+  if (finished || (quiz?.questions.length === stateIndex && isRestTime))
+    return <QuizFinished />
 
   if (stateIndex <= 0) {
     return <WaitingIdle />
   }
 
-  if (isRestTime) return <RestTime />
+  if (isRestTime && timer < restPeriod - seeResultDuration) return <RestTime />
 
   return <QuestionPrompt />
 }

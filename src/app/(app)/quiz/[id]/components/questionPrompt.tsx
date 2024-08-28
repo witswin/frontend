@@ -12,7 +12,8 @@ const QuestionPrompt: FC = () => {
     hintData,
   } = useQuizContext()
 
-  const question = isRestTime ? previousQuestion : currentQuestion
+  // const question = isRestTime ? previousQuestion : currentQuestion
+  const question = currentQuestion
 
   useEffect(() => {
     const questionIndexes = ["A", "B", "C", "D"]
@@ -87,14 +88,14 @@ const QuestionChoice: FC<{
       }
       className={`relative rounded-xl border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors ${
         question &&
-        answersHistory[question.id] &&
-        answersHistory[question.id] !== index &&
+        answersHistory[question.number - 1] &&
+        answersHistory[question.number - 1] !== index &&
         activeQuestionChoiceIndex === index
           ? "!border-error !text-error/40 !bg-error/40"
           : ""
       } ${
         question &&
-        answersHistory[question.id] === index &&
+        answersHistory[question.number - 1] === index &&
         activeQuestionChoiceIndex !== -1
           ? "!border-space-green text-space-green !bg-dark-space-green"
           : ""

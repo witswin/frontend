@@ -77,6 +77,7 @@ export const QuizContext = createContext<QuizContextProps>({
 
 export const statePeriod = 15000
 export const restPeriod = 5000
+export const seeResultDuration = 2000
 const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
@@ -355,19 +356,12 @@ const QuizContextProvider: FC<
       const newState = recalculateState()
       setStateIndex(newState)
 
-      const now = new Date().getTime()
+      // const now = new Date().getTime()
 
-      let estimatedRemaining = totalPeriod * newState + startAt.getTime() - now
+      // let estimatedRemaining = totalPeriod * newState + startAt.getTime() - now
 
-      if (
-        newState > quiz.questions.length ||
-        (estimatedRemaining < restPeriod && newState === quiz.questions.length)
-      ) {
-        setFinished((prev) => {
-          if (!prev) submitUserAnswer()
-
-          return true
-        })
+      if (newState > quiz.questions.length) {
+        setFinished(true)
         setTimer(0)
         return
       }
