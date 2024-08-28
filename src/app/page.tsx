@@ -1,7 +1,7 @@
 "use client"
 import { FaMoneyCheckAlt } from "react-icons/fa"
 
-import { FC, useEffect, useState } from "react"
+import { FC, PropsWithChildren, useEffect, useState } from "react"
 import Timer from "./(app)/quiz/[id]/components/timer"
 import Icon from "@/components/ui/Icon"
 import { indexesToABC } from "./(app)/quiz/[id]/components/questionPrompt"
@@ -126,27 +126,41 @@ const ContentCardsSection = () => {
         icon={<FaMoneyCheckAlt size={30} />}
         description="Wits is your go-to platform where you can dive into interactive quizzes, earn rewards, and expand your knowledge of blockchain, cryptocurrencies, DeFi, and more. Challenge yourself and others to see who’s the ultimate Web3 expert!"
         title="For Users"
-      />
+      >
+        <Button className="bg-space-green text-black" as={Link} href="/quiz">
+          Launch App
+        </Button>
+      </CartItem>
       <CartItem
         icon={<FaMoneyCheckAlt size={30} />}
         description="Wits helps Web3 projects with educational outreach and community engagement through interactive quizzes. Projects can create custom quizzes, offer rewards, and host competitions to boost visibility, while Wits also provides insights and integrates with Web3 ecosystems to support user onboarding and growth."
         title="For Ecosystems"
-      />
+      >
+        <Button className="" disabled isDisabled as={Link} href="/quiz">
+          Coming soon...
+        </Button>
+      </CartItem>
       <CartItem
         description="Wits enhances event engagement by incorporating real-time quizzes, turning attendees into active participants. This interactive approach makes content more memorable and fun, allowing organisers to offer rewards like tokens or NFTs to boost participation and impact."
         icon={<FaMoneyCheckAlt size={30} />}
         title="For Events and Speeches"
-      />
+      >
+        <Button color="secondary" as={Link} href="mailto:team@wits.win">
+          Contact us
+        </Button>
+      </CartItem>
     </div>
   )
 }
 
-const CartItem: FC<{
-  title: string
-  description: string
-  icon?: any
-  className?: string
-}> = ({ description, title, icon, className }) => {
+const CartItem: FC<
+  PropsWithChildren & {
+    title: string
+    description: string
+    icon?: any
+    className?: string
+  }
+> = ({ description, title, icon, className, children }) => {
   return (
     <Card
       shadow="none"
@@ -157,11 +171,7 @@ const CartItem: FC<{
         <h3>{title}</h3>
       </div>
       <p className="text-gray100 leading-loose">{description}</p>
-      <CardFooter className="justify-end gap-4">
-        <Button className="bg-space-green text-black" as={Link} href="/quiz">
-          Launch App
-        </Button>
-      </CardFooter>
+      <CardFooter className="justify-end gap-4">{children}</CardFooter>
     </Card>
   )
 }
