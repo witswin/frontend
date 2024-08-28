@@ -93,7 +93,7 @@ const QuizTapSidebar: FC = () => {
             {quiz?.sponsors.map((sponsor, key) => (
               <Link href={sponsor.link} key={key} target="_blank">
                 <Icon
-                  className="h-5 w-5"
+                  className="h-5 w-5 grayscale"
                   iconSrc={sponsor.image}
                   alt="polygon"
                 />

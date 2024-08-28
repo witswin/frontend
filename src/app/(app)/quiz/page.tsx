@@ -3,6 +3,7 @@ import { fetchQuizzesApi } from "@/utils/api"
 import { FC } from "react"
 import Header from "../components/header"
 import QuizRaffleList from "../components/quizRaffleList"
+import EnrollModal from "./_components/enrollModal"
 
 const QuizListPage: FC = async () => {
   const res = await fetchQuizzesApi()
@@ -16,6 +17,7 @@ const QuizListPage: FC = async () => {
     >
       <Header />
       <QuizRaffleList />
+      <EnrollModal />
     </QuizTapListProvider>
   )
 }

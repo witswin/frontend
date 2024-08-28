@@ -1,66 +1,66 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react"
 
 type CompetitionCardTimerProps = {
-  startTime: string;
-  setEnterState: (value: number) => void;
-};
+  startTime: string
+  setEnterState: (value: number) => void
+}
 
 const CompetitionCardTimer = ({
   startTime,
   setEnterState,
 }: CompetitionCardTimerProps) => {
-  const [now, setNow] = useState(new Date());
-  const [days, setDays] = useState("00");
-  const [hours, setHours] = useState("00");
-  const [minutes, setMinutes] = useState("00");
-  const [seconds, setSeconds] = useState("00");
+  const [now, setNow] = useState(new Date())
+  const [days, setDays] = useState("00")
+  const [hours, setHours] = useState("00")
+  const [minutes, setMinutes] = useState("00")
+  const [seconds, setSeconds] = useState("00")
 
-  const startTimeDate = useMemo(() => new Date(startTime), [startTime]);
+  const startTimeDate = useMemo(() => new Date(startTime), [startTime])
 
-  const deadline = useMemo(() => startTimeDate, [startTimeDate]);
+  const deadline = useMemo(() => startTimeDate, [startTimeDate])
 
   useEffect(() => {
-    const diff = deadline.getTime() - now.getTime();
+    const diff = deadline.getTime() - now.getTime()
 
-    if (diff <= 60000 && diff >= -30000) {
-      setEnterState(1);
-    } else if (diff < -30000) {
-      setEnterState(-1);
-    } else {
-      setEnterState(0);
-    }
+    setEnterState(diff / 1000)
+    // if (diff <= 60000 * 3 && diff >= -30000) {
+    // } else if (diff < -30000) {
+    //   setEnterState(-1)
+    // } else {
+    //   setEnterState(0)
+    // }
 
     if (diff <= 0) {
-      setDays("00");
-      setHours("00");
-      setMinutes("00");
-      setSeconds("00");
+      setDays("00")
+      setHours("00")
+      setMinutes("00")
+      setSeconds("00")
 
-      return;
+      return
     }
 
-    const newDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    const newDays = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000)
 
-    setSeconds(seconds < 10 ? `0${seconds}` : seconds.toString());
-    setMinutes(minutes < 10 ? `0${minutes}` : minutes.toString());
-    setHours(hours < 10 ? `0${hours}` : hours.toString());
-    setDays(newDays < 10 ? `0${newDays}` : newDays.toString());
-  }, [now, deadline, setEnterState]);
+    setSeconds(seconds < 10 ? `0${seconds}` : seconds.toString())
+    setMinutes(minutes < 10 ? `0${minutes}` : minutes.toString())
+    setHours(hours < 10 ? `0${hours}` : hours.toString())
+    setDays(newDays < 10 ? `0${newDays}` : newDays.toString())
+  }, [now, deadline, setEnterState])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setNow(new Date());
-    }, 1000);
+      setNow(new Date())
+    }, 1000)
 
     return () => {
-      clearInterval(interval);
-    };
-  }, [startTime]);
+      clearInterval(interval)
+    }
+  }, [startTime])
 
   return (
     <div className="flex items-center justify-between gap-4 rounded-xl py-2 md:px-3">
@@ -84,7 +84,7 @@ const CompetitionCardTimer = ({
         <p className="item-label text-gray90">s</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CompetitionCardTimer;
+export default CompetitionCardTimer

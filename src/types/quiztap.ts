@@ -34,6 +34,8 @@ export type Sponsor = {
 }
 
 export type Competition = {
+  hintCount: number
+  participantsCount: number
   id: number
   pk: number
   sponsors: Sponsor[]
@@ -52,7 +54,7 @@ export type Competition = {
   twitterUrl?: string
   emailUrl?: string
   telegramUrl?: string
-  imageUrl?: string
+  image?: string
   restTimeSeconds: number
   tokenImageUrl?: string
   isActive: boolean

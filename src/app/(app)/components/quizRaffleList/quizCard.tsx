@@ -1,6 +1,7 @@
 import {
   ClaimAndEnrollButton,
   EnrolledButton,
+  PrimaryOutlinedButton,
 } from "@/components/ui/Button/button"
 import Tooltip from "@/components/ui/Tooltip"
 import { Competition } from "@/types"
@@ -14,30 +15,29 @@ import Link from "next/link"
 
 const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   const [showAllPermissions, setShowAllPermissions] = useState(false)
-  const constraints = [
-    "Aura Authentication",
-    "Connected Metamask",
-    "Owner",
-    "Aura Authentication",
-    "Connected Metamask",
-  ]
-  const peopleEnrolled = 1398
-  const maxUserEntry = 1400
 
   const [loading, setLoading] = useState(false)
   const [enterState, setEnterState] = useState(0)
-  const { enrollmentsList, addEnrollment } = useQuizTapListContext()
+  const {
+    enrollmentsList,
+    addEnrollment,
+    setModalState,
+    setSelectedCompetition,
+  } = useQuizTapListContext()
 
   const onEnroll = () => {
-    setLoading(true)
+    // setLoading(true)
 
-    enrollQuizApi(competition.id)
-      .then((res) => {
-        addEnrollment(res)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    // enrollQuizApi(competition.id)
+    //   .then((res) => {
+    //     addEnrollment(res)
+    //   })
+    //   .finally(() => {
+    //     setLoading(false)
+    //   })
+
+    setSelectedCompetition(competition)
+    setModalState("enroll")
   }
 
   const isEnrolled =
@@ -53,7 +53,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
       <div className="left-side relative flex min-h-[175px] min-w-[165px] items-center rounded-br-[100px] rounded-tr-[100px] before:h-[21px] before:w-5 before:rounded-bl-[150px] before:rounded-tl-[150px] before:content-[''] after:absolute after:h-[23px] after:w-5 after:rounded-bl-[100px] after:rounded-tl-[100px] after:content-[''] lg:bg-[#10101B]  lg:shadow-[inset_-2px_0px_0_2px_#242431]  lg:before:absolute  lg:before:left-20  lg:before:top-[-18px]  lg:before:bg-[#1e1e273a]  lg:before:shadow-[-26px_-0px_0_15px_#10101B,inset_1px_1px_0_1px_#242431]  lg:after:bottom-[-19px]  lg:after:left-[80px]  lg:after:bg-[#1d1d273f]  lg:after:shadow-[-23px_-0px_0_15px_#10101B,inset_1px_0px_0_1px_#242431]">
         <div className="relative h-[135px] w-[135px] rounded-[100%] content-[''] lg:before:absolute lg:before:bottom-[-45px] lg:before:h-[30px] lg:before:w-[60px] lg:before:bg-[#10101B] lg:before:content-[''] lg:after:absolute lg:after:top-[-45px] lg:after:h-[30px] lg:after:w-[60px] lg:after:bg-[#10101B]">
           <Image
-            src={competition.imageUrl ?? "/assets/images/quizTap/usdt.svg"}
+            src={competition.image ?? "/assets/images/quizTap/usdt.svg"}
             alt={competition.prizeAmount + " " + competition.token}
             width="135"
             height="133"
@@ -79,7 +79,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
               {competition.sponsors.map((sponsor, key) => (
                 <Link href={sponsor.link} key={key} target="_blank">
                   <Icon
-                    className="h-5 w-5"
+                    className="h-5 w-5 grayscale"
                     iconSrc={sponsor.image}
                     alt="polygon"
                   />
@@ -103,7 +103,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
         <div className="footer mt-3 flex w-full flex-col justify-between gap-4 lg:flex-row lg:items-center ">
           <div className="counter flex w-full max-w-[520px] flex-col justify-between rounded-xl border-2 border-gray60 bg-gray10 px-4 py-2 md:flex-row md:items-center md:p-0 md:pl-16 md:pr-12">
             <p className="text-2xs font-medium leading-[13.62px] text-gray100">
-              {peopleEnrolled + "/" + maxUserEntry} people enrolled
+              {competition.participantsCount} people enrolled
             </p>
             <CompetitionCardTimer
               setEnterState={setEnterState}
@@ -111,7 +111,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
             />
           </div>
 
-          {enterState === -1 ? (
+          {enterState < -20 ? (
             <Link
               href={`/quiz/${competition.id}`}
               className="px-5 flex font-semibold gap-4 border-2 border-gray90 py-2 bg-gray40 rounded-xl items-center"
@@ -127,24 +127,35 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
               />
             </Link>
           ) : isEnrolled ? (
-            enterState === 1 ? (
+            enterState < 60 * 30 ? (
               <Link href={`/quiz/${competition.id}`}>
-                <ClaimAndEnrollButton
+                <PrimaryOutlinedButton
                   height="48px"
                   $fontSize="14px"
                   $width="252px"
-                  className="!w-full min-w-[552px] md:!w-[352px]"
+                  className="!w-full before:!bg-g-dark-primary-gradient min-w-[552px] md:!w-[352px]"
                 >
                   <div className="relative w-full">
-                    <p className="bg-g-primary bg-clip-text text-transparent">
-                      {"Enter Quiz"}
-                    </p>
+                    {enterState < 0 ? (
+                      <div className="flex items-center w-full justify-between">
+                        <p className="bg-g-primary bg-clip-text text-transparent">
+                          Start
+                        </p>
+                        <div className="text-white font-normal font-digital-numbers">
+                          {enterState.toFixed(0)}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="bg-g-primary bg-clip-text text-transparent">
+                        {"Go to Lobby"}
+                      </p>
+                    )}
                   </div>
-                </ClaimAndEnrollButton>
+                </PrimaryOutlinedButton>
               </Link>
             ) : (
               <EnrolledButton
-                disabled={true}
+                onClick={onEnroll}
                 className="!w-full  min-w-[552px] md:!w-[352px]"
                 height="48px"
                 $fontSize="14px"

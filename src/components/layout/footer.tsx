@@ -4,7 +4,7 @@ import Link from "next/link"
 
 const Footer: FC = () => {
   return (
-    <footer className="hidden h-16 w-full items-center justify-center p-3 gap-4 md:flex">
+    <footer className="hidden h-16 w-full items-center bg-footer-gradient justify-center p-3 gap-4 md:flex">
       <Link href="https://t.me/WitsWin" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/telegram.svg"
