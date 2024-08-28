@@ -216,9 +216,8 @@ const QuizContextProvider: FC<
           } else if (data.type === "add_answer") {
             const answerData = data.data
             setAnswersHistory((userAnswerHistory) => {
-              userAnswerHistory[answerData.questionId] = answerData.isCorrect
-                ? data.answer.selectedChoice.id
-                : -1
+              userAnswerHistory[answerData.questionNumber - 1] =
+                answerData.isCorrect ? answerData.answer.selectedChoice.id : -1
               return [...userAnswerHistory]
             })
           } else if (data.type === "quiz_stats") {
@@ -308,29 +307,29 @@ const QuizContextProvider: FC<
         return
       }
 
-      // socket.current.client?.send(
-      //   JSON.stringify({
-      //     command: "ANSWER",
-      //     args: {
-      //       questionId: currentQuestionIndex,
-      //       selectedChoiceId: userAnswersHistory[questionNumber]!,
-      //     },
-      //   })
-      // )
-
-      const answerRes = await submitAnswerApi(
-        currentQuestionIndex!,
-        userEnrollmentPk,
-        userAnswersHistory[questionNumber]
+      socket.current.client?.send(
+        JSON.stringify({
+          command: "ANSWER",
+          args: {
+            questionId: currentQuestionIndex,
+            selectedChoiceId: userAnswersHistory[questionNumber]!,
+          },
+        })
       )
 
-      setAnswersHistory((userAnswerHistory) => {
-        userAnswerHistory[questionNumber] = answerRes.selectedChoice.isCorrect
-          ? answerRes.selectedChoice.id
-          : -1
+      // const answerRes = await submitAnswerApi(
+      //   currentQuestionIndex!,
+      //   userEnrollmentPk,
+      //   userAnswersHistory[questionNumber]
+      // )
 
-        return [...userAnswerHistory]
-      })
+      // setAnswersHistory((userAnswerHistory) => {
+      //   userAnswerHistory[questionNumber] = answerRes.selectedChoice.isCorrect
+      //     ? answerRes.selectedChoice.id
+      //     : -1
+
+      //   return [...userAnswerHistory]
+      // })
     }
   }, [
     getNextQuestionPk,
