@@ -46,7 +46,7 @@ export type QuizContextProps = {
   socketInstance: WebSocket | null
   hintData: { questionId: number; data: number[] } | null
   previousRoundLosses: number
-  winners: Address[] | null
+  winners: { userProfile_WalletAddress: Address; txHash: string }[] | null
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -101,7 +101,9 @@ const QuizContextProvider: FC<
     questionId: number
     data: number[]
   } | null>(null)
-  const [winnersList, setWinnersList] = useState<Address[] | null>(null)
+  const [winnersList, setWinnersList] = useState<
+    { userProfile_WalletAddress: Address; txHash: string }[] | null
+  >(null)
 
   const [ping, setPing] = useState(-1)
 
