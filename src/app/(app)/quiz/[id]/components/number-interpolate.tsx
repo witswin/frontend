@@ -2,7 +2,6 @@
 import { FC } from "react"
 
 const NumberEasing = require("react-number-easing").default
-console.log(NumberEasing)
 
 const NubmerInterpolate: FC<{
   value: number
