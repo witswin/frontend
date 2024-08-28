@@ -25,7 +25,9 @@ const Separator: FC<{ index: number }> = ({ index }) => {
   const width =
     isRestTime && index === stateIndex
       ? Math.min((28 * (restPeriod - timer)) / restPeriod, restPeriod)
-      : 28
+      : stateIndex > index
+        ? 28
+        : 0
 
   return (
     <div className="relative mx-2 my-auto h-[2px] w-7 rounded-2xl bg-gray50">

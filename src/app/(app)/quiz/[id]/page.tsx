@@ -80,10 +80,10 @@ const QuizItemPage = () => {
                 className={`${ping !== -1 && ping <= 400 ? className : "bg-gray100"} w-1 rounded h-3`}
               ></div>
               <div
-                className={`${ping !== -1 && ping <= 300 ? className : "bg-gray100"} w-1 rounded h-4`}
+                className={`${ping !== -1 && ping <= 200 ? className : "bg-gray100"} w-1 rounded h-4`}
               ></div>
               <div
-                className={`${ping !== -1 && ping <= 200 ? className : "bg-gray100"} w-1 rounded h-5`}
+                className={`${ping !== -1 && ping <= 100 ? className : "bg-gray100"} w-1 rounded h-5`}
               ></div>
             </div>
             {ping === -1 ? (

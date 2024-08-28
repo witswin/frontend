@@ -15,16 +15,15 @@ const QuestionPrompt: FC = () => {
   const question = isRestTime ? previousQuestion : currentQuestion
 
   useEffect(() => {
+    const questionIndexes = ["A", "B", "C", "D"]
     const onKeyPressed = (e: KeyboardEvent) => {
       if (isRestTime || !question?.isEligible) return
-      if (e.key === "A") {
-        answerQuestion(1)
-      } else if (e.key === "B") {
-        answerQuestion(2)
-      } else if (e.key === "C") {
-        answerQuestion(3)
-      } else if (e.key === "D") {
-        answerQuestion(4)
+      const selectedKey = e.shiftKey ? e.key.toUpperCase() : e.key
+
+      if (questionIndexes.includes(selectedKey)) {
+        answerQuestion(
+          question.choices[questionIndexes.indexOf(selectedKey)].id
+        )
       }
     }
 
@@ -50,6 +49,7 @@ const QuestionPrompt: FC = () => {
             }
             title={item.text}
             index={item.id}
+            choiceIndex={key}
             key={key}
           />
         ))}
@@ -69,7 +69,8 @@ const QuestionChoice: FC<{
   index: number
   title: string
   disabled?: boolean
-}> = ({ index, title, disabled }) => {
+  choiceIndex: number
+}> = ({ index, title, disabled, choiceIndex }) => {
   const {
     answerQuestion,
     activeQuestionChoiceIndex,
@@ -108,7 +109,7 @@ const QuestionChoice: FC<{
           height="16px"
           alt="shift"
         />
-        <span>{indexesToABC[index]}</span>
+        <span>{indexesToABC[choiceIndex + 1]}</span>
       </div>
     </button>
   )
