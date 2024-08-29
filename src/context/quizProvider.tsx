@@ -153,11 +153,23 @@ const QuizContextProvider: FC<
   const recalculateState = useCallback(() => {
     const now = new Date()
 
-    if (startAt > now) {
+    const nowUTC = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        now.getUTCHours(),
+        now.getUTCMinutes(),
+        now.getUTCSeconds(),
+        now.getUTCMilliseconds()
+      )
+    )
+
+    if (startAt > nowUTC) {
       return -1
     }
 
-    const timePassed = now.getTime() - startAt.getTime()
+    const timePassed = nowUTC.getTime() - startAt.getTime()
 
     const newState = Math.floor(timePassed / (restPeriod + statePeriod)) + 1
 
@@ -355,10 +367,6 @@ const QuizContextProvider: FC<
       const newState = recalculateState()
       setStateIndex(newState)
 
-      // const now = new Date().getTime()
-
-      // let estimatedRemaining = totalPeriod * newState + startAt.getTime() - now
-
       if (newState > quiz.questions.length) {
         setFinished(true)
         setTimer(0)
@@ -371,13 +379,24 @@ const QuizContextProvider: FC<
       }
 
       setTimer(() => {
-        const now = new Date().getTime()
+        const now = new Date() // Current local time
+        const nowUTC = new Date(
+          Date.UTC(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            now.getUTCHours(),
+            now.getUTCMinutes(),
+            now.getUTCSeconds(),
+            now.getUTCMilliseconds()
+          )
+        ) // Current UTC time
 
         let estimatedRemaining =
-          totalPeriod * newState + startAt.getTime() - now
+          totalPeriod * newState + startAt.getTime() - nowUTC.getTime()
 
         if (newState <= 0) {
-          return startAt.getTime() - now
+          return startAt.getTime() - nowUTC.getTime()
         }
 
         if (estimatedRemaining < restPeriod) {
