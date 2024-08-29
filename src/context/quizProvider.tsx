@@ -373,10 +373,10 @@ const QuizContextProvider: FC<
         return
       }
 
-      if (newState !== stateIndex) {
-        setPreviousQuestion(question)
-        setQuestion(null)
-      }
+      // if (newState !== stateIndex) {
+      //   setPreviousQuestion(question)
+      //   setQuestion(null)
+      // }
 
       setTimer(() => {
         const now = new Date() // Current local time
