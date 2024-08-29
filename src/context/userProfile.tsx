@@ -117,14 +117,19 @@ export const UserContextProvider: FC<
   }
 
   useEffect(() => {
-    if (holdUserLogout || !userToken || !userProfile) {
+    if (holdUserLogout) {
       // if (isConnected && !userToken) {
       //   disconnect?.();
       // }
       return
     }
 
-    if (isConnected && isAddressEqual(userProfile.walletAddress, address!))
+    if (
+      userToken &&
+      isConnected &&
+      userProfile &&
+      isAddressEqual(userProfile.walletAddress, address!)
+    )
       return
 
     const timeout = setTimeout(() => {

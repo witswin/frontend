@@ -48,7 +48,7 @@ const WalletConnecting: FC<{
         JSON.stringify({
           message: {
             message: "Wits Sign In",
-            URI: "https://unitap.app",
+            URI: "https://wits.win",
             IssuedAt: now,
           },
           primaryType: "Wits",
@@ -72,7 +72,6 @@ const WalletConnecting: FC<{
               { name: "IssuedAt", type: "string" },
             ],
           },
-          onSuccess,
         })
       )
 
@@ -104,18 +103,16 @@ const WalletConnecting: FC<{
 
     if (!address) return
 
-    console.log(connector)
-
     signTypedDataAsync({
       message: {
-        message: "Unitap Sign In",
-        URI: "https://unitap.app",
+        message: "Wits Sign In",
+        URI: "https://wits.win",
         IssuedAt: now,
       },
       // connector,
       // account: address,
       domain: {
-        name: "Unitap Connect",
+        name: "Wits Connect",
         version: "1",
         chainId: chainId ?? 1,
         verifyingContract: "0x0000000000000000000000000000000000000000",

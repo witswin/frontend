@@ -7,12 +7,10 @@ const QuestionPrompt: FC = () => {
     stateIndex,
     answerQuestion,
     question: currentQuestion,
-    previousQuestion,
     isRestTime,
     hintData,
   } = useQuizContext()
 
-  // const question = isRestTime ? previousQuestion : currentQuestion
   const question = currentQuestion
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 "use client"
 
 import Icon from "@/components/ui/Icon"
+import { restPeriod, seeResultDuration } from "@/context/quizProvider"
 import { FC } from "react"
 
 const Timer: FC<{ timer: number; className?: string }> = ({
@@ -41,7 +42,9 @@ const Timer: FC<{ timer: number; className?: string }> = ({
         <p
           className={`font-digital-numbers text-2xl ${time.seconds > 5 ? "text-white" : time.seconds > 2 ? "text-warn" : "text-error"} `}
         >
-          {`${time.formattedSeconds}:${time.formattedMilliSeconds}`}
+          {timer < restPeriod - seeResultDuration
+            ? "00:0"
+            : `${time.formattedSeconds}:${time.formattedMilliSeconds}`}
         </p>
       </div>
     </div>

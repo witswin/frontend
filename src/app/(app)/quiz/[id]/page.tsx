@@ -102,7 +102,9 @@ const QuizItemPage = () => {
             {ping === -1 ? (
               <p className="text-xs text-gray100">Reconnecting</p>
             ) : (
-              <p className="text-sm text-gray100">{ping}</p>
+              <p className="text-sm text-gray100">
+                {ping} <span className="text-xs">ms</span>
+              </p>
             )}
           </span>
         </div>

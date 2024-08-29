@@ -4,18 +4,36 @@ import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
 import Link from "next/link"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 
 const LoseModal: FC = () => {
   const { wrongAnswersCount, finished, previousRoundLosses } = useQuizContext()
 
-  const [watchAsSpectator, setWatchAsSpectator] = useState(false)
+  const [isDissmissed, setIsDissmissed] = useState(false)
+  const [watchAsSpectator, setWatchAsSpectator] = useState(true)
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+
+    if (wrongAnswersCount > 0 && !isDissmissed) {
+      timeout = setTimeout(() => {
+        setWatchAsSpectator(false)
+      }, 3000)
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout)
+    }
+  }, [wrongAnswersCount, isDissmissed])
 
   return (
     <Modal
       className="bg-gray20"
       isOpen={!watchAsSpectator && !finished && wrongAnswersCount > 0}
-      onOpenChange={() => setWatchAsSpectator(true)}
+      onOpenChange={() => {
+        setWatchAsSpectator(true)
+        setIsDissmissed(true)
+      }}
     >
       <ModalContent>
         <ModalHeader className="justify-center">Quiz Over</ModalHeader>
@@ -36,7 +54,10 @@ const LoseModal: FC = () => {
           <p className="text-sm text-gray90">Next Questions in 5 seconds...</p>
 
           <button
-            onClick={() => setWatchAsSpectator(true)}
+            onClick={() => {
+              setWatchAsSpectator(true)
+              setIsDissmissed(true)
+            }}
             className="flex mt-3 font-semibold gap-4 border-2 border-gray90 py-3 bg-gray40 rounded-xl justify-center items-center"
           >
             <span className="text-gray100">Continue Watching</span>

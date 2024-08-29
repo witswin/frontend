@@ -35,7 +35,6 @@ export type QuizContextProps = {
   activeQuestionChoiceIndex: number | null
   isRestTime: boolean
   setIsRestTime: (value: boolean) => void
-  previousQuestion: QuestionResponse | null
   answersHistory: (number | null)[]
   userAnswersHistory: (number | null)[]
   finished: boolean
@@ -61,7 +60,6 @@ export const QuizContext = createContext<QuizContextProps>({
   activeQuestionChoiceIndex: -1,
   isRestTime: false,
   setIsRestTime: NullCallback,
-  previousQuestion: null,
   answersHistory: [],
   userAnswersHistory: [],
   finished: false,
@@ -76,8 +74,8 @@ export const QuizContext = createContext<QuizContextProps>({
 })
 
 export const statePeriod = 15000
-export const restPeriod = 5000
-export const seeResultDuration = 2000
+export const restPeriod = 8000
+export const seeResultDuration = 3000
 const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
@@ -95,8 +93,6 @@ const QuizContextProvider: FC<
   const [question, setQuestion] = useState<QuestionResponse | null>(null)
   const [timer, setTimer] = useState(0)
   const [stateIndex, setStateIndex] = useState(-1)
-  const [previousQuestion, setPreviousQuestion] =
-    useState<QuestionResponse | null>(null)
   const [previousRoundLosses, setPreviousRoundLosses] = useState(0)
   const [hintData, setHintData] = useState<{
     questionId: number
@@ -225,11 +221,23 @@ const QuizContextProvider: FC<
                 ? JSON.parse(data.question)
                 : data.question
             )
+            const correctAnswer = data.question.choices.find(
+              (item: any) => item.isCorrect
+            )
+            if (correctAnswer) {
+              setAnswersHistory((prev) => {
+                prev[data.question.number - 1] = correctAnswer.id
+
+                return [...prev]
+              })
+            }
+            logger.log(data.question.choices)
           } else if (data.type === "add_answer") {
             const answerData = data.data
             setAnswersHistory((userAnswerHistory) => {
-              userAnswerHistory[answerData.questionNumber - 1] =
-                answerData.isCorrect ? answerData.answer.selectedChoice.id : -1
+              userAnswerHistory[answerData.number - 1] = answerData.isCorrect
+                ? answerData.answer.selectedChoice.id
+                : answerData.correctChoice
               return [...userAnswerHistory]
             })
           } else if (data.type === "quiz_stats") {
@@ -300,7 +308,14 @@ const QuizContextProvider: FC<
 
     if (!question?.isEligible) {
       setAnswersHistory((prev) => [...prev, -1])
-
+      socket.current.client?.send(
+        JSON.stringify({
+          command: "GET_QUESTION",
+          args: {
+            index: currentQuestionIndex,
+          },
+        })
+      )
       return
     }
 
@@ -308,7 +323,6 @@ const QuizContextProvider: FC<
       userAnswersHistory[question.number - 1] !== -1 &&
       currentQuestionIndex !== -1
     ) {
-      const currentQuestion = currentQuestionIndex
       const questionNumber = question.number - 1
 
       if (
@@ -316,6 +330,14 @@ const QuizContextProvider: FC<
         userAnswersHistory[questionNumber] === undefined
       ) {
         setAnswersHistory((prev) => [...prev, -1])
+        socket.current.client?.send(
+          JSON.stringify({
+            command: "GET_QUESTION",
+            args: {
+              index: currentQuestionIndex,
+            },
+          })
+        )
         return
       }
 
@@ -328,20 +350,6 @@ const QuizContextProvider: FC<
           },
         })
       )
-
-      // const answerRes = await submitAnswerApi(
-      //   currentQuestionIndex!,
-      //   userEnrollmentPk,
-      //   userAnswersHistory[questionNumber]
-      // )
-
-      // setAnswersHistory((userAnswerHistory) => {
-      //   userAnswerHistory[questionNumber] = answerRes.selectedChoice.isCorrect
-      //     ? answerRes.selectedChoice.id
-      //     : -1
-
-      //   return [...userAnswerHistory]
-      // })
     }
   }, [
     getNextQuestionPk,
@@ -372,11 +380,6 @@ const QuizContextProvider: FC<
         setTimer(0)
         return
       }
-
-      // if (newState !== stateIndex) {
-      //   setPreviousQuestion(question)
-      //   setQuestion(null)
-      // }
 
       setTimer(() => {
         const now = new Date() // Current local time
@@ -446,7 +449,6 @@ const QuizContextProvider: FC<
           : -1,
         isRestTime,
         setIsRestTime,
-        previousQuestion,
         answersHistory,
         userAnswersHistory,
         finished,
