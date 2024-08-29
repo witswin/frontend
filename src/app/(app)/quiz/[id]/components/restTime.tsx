@@ -86,14 +86,14 @@ const RestTime: FC<{}> = () => {
           iconSrc="/assets/images/quizTap/like-hand.svg"
           alt="spaceman like"
           width="183"
-          className="absolute right-0 top-1/2 -translate-y-1/2 opacity-30"
+          className="absolute w-20 md:w-48 right-0 top-1/2 -translate-y-1/2 opacity-30"
           height="176"
         />
         <Icon
           iconSrc="/assets/images/quizTap/like-hand-left.svg"
           alt="spaceman like"
           width="183"
-          className="absolute left-0 top-1/2 -translate-y-1/2 opacity-30"
+          className="absolute w-20 md:w-48 left-0 top-1/2 -translate-y-1/2 opacity-30"
           height="176"
         />
         <Icon

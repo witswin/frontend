@@ -19,7 +19,7 @@ const QuizTapSidebar: FC = () => {
   const isUserLost = wrongAnswersCount > 0
 
   return (
-    <aside className="quiz-sidebar flex md:w-60 flex-row md:flex-col gap-1 rounded-2xl p-1">
+    <aside className="quiz-sidebar flex md:w-60 flex-col gap-1 rounded-2xl p-1">
       <div className="flex flex-col md:flex-row items-center justify-between rounded-lg bg-gray10 p-5">
         <p className="text-gray100">Health</p>
 
@@ -89,7 +89,7 @@ const QuizTapSidebar: FC = () => {
             iconSrc="/assets/images/quizTap/sponsored.png"
             alt="health"
           />
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="mt-4 flex flex-col md:flex-row items-center justify-center gap-3">
             {quiz?.sponsors.map((sponsor, key) => (
               <Link href={sponsor.link} key={key} target="_blank">
                 <Icon

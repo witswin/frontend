@@ -39,7 +39,7 @@ const QuestionPrompt: FC = () => {
         {stateIndex} - {question?.text}
       </h3>
 
-      <div className="mt-10 grid grid-cols-2 gap-5 font-semibold">
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5 font-semibold">
         {question?.choices.map((item, key) => (
           <QuestionChoice
             disabled={
