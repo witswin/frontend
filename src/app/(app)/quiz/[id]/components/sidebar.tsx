@@ -19,8 +19,8 @@ const QuizTapSidebar: FC = () => {
   const isUserLost = wrongAnswersCount > 0
 
   return (
-    <aside className="quiz-sidebar flex w-60 flex-col rounded-2xl p-1">
-      <div className="flex items-center justify-between rounded-lg bg-gray10 p-5">
+    <aside className="quiz-sidebar flex md:w-60 flex-row md:flex-col gap-1 rounded-2xl p-1">
+      <div className="flex flex-col md:flex-row items-center justify-between rounded-lg bg-gray10 p-5">
         <p className="text-gray100">Health</p>
 
         <div className="flex items-center gap-4">
@@ -83,7 +83,7 @@ const QuizTapSidebar: FC = () => {
       </div>
       <div className="mt-3"></div>
       {!!quiz?.sponsors.length && (
-        <div className="mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
+        <div className="mt-0 md:mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
           <Icon
             className="mx-auto w-48"
             iconSrc="/assets/images/quizTap/sponsored.png"

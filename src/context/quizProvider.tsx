@@ -234,11 +234,10 @@ const QuizContextProvider: FC<
             logger.log(data.question.choices)
           } else if (data.type === "add_answer") {
             const answerData = data.data
-            setAnswersHistory((userAnswerHistory) => {
-              userAnswerHistory[answerData.number - 1] = answerData.isCorrect
-                ? answerData.answer.selectedChoice.id
-                : answerData.correctChoice
-              return [...userAnswerHistory]
+            setAnswersHistory((answerHistory) => {
+              answerHistory[answerData.questionNumber - 1] =
+                answerData.correctChoice
+              return [...answerHistory]
             })
           } else if (data.type === "quiz_stats") {
             const stats = data.data
@@ -340,6 +339,8 @@ const QuizContextProvider: FC<
         )
         return
       }
+
+      console.log(userAnswersHistory)
 
       socket.current.client?.send(
         JSON.stringify({

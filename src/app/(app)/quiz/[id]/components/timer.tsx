@@ -4,10 +4,11 @@ import Icon from "@/components/ui/Icon"
 import { restPeriod, seeResultDuration } from "@/context/quizProvider"
 import { FC } from "react"
 
-const Timer: FC<{ timer: number; className?: string }> = ({
-  timer,
-  className,
-}) => {
+const Timer: FC<{
+  timer: number
+  className?: string
+  isRestTime?: boolean
+}> = ({ timer, className, isRestTime }) => {
   const formatTime = (time: number) => {
     const totalSeconds = Math.floor(time / 1000)
     const seconds = totalSeconds % 60
@@ -42,9 +43,7 @@ const Timer: FC<{ timer: number; className?: string }> = ({
         <p
           className={`font-digital-numbers text-2xl ${time.seconds > 5 ? "text-white" : time.seconds > 2 ? "text-warn" : "text-error"} `}
         >
-          {timer < restPeriod - seeResultDuration
-            ? "00:0"
-            : `${time.formattedSeconds}:${time.formattedMilliSeconds}`}
+          {`${time.formattedSeconds}:${time.formattedMilliSeconds}`}
         </p>
       </div>
     </div>

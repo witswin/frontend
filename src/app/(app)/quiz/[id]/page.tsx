@@ -116,7 +116,12 @@ const QuizItemPage = () => {
 const RenderQuizItemBody = () => {
   const { stateIndex, isRestTime, finished, timer, quiz } = useQuizContext()
 
-  if (finished || (quiz?.questions.length === stateIndex && isRestTime))
+  if (
+    finished ||
+    (quiz?.questions.length === stateIndex &&
+      isRestTime &&
+      timer < restPeriod - seeResultDuration)
+  )
     return <QuizFinished />
 
   if (stateIndex <= 0) {
