@@ -77,7 +77,7 @@ const EnrollModal: FC<{}> = () => {
                 Prize
               </p>
               <p className="bg-prize-text-gradient bg-clip-text text-sm font-semibold leading-[20px] text-transparent">
-                {fromWei(competition?.prizeAmount, competition.tokenDecimals) +
+                {fromWei(competition?.prizeAmount, competition?.tokenDecimals) +
                   " " +
                   competition?.token}{" "}
               </p>
