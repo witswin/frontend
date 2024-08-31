@@ -84,7 +84,7 @@ const QuizItemPage = () => {
         <WinnerModal />
 
         <div className="text-right text-sm mt-20">
-          <span className="px-2 py-1 rounded-lg bg-gray30 border border-gray70 shadow-lg inline-flex items-center space-x-2">
+          <span className="px-2 py-1 rounded-lg bg-gray30 border border-gray70 shadow-lg inline-flex items-end space-x-2">
             <div className="flex gap-1 items-end">
               <div
                 className={`${ping !== -1 && ping <= 500 ? className : "bg-gray100"} w-1 rounded h-2`}

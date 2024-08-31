@@ -13,6 +13,7 @@ import LoginSuccessBody from "./LoginSuccess"
 import { parseCookies } from "@/utils/cookies"
 import { useDisconnect } from "wagmi"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
+import { useUserProfileContext } from "@/context/userProfile"
 
 export enum ConnectionProvider {
   Metamask,
@@ -164,6 +165,7 @@ const walletStateTitles = {
 
 export const ConnectWalletModal = () => {
   const { isWalletPromptOpen, setIsWalletPromptOpen } = useGlobalContext()
+  const { setHoldUserLogout } = useUserProfileContext()
   const [title, setTitle] = useState(walletStateTitles[WalletState.Prompt])
 
   const { disconnect, isPending } = useDisconnect()
@@ -171,6 +173,7 @@ export const ConnectWalletModal = () => {
   const setWalletTitle = (title: string) => setTitle(title)
 
   useEffect(() => {
+    setHoldUserLogout(isWalletPromptOpen)
     if (!isWalletPromptOpen) return
 
     disconnect()
