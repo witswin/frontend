@@ -216,11 +216,13 @@ const QuizContextProvider: FC<
           const data = JSON.parse(e.data)
 
           if (data.type === "new_question") {
-            setQuestion(
-              typeof data.question === "string"
-                ? JSON.parse(data.question)
-                : data.question
-            )
+            setQuestion((prev) => {
+              if (prev?.id === data.question.id) {
+                return prev
+              }
+
+              return data.question
+            })
             const correctAnswer = data.question.choices.find(
               (item: any) => item.isCorrect
             )
