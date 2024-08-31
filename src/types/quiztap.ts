@@ -58,6 +58,7 @@ export type Competition = {
   restTimeSeconds: number
   tokenImageUrl?: string
   isActive: boolean
+  tokenDecimals: number
 }
 
 export type UserCompetition = {

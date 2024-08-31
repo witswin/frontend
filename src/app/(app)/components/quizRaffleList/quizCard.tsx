@@ -12,6 +12,7 @@ import Icon from "@/components/ui/Icon"
 import { enrollQuizApi } from "@/utils/api"
 import { useQuizTapListContext } from "@/context/quiztapListProvider"
 import Link from "next/link"
+import { fromWei } from "@/utils"
 
 const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   const [showAllPermissions, setShowAllPermissions] = useState(false)
@@ -54,7 +55,11 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
         <div className="relative h-[135px] w-[135px] rounded-[100%] content-[''] lg:before:absolute lg:before:bottom-[-45px] lg:before:h-[30px] lg:before:w-[60px] lg:before:bg-[#10101B] lg:before:content-[''] lg:after:absolute lg:after:top-[-45px] lg:after:h-[30px] lg:after:w-[60px] lg:after:bg-[#10101B]">
           <Image
             src={competition.image ?? "/assets/images/quizTap/usdt.svg"}
-            alt={competition.prizeAmount + " " + competition.token}
+            alt={
+              fromWei(competition?.prizeAmount, competition.tokenDecimals) +
+              " " +
+              competition.token
+            }
             width="135"
             height="133"
           />
@@ -95,7 +100,9 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
             Prize
           </p>
           <p className="bg-prize-text-gradient bg-clip-text text-sm font-semibold leading-[20px] text-transparent">
-            {competition.prizeAmount + " " + competition.token}{" "}
+            {fromWei(competition?.prizeAmount, competition.tokenDecimals) +
+              " " +
+              competition.token}{" "}
           </p>
         </div>
         <div className="requirements mt-4 flex h-[22px] gap-2"></div>

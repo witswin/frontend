@@ -12,6 +12,7 @@ import {
 import { enrollQuizApi } from "@/utils/api"
 import { useTimer } from "@/utils/hooks/timer"
 import Link from "next/link"
+import { fromWei } from "@/utils"
 
 const EnrollModal: FC<{}> = () => {
   const {
@@ -58,7 +59,11 @@ const EnrollModal: FC<{}> = () => {
         <ModalBody className="text-gray100">
           <Image
             src={competition?.image ?? "/assets/images/quizTap/usdt.svg"}
-            alt={competition?.prizeAmount + " " + competition?.token}
+            alt={
+              fromWei(competition?.prizeAmount, competition?.tokenDecimals) +
+              " " +
+              competition?.token
+            }
             width="135"
             className="mx-auto"
             height="133"
@@ -72,7 +77,9 @@ const EnrollModal: FC<{}> = () => {
                 Prize
               </p>
               <p className="bg-prize-text-gradient bg-clip-text text-sm font-semibold leading-[20px] text-transparent">
-                {competition?.prizeAmount + " " + competition?.token}{" "}
+                {fromWei(competition?.prizeAmount, competition.tokenDecimals) +
+                  " " +
+                  competition?.token}{" "}
               </p>
             </div>
             <div className="flex px-2 flex-1 items-center rounded-xl border border-gray70 bg-gray50">
