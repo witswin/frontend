@@ -3,6 +3,7 @@
 import { ClaimButton } from "@/components/ui/Button/button"
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
+import { toWei } from "@/utils"
 import { useWalletAccount } from "@/utils/wallet"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
 import Link from "next/link"
@@ -47,7 +48,7 @@ const WinnerModal: FC = () => {
           <p className="text-lg font-semibold text-space-green">
             Congrats! You won{" "}
             <span className="bg-g-primary bg-clip-text text-transparent">
-              {amountWinPerUser} {quiz?.token}
+              {toWei(amountWinPerUser, quiz?.tokenDecimals)} {quiz?.token}
             </span>
             .
           </p>
@@ -57,7 +58,7 @@ const WinnerModal: FC = () => {
           </p>
           <ClaimButton onClick={() => {}} className="mx-auto mb-5 !w-full mt-7">
             <p>
-              Claim {amountWinPerUser} {quiz?.token}
+              Claim {toWei(amountWinPerUser, quiz?.tokenDecimals)} {quiz?.token}
             </p>
           </ClaimButton>
         </ModalBody>

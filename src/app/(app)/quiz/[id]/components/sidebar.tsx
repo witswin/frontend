@@ -6,6 +6,7 @@ import { useNumberLinearInterpolate } from "@/utils/interpolate"
 import Link from "next/link"
 import { FC, useEffect } from "react"
 import NubmerInterpolate from "./number-interpolate"
+import { toWei } from "@/utils"
 
 const QuizTapSidebar: FC = () => {
   const {
@@ -62,7 +63,10 @@ const QuizTapSidebar: FC = () => {
 
           <p className="mt-2">
             <strong className="text-white">
-              <NubmerInterpolate value={amountWinPerUser} decimals={2} />
+              <NubmerInterpolate
+                value={toWei(amountWinPerUser, quiz?.tokenDecimals)}
+                decimals={2}
+              />
             </strong>{" "}
             <span
               className={`transition-colors ${isUserLost ? "text-error" : "text-space-green"}`}
