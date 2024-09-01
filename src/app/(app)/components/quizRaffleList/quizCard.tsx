@@ -27,16 +27,6 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   } = useQuizTapListContext()
 
   const onEnroll = () => {
-    // setLoading(true)
-
-    // enrollQuizApi(competition.id)
-    //   .then((res) => {
-    //     addEnrollment(res)
-    //   })
-    //   .finally(() => {
-    //     setLoading(false)
-    //   })
-
     setSelectedCompetition(competition)
     setModalState("enroll")
   }

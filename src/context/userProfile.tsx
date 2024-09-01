@@ -132,6 +132,8 @@ export const UserContextProvider: FC<
     )
       return
 
+    console.log(userProfile, isConnected, userToken)
+
     const timeout = setTimeout(() => {
       disconnect?.()
       localStorage.removeItem("userToken")
