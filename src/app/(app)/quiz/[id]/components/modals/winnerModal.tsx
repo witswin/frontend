@@ -5,7 +5,14 @@ import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import { fromWei, toWei } from "@/utils"
 import { useWalletAccount } from "@/utils/wallet"
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from "@nextui-org/react"
+import Image from "next/image"
 import Link from "next/link"
 import { FC, useState } from "react"
 import { isAddressEqual } from "viem"
@@ -22,6 +29,14 @@ const WinnerModal: FC = () => {
   const { address } = useWalletAccount()
 
   const [dismissWinnerModal, setDissmissWinnerModal] = useState(false)
+
+  const onShareTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      `I've just claimed ${fromWei(amountWinPerUser, quiz?.tokenDecimals)} ${quiz?.token} from @witswin 🔥\n Participate on:`
+    )}&url=${encodeURIComponent("wist.win/quiz")}`
+
+    window.open(twitterUrl, "_blank")
+  }
 
   return (
     <Modal
@@ -59,16 +74,23 @@ const WinnerModal: FC = () => {
             The total {fromWei(quiz?.prizeAmount ?? 0, quiz?.tokenDecimals)}{" "}
             {quiz?.token} Reward is distributed among the winners.
           </p>
-          <ClaimButton onClick={() => {}} className="mx-auto mb-5 !w-full mt-7">
-            <p>
-              Claim {fromWei(amountWinPerUser, quiz?.tokenDecimals)}{" "}
-              {quiz?.token}
-            </p>
-          </ClaimButton>
+          <Button
+            onClick={onShareTwitter}
+            size="lg"
+            className="mx-auto bg-twitter-image text-base border-2 border-white mb-5 !w-full flex items-center gap-5 mt-7"
+            style={{ backgroundColor: "#000" }}
+          >
+            <p>Share on</p>
+            <Image src={"/x.svg"} alt="X" width={20} height={20} />
+          </Button>
         </ModalBody>
       </ModalContent>
     </Modal>
   )
 }
+
+// {fromWei(amountWinPerUser, quiz?.tokenDecimals)}{" "}
+// {quiz?.token}
+//
 
 export default WinnerModal

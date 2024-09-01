@@ -82,6 +82,7 @@ const config: Config = {
         3: "3px",
       },
       backgroundImage: {
+        "twitter-image": "url('/share-on-x.svg')",
         "dark-primary":
           "linear-gradient(to right, #22222f, #21232e, #242130, #231f2f)",
         "dark-primary-2": "url('/assets/images/token-tap/bg-primary-dark.svg')",
