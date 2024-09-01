@@ -146,15 +146,7 @@ export const UserContextProvider: FC<
     return () => {
       clearTimeout(timeout)
     }
-  }, [
-    userToken,
-    setToken,
-    isConnected,
-    holdUserLogout,
-    userProfile,
-    address,
-    disconnect,
-  ])
+  }, [userToken, isConnected, holdUserLogout, userProfile, address, disconnect])
 
   return (
     <UserProfileContext.Provider

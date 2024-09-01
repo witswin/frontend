@@ -172,13 +172,6 @@ export const ConnectWalletModal = () => {
 
   const setWalletTitle = (title: string) => setTitle(title)
 
-  useEffect(() => {
-    setHoldUserLogout(isWalletPromptOpen)
-    if (!isWalletPromptOpen) return
-
-    disconnect()
-  }, [disconnect, isWalletPromptOpen])
-
   return (
     <Modal
       className="bg-gray20"

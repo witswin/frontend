@@ -1,36 +1,31 @@
-"use client";
+"use client"
 
-import Icon from "@/components/ui/Icon";
-import { FC, useEffect } from "react";
-import { ConnectionProvider, WalletState } from ".";
-import { WalletProviderButton } from "./walletPrompt";
-import { useWalletAccount, useWalletConnection } from "@/utils/wallet";
-import Image from "next/image";
-import { useDisconnect } from "wagmi";
-import { checkUserExists } from "@/utils/api";
+import Icon from "@/components/ui/Icon"
+import { FC, useEffect } from "react"
+import { ConnectionProvider, WalletState } from "."
+import { WalletProviderButton } from "./walletPrompt"
+import { useWalletAccount, useWalletConnection } from "@/utils/wallet"
+import Image from "next/image"
+import { useDisconnect } from "wagmi"
+import { checkUserExists } from "@/utils/api"
 
 const AddNewWalletBody: FC<{
-  setWalletProvider: (provider: ConnectionProvider) => void;
-  setWalletState: (state: WalletState) => void;
+  setWalletProvider: (provider: ConnectionProvider) => void
+  setWalletState: (state: WalletState) => void
 }> = ({ setWalletProvider, setWalletState }) => {
-  const { connect, connectors, isSuccess } = useWalletConnection();
-  const { disconnect } = useDisconnect();
+  const { connect, connectors, isSuccess } = useWalletConnection()
 
-  const { address } = useWalletAccount();
-
-  useEffect(() => {
-    if (disconnect) disconnect();
-  }, [disconnect]);
+  const { address } = useWalletAccount()
 
   useEffect(() => {
-    if (!isSuccess || !address) return;
+    if (!isSuccess || !address) return
 
     checkUserExists(address).then((exists) => {
       setWalletState(
         exists ? WalletState.SignMessage : WalletState.AddWalletFailed
-      );
-    });
-  }, [address, isSuccess, setWalletState]);
+      )
+    })
+  }, [address, isSuccess, setWalletState])
 
   return (
     <div className="text-center">
@@ -56,12 +51,12 @@ const AddNewWalletBody: FC<{
         imageIcon="/assets/images/modal/metamask-icon.svg"
         backgroundImage="/assets/images/modal/metamask-bg.svg"
         onClick={() => {
-          setWalletProvider(ConnectionProvider.Metamask);
+          setWalletProvider(ConnectionProvider.Metamask)
           connect({
             connector: connectors.find(
               (connector) => connector.id === "injected"
             )!,
-          });
+          })
         }}
       />
       <WalletProviderButton
@@ -70,16 +65,16 @@ const AddNewWalletBody: FC<{
         backgroundImage="/assets/images/modal/walletconnect-bg.svg"
         imageIcon="/assets/images/modal/walletconnect-icon.svg"
         onClick={() => {
-          setWalletProvider(ConnectionProvider.Walletconnect);
+          setWalletProvider(ConnectionProvider.Walletconnect)
           connect({
             connector: connectors.find(
               (connector) => connector.id === "walletConnect"
             )!,
-          });
+          })
         }}
       />
     </div>
-  );
-};
+  )
+}
 
-export default AddNewWalletBody;
+export default AddNewWalletBody
