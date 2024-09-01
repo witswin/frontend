@@ -2,11 +2,7 @@
 
 import { Competition, QuestionResponse, UserAnswer } from "@/types"
 import { NullCallback } from "@/utils"
-import {
-  fetchQuizApi,
-  fetchQuizQuestionApi,
-  submitAnswerApi,
-} from "@/utils/api"
+import { fetchQuizApi } from "@/utils/api"
 import {
   FC,
   PropsWithChildren,
@@ -79,6 +75,33 @@ export const seeResultDuration = 3000
 const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
+
+function formatTimeDifference(startAt: Date, nowUTC: Date) {
+  // Step 1: Get the difference in milliseconds
+  const difference = startAt.getTime() - nowUTC.getTime()
+
+  // Step 2: Convert milliseconds to seconds
+  let totalSeconds = Math.floor(difference / 1000)
+
+  // Step 3: Calculate hours, minutes, and seconds
+  const hours = Math.floor(totalSeconds / 3600)
+  totalSeconds %= 3600 // Remaining seconds after extracting hours
+
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+
+  const formattedTime = `${hours}:${minutes}:${seconds}`
+
+  return formattedTime
+}
+
+const setDocTitle = (title?: string) => {
+  if (!title) document.title = "WITS"
+
+  const docTitle = `WITS | ${title}`
+
+  if (docTitle !== document.title) document.title = docTitle
+}
 
 const QuizContextProvider: FC<
   PropsWithChildren & { quiz: Competition; userEnrollmentPk: number }
@@ -380,6 +403,7 @@ const QuizContextProvider: FC<
 
       if (newState > quiz.questions.length) {
         setFinished(true)
+        setDocTitle(`Quiz Finished`)
         setTimer(0)
         return
       }
@@ -402,13 +426,16 @@ const QuizContextProvider: FC<
           totalPeriod * newState + startAt.getTime() - nowUTC.getTime()
 
         if (newState <= 0) {
+          setDocTitle(`Start At ${formatTimeDifference(startAt, nowUTC)}`)
           return startAt.getTime() - nowUTC.getTime()
         }
 
         if (estimatedRemaining < restPeriod) {
+          setDocTitle(`Rest Time`)
           setIsRestTime(true)
         } else {
           estimatedRemaining -= restPeriod
+          setDocTitle(`[Question] ${Math.floor(estimatedRemaining / 1000)}`)
           setIsRestTime(false)
         }
 
@@ -418,6 +445,7 @@ const QuizContextProvider: FC<
 
     return () => {
       clearInterval(timerInterval)
+      setDocTitle(``)
     }
   }, [
     question,
