@@ -60,7 +60,7 @@ const LoseModal: FC = () => {
             }}
             className="flex mt-3 font-semibold gap-4 border-2 border-gray90 py-3 bg-gray40 rounded-xl justify-center items-center"
           >
-            <span className="text-gray100">Continue Watching</span>
+            <span className="text-gray100">Keep Watching</span>
             <Icon
               className="opacity-70"
               iconSrc="/assets/images/provider-dashboard/ic_link_white.svg"

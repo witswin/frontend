@@ -1,7 +1,7 @@
 "use client"
 import { FaMoneyCheckAlt } from "react-icons/fa"
 
-import { FC, PropsWithChildren, useEffect, useState } from "react"
+import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react"
 import Timer from "./(app)/quiz/[id]/components/timer"
 import Icon from "@/components/ui/Icon"
 import { indexesToABC } from "./(app)/quiz/[id]/components/questionPrompt"
@@ -124,7 +124,7 @@ const ContentCardsSection = () => {
       <CartItem
         className="col-span-2"
         icon={<FaMoneyCheckAlt size={30} />}
-        description="Wits is your go-to platform where you can dive into interactive quizzes, earn rewards, and expand your knowledge of blockchain, cryptocurrencies, DeFi, and more. Challenge yourself and others to see who’s the ultimate Web3 expert!"
+        description="Wits interactive quiz platform is here to make learning about blockchain, cryptocurrencies, DeFi, and more exciting and rewarding! Test your skills, compete with others, and earn amazing rewards as you rise to the top. ready to prove you're the ultimate Web3 expert? Let the games begin!"
         title="For Users"
       >
         <Button className="bg-space-green text-black" as={Link} href="/quiz">
@@ -133,7 +133,23 @@ const ContentCardsSection = () => {
       </CartItem>
       <CartItem
         icon={<FaMoneyCheckAlt size={30} />}
-        description="Wits helps Web3 projects with educational outreach and community engagement through interactive quizzes. Projects can create custom quizzes, offer rewards, and host competitions to boost visibility, while Wits also provides insights and integrates with Web3 ecosystems to support user onboarding and growth."
+        description={
+          <>
+            <p>
+              Wits empowers Web3 projects to elevate their educational outreach
+              and community engagement through dynamic, incentivizing quizzes.
+            </p>
+            <p>
+              Create custom quizzes, offer enticing rewards, and host exciting
+              competitions to boost your project's community engagement.
+            </p>
+            <p>
+              Wits seamlessly integrates with Web3 ecosystems, providing
+              valuable insights and supporting user onboarding and community
+              growth.
+            </p>
+          </>
+        }
         title="For Ecosystems"
       >
         <Button className="" disabled isDisabled as={Link} href="/quiz">
@@ -141,7 +157,7 @@ const ContentCardsSection = () => {
         </Button>
       </CartItem>
       <CartItem
-        description="Wits enhances event engagement by incorporating real-time quizzes, turning attendees into active participants. This interactive approach makes content more memorable and fun, allowing organisers to offer rewards like tokens or NFTs to boost participation and impact."
+        description="Wits transforms event engagement by adding real-time quizzes that turn attendees into active participants. Organizers can offer rewards such as tokens or NFTs to drive participation. This dynamic approach ensures your content leaves a lasting impression."
         icon={<FaMoneyCheckAlt size={30} />}
         title="For Events and Speeches"
       >
@@ -156,7 +172,7 @@ const ContentCardsSection = () => {
 const CartItem: FC<
   PropsWithChildren & {
     title: string
-    description: string
+    description: string | ReactNode
     icon?: any
     className?: string
   }

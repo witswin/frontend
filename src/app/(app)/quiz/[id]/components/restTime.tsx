@@ -15,6 +15,19 @@ const isArrayEqual = (array1: any[], array2: any[]) => {
   return true
 }
 
+const correctTitles = ["Nailed it!", "Correct!", "Spot on!", "Nice job!"]
+const wrongAnswers = [
+  "Oops!",
+  "Wrong answer!",
+  "dang it!",
+  "better luck next time!",
+]
+
+function getRandomItem<T>(arr: T[]) {
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
+}
+
 const RestTime: FC<{}> = () => {
   const {
     timer,
@@ -40,6 +53,8 @@ const RestTime: FC<{}> = () => {
       userAnswersHistory.length === stateIndex
     )
   }, [answersHistory, userAnswersHistory])
+
+  const title = getRandomItem(isWonLastQuestion ? correctTitles : wrongAnswers)
 
   if (answersHistory[stateIndex - 1] === null) {
     return (
@@ -70,7 +85,7 @@ const RestTime: FC<{}> = () => {
           <strong className="text-white underline">
             {previousRoundLosses}
           </strong>{" "}
-          <span>people lost the game in the previous round</span>
+          <span>players got Knocked out.</span>
         </p>
         <p className="mt-3 text-sm text-gray90">
           Next Questions in {seconds} seconds...
@@ -102,9 +117,7 @@ const RestTime: FC<{}> = () => {
           width="68px"
           height="68px"
         />
-        <p className="text-lg font-semibold text-space-green">
-          Nice Job! thats right.
-        </p>
+        <p className="text-lg font-semibold text-space-green">{title}</p>
 
         <p className="mt-5 text-gray100">
           <strong className="text-white underline">
@@ -127,7 +140,7 @@ const RestTime: FC<{}> = () => {
         width="100px"
         height="100px"
       />
-      <p className="text-lg font-semibold text-error">Ohh! Game Over.</p>
+      <p className="text-lg font-semibold text-error">{title}</p>
 
       <p className="mt-5 text-gray100">
         <strong className="text-white underline">{previousRoundLosses}</strong>{" "}

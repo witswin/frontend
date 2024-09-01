@@ -46,15 +46,18 @@ const WinnerModal: FC = () => {
             height="100px"
           />
           <p className="text-lg font-semibold text-space-green">
-            Congrats! You won{" "}
+            Way to go! You won{" "}
             <span className="bg-g-primary bg-clip-text text-transparent">
               {fromWei(amountWinPerUser, quiz?.tokenDecimals)} {quiz?.token}
             </span>
             .
           </p>
           <p className="mt-5 text-gray100">
-            This had {winners?.length} that the total prize of the game divided
-            between there winners.
+            {winners?.length} People won this game.
+          </p>
+          <p className="mt-5 text-gray100">
+            The total {fromWei(quiz?.prizeAmount ?? 0, quiz?.tokenDecimals)}{" "}
+            {quiz?.token} Reward is distributed among the winners.
           </p>
           <ClaimButton onClick={() => {}} className="mx-auto mb-5 !w-full mt-7">
             <p>

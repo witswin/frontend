@@ -15,7 +15,9 @@ const Header = () => {
           <div className="bg-clip-text text-transparent bg-primary-gradient text-3xl font-bold">
             WITS
           </div>
-          <p className="text-gray100 mt-4 font-semibold">Who Is The Smartest</p>
+          <p className="text-gray100 mt-4 font-semibold">
+            Show them who is the smartest!
+          </p>
           <p className="text-sm mt-4 text-gray100">
             Here{"’"}s a place to ask, answer, and win!
           </p>

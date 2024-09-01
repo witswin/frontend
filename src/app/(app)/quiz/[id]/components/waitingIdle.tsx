@@ -1,15 +1,15 @@
-import { FC } from "react";
+import { FC } from "react"
 
 const WaitingIdle: FC<{}> = () => {
   return (
     <div className="mt-20 text-center">
-      <p className="text-lg font-semibold text-white">Waiting for start</p>
+      <p className="text-lg font-semibold text-white"> Hang tight!</p>
 
       <p className="mt-5 text-gray100">
-        please wait for everyone joins and the quiz starts
+        the quiz begins as soon as everyone’s in.
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default WaitingIdle;
+export default WaitingIdle

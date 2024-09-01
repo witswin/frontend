@@ -22,7 +22,7 @@ const QuizTapSidebar: FC = () => {
   return (
     <aside className="quiz-sidebar flex md:w-60 flex-col gap-1 rounded-2xl p-1">
       <div className="flex flex-col md:flex-row items-center justify-between rounded-lg bg-gray10 p-5">
-        <p className="text-gray100">Health</p>
+        <p className="text-gray100">Lives</p>
 
         <div className="flex items-center gap-4">
           <span className="text-lg">{Math.max(1 - wrongAnswersCount, 0)}</span>
