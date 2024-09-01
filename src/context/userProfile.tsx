@@ -65,7 +65,8 @@ export const UserContextProvider: FC<
   const [userToken, setToken] = useLocalStorageState("userToken")
   const [holdUserLogout, setHoldUserLogout] = useState(false)
 
-  const { address, isConnected } = useWalletAccount()
+  const { address, isConnected, isConnecting, isReconnecting } =
+    useWalletAccount()
   const { disconnect } = useDisconnect()
 
   const [userProfileLoading, setUserProfileLoading] = useState(false)
@@ -117,7 +118,7 @@ export const UserContextProvider: FC<
   }
 
   useEffect(() => {
-    if (holdUserLogout) {
+    if (holdUserLogout || isConnecting || isReconnecting) {
       // if (isConnected && !userToken) {
       //   disconnect?.();
       // }
@@ -132,21 +133,24 @@ export const UserContextProvider: FC<
     )
       return
 
-    console.log(userProfile, isConnected, userToken)
+    console.log(userProfile, isConnected, userToken, holdUserLogout)
 
-    const timeout = setTimeout(() => {
-      disconnect?.()
-      localStorage.removeItem("userToken")
-      setCookie("userToken", "")
+    disconnect?.()
+    localStorage.removeItem("userToken")
+    setCookie("userToken", "")
 
-      setUserProfile(null)
-      setToken("")
-    }, 200)
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [userToken, isConnected, holdUserLogout, userProfile, address, disconnect])
+    setUserProfile(null)
+    setToken("")
+  }, [
+    userToken,
+    isConnected,
+    holdUserLogout,
+    userProfile,
+    address,
+    disconnect,
+    isConnecting,
+    isReconnecting,
+  ])
 
   return (
     <UserProfileContext.Provider
