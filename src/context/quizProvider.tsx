@@ -397,6 +397,22 @@ const QuizContextProvider: FC<
   }, [quiz.id])
 
   useEffect(() => {
+    if (stateIndex >= 0) return
+
+    const interval = setInterval(() => {
+      socket.current.client?.send(
+        JSON.stringify({
+          command: "GET_STATS",
+        })
+      )
+    }, 5000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [stateIndex])
+
+  useEffect(() => {
     const timerInterval = setInterval(() => {
       const newState = recalculateState()
       setStateIndex(newState)
@@ -426,8 +442,10 @@ const QuizContextProvider: FC<
           totalPeriod * newState + startAt.getTime() - nowUTC.getTime()
 
         if (newState <= 0) {
+          const passedTime = startAt.getTime() - nowUTC.getTime()
           setDocTitle(`Start At ${formatTimeDifference(startAt, nowUTC)}`)
-          return startAt.getTime() - nowUTC.getTime()
+
+          return passedTime
         }
 
         if (estimatedRemaining < restPeriod) {
