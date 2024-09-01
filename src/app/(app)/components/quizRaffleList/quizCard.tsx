@@ -13,12 +13,16 @@ import { enrollQuizApi } from "@/utils/api"
 import { useQuizTapListContext } from "@/context/quiztapListProvider"
 import Link from "next/link"
 import { fromWei } from "@/utils"
+import { useUserProfileContext } from "@/context/userProfile"
+import { useGlobalContext } from "@/context/globalProvider"
 
 const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   const [showAllPermissions, setShowAllPermissions] = useState(false)
 
   const [loading, setLoading] = useState(false)
   const [enterState, setEnterState] = useState(0)
+  const { userProfile } = useUserProfileContext()
+  const { setIsWalletPromptOpen } = useGlobalContext()
   const {
     enrollmentsList,
     addEnrollment,
@@ -27,6 +31,10 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   } = useQuizTapListContext()
 
   const onEnroll = () => {
+    if (!userProfile) {
+      setIsWalletPromptOpen(true)
+      return
+    }
     setSelectedCompetition(competition)
     setModalState("enroll")
   }

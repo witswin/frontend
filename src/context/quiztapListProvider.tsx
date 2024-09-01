@@ -12,6 +12,7 @@ import {
   useContext,
   useState,
 } from "react"
+import { useUserProfileContext } from "./userProfile"
 
 export type EnrollModalState = "closed" | "enroll"
 
@@ -61,6 +62,8 @@ const QuizTapListProvider: FC<
     null as Competition | null
   )
 
+  const { userToken } = useUserProfileContext()
+
   const [enrollmentsList, setEnrollmentsList] = useState<
     {
       id: number
@@ -79,12 +82,13 @@ const QuizTapListProvider: FC<
 
   useRefreshWithInitial(
     () => {
+      if (!userToken) return
       fetchUsersQuizEnrollments().then((res) => {
         setEnrollmentsList(res)
       })
     },
     FAST_INTERVAL,
-    []
+    [userToken]
   )
 
   return (
