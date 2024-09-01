@@ -54,7 +54,10 @@ const RestTime: FC<{}> = () => {
     )
   }, [answersHistory, userAnswersHistory])
 
-  const title = getRandomItem(isWonLastQuestion ? correctTitles : wrongAnswers)
+  const title = useMemo(
+    () => getRandomItem(isWonLastQuestion ? correctTitles : wrongAnswers),
+    [isWonLastQuestion]
+  )
 
   if (answersHistory[stateIndex - 1] === null) {
     return (

@@ -33,6 +33,8 @@ const QuestionPrompt: FC = () => {
     }
   }, [answerQuestion, isRestTime, question?.isEligible])
 
+  if (stateIndex !== question?.number) return "Loading"
+
   return (
     <div className="mt-10">
       <h3 className="text-base font-normal">
