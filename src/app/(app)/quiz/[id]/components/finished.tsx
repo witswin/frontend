@@ -23,12 +23,12 @@ const QuizFinished: FC<{}> = () => {
             {winners.map((item, key) => (
               <span
                 key={key}
-                className="px-4 py-3 inline-flex gap-10 items-center text-gray100 font-sans rounded-xl bg-gray60"
+                className="px-4 w-52 justify-center tracking-widest py-3 inline-flex gap-10 items-center text-gray100 font-sans rounded-xl bg-gray60"
               >
                 {shortenAddress(item.userProfile_WalletAddress)}
 
                 {/* {item.txHash ? ( */}
-                <a
+                {/* <a
                   target="_blank"
                   href={`https://polygonscan.com/tx/${item.txHash}`}
                   className="ml-auto text-xs font-semibold border-mid-dark-space-green border-2 rounded-lg bg-dark-space-green px-2 text-space-green flex items-center gap-1 py-1 underline"
@@ -43,7 +43,7 @@ const QuizFinished: FC<{}> = () => {
                     iconSrc="/assets/images/prize-tap/diamond.svg"
                     className="ml-2"
                   />
-                </a>
+                </a> */}
                 {/* // ) : (
                 //   <span className="bg-gray50 border-2 border-gray70 rounded-lg px-4 py-2 text-xs ml-auto text-gray80">
                 //     Not Claimed by the winner yet

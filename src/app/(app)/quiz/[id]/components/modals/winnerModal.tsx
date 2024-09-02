@@ -16,6 +16,7 @@ import {
 import Image from "next/image"
 import Link from "next/link"
 import { FC, useState } from "react"
+import { FaArrowRight } from "react-icons/fa"
 import { isAddressEqual } from "viem"
 
 const twitterTitles = [
@@ -90,12 +91,19 @@ const WinnerModal: FC = () => {
           <Button
             onClick={onShareTwitter}
             size="lg"
-            className="mx-auto bg-twitter-image text-base border-2 border-white mb-5 !w-full flex items-center gap-5 mt-7"
+            className="mx-auto bg-twitter-image text-base border-2 border-white mb-2 !w-full flex items-center gap-5 mt-7"
             style={{ backgroundColor: "#000" }}
           >
             <p>Share on</p>
             <Image src={"/x.svg"} alt="X" width={20} height={20} />
           </Button>
+          <Link
+            className="text-gray100 mb-5 justify-center flex items-center gap-5"
+            href="/quiz"
+          >
+            Go back
+            <FaArrowRight />
+          </Link>
         </ModalBody>
       </ModalContent>
     </Modal>
