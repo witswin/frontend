@@ -34,6 +34,7 @@ export type Sponsor = {
 }
 
 export type Competition = {
+  txHash?: number
   hintCount: number
   participantsCount: number
   id: number

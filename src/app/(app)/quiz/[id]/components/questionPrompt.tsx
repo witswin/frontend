@@ -86,7 +86,7 @@ const QuestionChoice: FC<{
       onClick={() =>
         isRestTime || !question?.isEligible || answerQuestion(index)
       }
-      className={`relative rounded-xl border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors ${
+      className={`relative rounded-xl pl-10 border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors ${
         question &&
         answersHistory[question.number - 1] &&
         answersHistory[question.number - 1] !== index &&

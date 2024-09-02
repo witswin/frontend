@@ -19,10 +19,10 @@ const Header = () => {
             Show them who is the smartest!
           </p>
           <p className="text-sm mt-4 text-gray100">
-            Here{"’"}s a place to ask, answer, and win!
+            {/* Here{"’"}s a place to ask, answer, and win! */}
           </p>
           <p className="text-sm mt-1 text-gray100">
-            Let's show everyone who is the smartest!!
+            {/* Let's show everyone who is the smartest!! */}
           </p>
         </span>
       </div>
