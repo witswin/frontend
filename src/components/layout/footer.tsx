@@ -44,11 +44,14 @@ const Footer: FC = () => {
         ></Icon>
       </Link>
       <Link
-        className="!absolute right-10"
+        className="absolute right-10"
         target="_blank"
         href="https://unitap.app"
       >
         <Icon iconSrc="/PoweredbyUnitap.svg" width="160px" height="auto"></Icon>
+      </Link>
+      <Link className="absolute left-10" href="/privacy-policy">
+        Privacy and Terms
       </Link>
     </footer>
   )
