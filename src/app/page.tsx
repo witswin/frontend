@@ -63,7 +63,7 @@ const QuizEditor = () => {
   }, [])
   return (
     <div
-      className="border-2 relative transform-gpu w-[525px] min-h-32 border-gray50 quiz-main-content rounded-lg p-6"
+      className="border-2 relative transform-gpu w-80 md:w-[525px] min-h-32 border-gray50 quiz-main-content rounded-lg p-6"
       style={{
         transform: "rotate3d(-21.5,-80.866,0,350deg) rotate(-1deg)",
         perspective: "700px",
@@ -120,9 +120,9 @@ const QuizEditor = () => {
 
 const ContentCardsSection = () => {
   return (
-    <div className="grid grid-cols-2 mt-28 gap-5 flex-wrap justify-center">
+    <div className="grid grid-cols-1 md:grid-cols-2 mt-28 gap-5 justify-center">
       <CartItem
-        className="col-span-2"
+        className="col-span-1 md:col-span-2"
         icon={<FaMoneyCheckAlt size={30} />}
         description="Wits interactive quiz platform is here to make learning about blockchain, cryptocurrencies, DeFi, and more exciting and rewarding! Test your skills, compete with others, and earn amazing rewards as you rise to the top. ready to prove you're the ultimate Web3 expert? Let the games begin!"
         title="For Users"
@@ -134,7 +134,7 @@ const ContentCardsSection = () => {
       <CartItem
         icon={<FaMoneyCheckAlt size={30} />}
         description={
-          <>
+          <div>
             <p>
               Wits empowers Web3 projects to elevate their educational outreach
               and community engagement through dynamic, incentivizing quizzes.
@@ -148,7 +148,7 @@ const ContentCardsSection = () => {
               valuable insights and supporting user onboarding and community
               growth.
             </p>
-          </>
+          </div>
         }
         title="For Ecosystems"
       >
@@ -180,7 +180,7 @@ const CartItem: FC<
   return (
     <Card
       shadow="none"
-      className={`p-10 flex gap-5 justify-between bg-contain flex-col rounded-lg bg-no-repeat ${className ?? ""}`}
+      className={`p-10 gap-5 justify-between bg-contain rounded-lg bg-no-repeat ${className ?? ""}`}
     >
       <div className="flex gap-4 items-center">
         <div className="">{icon}</div>
