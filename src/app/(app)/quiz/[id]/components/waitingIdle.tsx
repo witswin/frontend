@@ -12,6 +12,7 @@ const WaitingIdle: FC<{}> = () => {
       <p className="mt-5 text-gray100">
         the quiz begins as soon as everyone’s in.
       </p>
+      <div className="mx-5">
       <div className="flex mt-2 gap-2 ">
             <div className="flex px-2 justify-between flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
               <p className="text-sm font-normal leading-[22px] text-gray100">
@@ -37,7 +38,7 @@ const WaitingIdle: FC<{}> = () => {
               </span>
             </div>
           </div>
-          <div className="flex gap-2 ">
+          <div className="flex mt-5 gap-2 ">
             <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
               <h5 className="text-white font-semibold">10 Sec</h5>
               <p className="mt-2 text-sm text-gray100">
@@ -51,6 +52,7 @@ const WaitingIdle: FC<{}> = () => {
               <p className="mt-2 text-sm text-gray100">Number of Questions</p>
             </div>
           </div>
+      </div>
     </div>
   )
 }
