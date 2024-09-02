@@ -38,7 +38,7 @@ const QuizTapSidebar: FC = () => {
 
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
         <div className="text-gray100">
-          <p>In game people</p>
+          <p>Number of Players</p>
 
           <p className="mt-2">
             <strong className="text-white">

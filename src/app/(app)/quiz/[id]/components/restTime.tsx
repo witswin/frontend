@@ -86,7 +86,7 @@ const RestTime: FC<{}> = () => {
           </strong>{" "}
           <span>players got Knocked out.</span>
         </p>
-        <p className="mt-3 text-sm text-gray90">
+        <p className="mt-3 text-gray90">
           Next Questions in {seconds} seconds...
         </p>
       </div>
@@ -124,7 +124,7 @@ const RestTime: FC<{}> = () => {
           </strong>{" "}
           <span>people lost the game in the previous round</span>
         </p>
-        <p className="mt-3 text-sm text-gray90">
+        <p className="mt-3 text-gray90">
           Next Questions in {seconds} seconds...
         </p>
       </div>
@@ -145,7 +145,7 @@ const RestTime: FC<{}> = () => {
         <strong className="text-white underline">{previousRoundLosses}</strong>{" "}
         <span>people lost the game in the previous round.</span>
       </p>
-      <p className="mt-3 text-sm text-gray90">Next Questions in 5 seconds...</p>
+      <p className="mt-3 text-gray90">Next Questions in {seconds} seconds...</p>
     </div>
   )
 }
