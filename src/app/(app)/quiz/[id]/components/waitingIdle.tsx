@@ -18,7 +18,7 @@ const WaitingIdle: FC<{}> = () => {
                 Prize
               </p>
               <p className="bg-prize-text-gradient bg-clip-text text-sm font-semibold leading-[20px] text-transparent">
-                {fromWei(quiz?.prizeAmount, quiz?.tokenDecimals) +
+                {fromWei(quiz?.prizeAmount ?? 0, quiz?.tokenDecimals) +
                   " " +
                   quiz?.token}{" "}
               </p>
