@@ -451,7 +451,7 @@ const QuizContextProvider: FC<
           setIsRestTime(true)
         } else {
           estimatedRemaining -= restPeriod
-          setDocTitle(`[Question] ${Math.floor(estimatedRemaining / 1000)}`)
+          setDocTitle(`[Question ${newState}]. ${Math.floor(estimatedRemaining / 1000)}`)
           setIsRestTime(false)
         }
 
