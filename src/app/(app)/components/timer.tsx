@@ -50,7 +50,7 @@ const CompetitionCardTimer = ({
     setMinutes(minutes < 10 ? `0${minutes}` : minutes.toString())
     setHours(hours < 10 ? `0${hours}` : hours.toString())
     setDays(newDays < 10 ? `0${newDays}` : newDays.toString())
-  }, [now, deadline, setEnterState])
+  }, [now, deadline, startTime, setEnterState])
 
   useEffect(() => {
     const interval = setInterval(() => {

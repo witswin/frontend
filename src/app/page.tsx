@@ -186,7 +186,7 @@ const CartItem: FC<
         <div className="">{icon}</div>
         <h3>{title}</h3>
       </div>
-      <p className="text-gray100 leading-loose">{description}</p>
+      <div className="text-gray100 leading-loose">{description}</div>
       <CardFooter className="justify-end gap-4">{children}</CardFooter>
     </Card>
   )

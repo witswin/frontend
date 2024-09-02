@@ -15,6 +15,7 @@ import Link from "next/link"
 import { fromWei } from "@/utils"
 import { useUserProfileContext } from "@/context/userProfile"
 import { useGlobalContext } from "@/context/globalProvider"
+import logger from "@/core/logger"
 
 const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
   const [showAllPermissions, setShowAllPermissions] = useState(false)
