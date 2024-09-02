@@ -256,7 +256,6 @@ const QuizContextProvider: FC<
                 return [...prev]
               })
             }
-            logger.log(data.question.choices)
           } else if (data.type === "add_answer") {
             const answerData = data.data
             setAnswersHistory((answerHistory) => {
@@ -328,6 +327,7 @@ const QuizContextProvider: FC<
   }, [userToken])
 
   const submitUserAnswer = useCallback(async () => {
+    if (question?.number && question?.number > stateIndex) return
     const currentQuestionIndex = getNextQuestionPk(stateIndex)
 
     if (!question?.isEligible) {
@@ -364,8 +364,6 @@ const QuizContextProvider: FC<
         )
         return
       }
-
-      console.log(userAnswersHistory)
 
       socket.current.client?.send(
         JSON.stringify({
