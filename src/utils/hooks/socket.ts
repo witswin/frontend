@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { NullCallback } from ".."
 
 export const useSocket = ({
   basePath,
@@ -14,6 +15,27 @@ export const useSocket = ({
   const socket = useRef<{ client: WebSocket | null }>({ client: null })
 
   const [ping, setPing] = useState(-1)
+
+  const stableOnMessageEnter = useCallback(onMessageEnter ?? NullCallback, [
+    onMessageEnter,
+  ])
+
+  useEffect(() => {
+    if (!socket.current.client) return
+
+    socket.current.client.onmessage = (e) => {
+      if (e.data === "PONG") {
+        // const now = new Date()
+        // const timePassed = previousPing
+        //   ? now.getTime() - previousPing.getTime()
+        //   : -1
+        // setPing(timePassed)
+      } else {
+        const data = JSON.parse(e.data)
+        onMessageEnter?.(data)
+      }
+    }
+  }, [stableOnMessageEnter, ping])
 
   useEffect(() => {
     let isMounted = true
@@ -47,19 +69,6 @@ export const useSocket = ({
       socket.current.client.onclose = (e) => {
         if (isMounted) reconnect()
         setPing(-1)
-      }
-
-      socket.current.client.onmessage = (e) => {
-        if (e.data === "PONG") {
-          const now = new Date()
-          const timePassed = previousPing
-            ? now.getTime() - previousPing.getTime()
-            : -1
-          setPing(timePassed)
-        } else {
-          const data = JSON.parse(e.data)
-          onMessageEnter?.(data)
-        }
       }
     }
 
