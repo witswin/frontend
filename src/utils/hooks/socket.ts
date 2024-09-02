@@ -1,16 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { NullCallback } from ".."
+import { useUserProfileContext } from "@/context/userProfile"
 
 export const useSocket = ({
   basePath,
   reconnectInterval = 1000,
   onMessageEnter,
   enablePing,
+  deps = []
 }: {
   enablePing?: boolean
   basePath: string
   reconnectInterval?: number
   onMessageEnter?: (data: any) => void
+  deps?: any[]
 }) => {
   const socket = useRef<{ client: WebSocket | null }>({ client: null })
 
@@ -19,6 +22,8 @@ export const useSocket = ({
   const stableOnMessageEnter = useCallback(onMessageEnter ?? NullCallback, [
     onMessageEnter,
   ])
+
+  const { userToken } = useUserProfileContext()
 
   useEffect(() => {
     if (!socket.current.client) return
@@ -44,7 +49,11 @@ export const useSocket = ({
     let reconnectTimeout: NodeJS.Timeout | undefined
     let previousPing: Date | null = null
 
-    const socketUrl = process.env.NEXT_PUBLIC_WS_URL! + basePath
+    let socketUrl = process.env.NEXT_PUBLIC_WS_URL! + basePath
+
+    if (userToken) {
+      socketUrl += `?auth=${userToken}`
+    }
 
     const initializeWebSocket = () => {
       if (!isMounted) return
@@ -100,7 +109,7 @@ export const useSocket = ({
         socket.current.client = null
       }
     }
-  }, [basePath, reconnectInterval])
+  }, [basePath, reconnectInterval, userToken, ...deps])
 
   return {
     socket: socket.current,
