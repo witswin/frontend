@@ -78,6 +78,7 @@ const QuestionChoice: FC<{
     question,
     isRestTime,
     answersHistory,
+    timer,
   } = useQuizContext()
 
   return (
@@ -88,6 +89,7 @@ const QuestionChoice: FC<{
       }
       className={`relative rounded-xl pl-10 border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors ${
         question &&
+        timer <= 8000 &&
         answersHistory[question.number - 1] &&
         answersHistory[question.number - 1] !== index &&
         activeQuestionChoiceIndex === index
@@ -95,9 +97,17 @@ const QuestionChoice: FC<{
           : ""
       } ${
         question &&
+        timer <= 8000 &&
         answersHistory[question.number - 1] === index &&
         activeQuestionChoiceIndex !== -1
           ? "!border-space-green text-space-green !bg-dark-space-green"
+          : ""
+      } ${
+        activeQuestionChoiceIndex === index &&
+        isRestTime &&
+        timer > 8000 &&
+        timer % 500 > 250
+          ? "!border-warning-300 !bg-warning/70"
           : ""
       } ${activeQuestionChoiceIndex === index ? "!border-gray100 bg-gray60" : ""} ${disabled ? "opacity-20" : ""}`}
     >

@@ -95,7 +95,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
   if (stateIndex > index || isRestTime)
     return (
       <div
-        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-mid-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
+        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined || answersHistory[index - 1] ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-mid-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
       >
         {index}
       </div>
