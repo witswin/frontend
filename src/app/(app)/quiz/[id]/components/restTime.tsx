@@ -3,6 +3,7 @@
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import logger from "@/core/logger"
+import { getRandomItem } from "@/utils/random"
 import { FC, useMemo } from "react"
 
 const isArrayEqual = (array1: any[], array2: any[]) => {
@@ -22,11 +23,6 @@ const wrongAnswers = [
   "dang it!",
   "better luck next time!",
 ]
-
-function getRandomItem<T>(arr: T[]) {
-  const randomIndex = Math.floor(Math.random() * arr.length)
-  return arr[randomIndex]
-}
 
 const RestTime: FC<{}> = () => {
   const {

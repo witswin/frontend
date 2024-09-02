@@ -4,6 +4,7 @@ import { ClaimButton } from "@/components/ui/Button/button"
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import { fromWei, toWei } from "@/utils"
+import { getRandomItem } from "@/utils/random"
 import { useWalletAccount } from "@/utils/wallet"
 import {
   Button,
@@ -16,6 +17,14 @@ import Image from "next/image"
 import Link from "next/link"
 import { FC, useState } from "react"
 import { isAddressEqual } from "viem"
+
+const twitterTitles = [
+  `🎉 I just won $[Amount] on @WitsWin!! 😎🏆 Think you can outsmart me? Join Wits and let’s see Who’s The Smartest! `,
+  `Just bagged $[Amount] on @WitsWin! 🤑 Time to show off my web3 skills. Anyone dares challenge me? ⚔️`,
+  `Flexed my Web3 knowledge and won $[Amount] on @WitsWin! 💸 Don’t miss out on the next round! `,
+  `🏆 Just aced the quiz and earned $[Amount] on @WitsWin! 🚀 Think you can score a perfect game too? Jump in and earn your share!`,
+  `🔥 Nailed all the questions on @WitsWin and won $[Amount]! 🤓 Ready to take the challenge? `,
+]
 
 const WinnerModal: FC = () => {
   const {
@@ -31,9 +40,13 @@ const WinnerModal: FC = () => {
   const [dismissWinnerModal, setDissmissWinnerModal] = useState(false)
 
   const onShareTwitter = () => {
+    const item = getRandomItem(twitterTitles)
+
+    const amount = `${fromWei(amountWinPerUser, quiz?.tokenDecimals)} ${quiz?.token}`
+
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      `I've just claimed ${fromWei(amountWinPerUser, quiz?.tokenDecimals)} ${quiz?.token} from @witswin 🔥\n Participate on:`
-    )}&url=${encodeURIComponent("wist.win/quiz")}`
+      item.replace(/\$\[Amount\]/g, amount)
+    )}&url=${encodeURIComponent("wits.win")}`
 
     window.open(twitterUrl, "_blank")
   }
