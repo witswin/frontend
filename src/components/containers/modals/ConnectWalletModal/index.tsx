@@ -178,6 +178,7 @@ export const ConnectWalletModal = () => {
 
   return (
     <Modal
+      isDismissable={false}
       className="bg-gray20"
       isOpen={isWalletPromptOpen && !isPending}
       onOpenChange={() => setIsWalletPromptOpen(false)}
