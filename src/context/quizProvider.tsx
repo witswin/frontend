@@ -70,8 +70,8 @@ export const QuizContext = createContext<QuizContextProps>({
 })
 
 export const statePeriod = 10000
-export const restPeriod = 8000
-export const seeResultDuration = 3000
+export const restPeriod = 10000
+export const seeResultDuration = 5000
 const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
