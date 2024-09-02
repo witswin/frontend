@@ -12,7 +12,7 @@ const WaitingIdle: FC<{}> = () => {
       <p className="mt-5 text-gray100">
         the quiz begins as soon as everyone’s in.
       </p>
-      <div className="mx-5">
+      <div className="mx-5 mt-5">
       <div className="flex mt-2 gap-2 ">
             <div className="flex px-2 justify-between flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
               <p className="text-sm font-normal leading-[22px] text-gray100">
