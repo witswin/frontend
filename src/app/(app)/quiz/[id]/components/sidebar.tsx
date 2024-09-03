@@ -64,7 +64,11 @@ const QuizTapSidebar: FC = () => {
           <p className="mt-2">
             <strong className="text-white">
               <NubmerInterpolate
-                value={Number(fromWei(amountWinPerUser, quiz?.tokenDecimals))}
+                value={
+                  isUserLost
+                    ? 0
+                    : Number(fromWei(amountWinPerUser, quiz?.tokenDecimals))
+                }
                 decimals={2}
               />
             </strong>{" "}
