@@ -52,6 +52,7 @@ const EnrollModal: FC<{}> = () => {
   }
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout
     if (
       days === 0 &&
       hours === 0 &&
@@ -60,7 +61,13 @@ const EnrollModal: FC<{}> = () => {
       !!competition &&
       isEnrolled
     ) {
-      router.push(`/quiz/${competition.id}/`)
+      timeout = setTimeout(() => {
+        router.push(`/quiz/${competition.id}/`)
+      }, 1000)
+    }
+
+    return () => {
+      clearTimeout(timeout)
     }
   }, [minutes, seconds, days, hours, competition])
 
