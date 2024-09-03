@@ -55,7 +55,7 @@ const EnrollModal: FC<{}> = () => {
     if (
       days === 0 &&
       hours === 0 &&
-      minutes <= 5 &&
+      minutes <= 1 &&
       modalState !== "closed" &&
       !!competition
     ) {
