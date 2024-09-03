@@ -7,7 +7,7 @@ export const useSocket = ({
   reconnectInterval = 1000,
   onMessageEnter,
   enablePing,
-  deps = []
+  deps = [],
 }: {
   enablePing?: boolean
   basePath: string
@@ -18,10 +18,6 @@ export const useSocket = ({
   const socket = useRef<{ client: WebSocket | null }>({ client: null })
 
   const [ping, setPing] = useState(-1)
-
-  const stableOnMessageEnter = useCallback(onMessageEnter ?? NullCallback, [
-    onMessageEnter,
-  ])
 
   const { userToken } = useUserProfileContext()
 
@@ -37,10 +33,11 @@ export const useSocket = ({
         // setPing(timePassed)
       } else {
         const data = JSON.parse(e.data)
+        console.log(data)
         onMessageEnter?.(data)
       }
     }
-  }, [stableOnMessageEnter, ping])
+  }, [onMessageEnter, ping])
 
   useEffect(() => {
     let isMounted = true
@@ -74,7 +71,19 @@ export const useSocket = ({
           }, 3000)
         }
       }
-
+      socket.current.client.onmessage = (e) => {
+        if (e.data === "PONG") {
+          // const now = new Date()
+          // const timePassed = previousPing
+          //   ? now.getTime() - previousPing.getTime()
+          //   : -1
+          // setPing(timePassed)
+        } else {
+          const data = JSON.parse(e.data)
+          console.log(data)
+          onMessageEnter?.(data)
+        }
+      }
       socket.current.client.onclose = (e) => {
         if (isMounted) reconnect()
         setPing(-1)

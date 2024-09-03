@@ -9,6 +9,7 @@ import {
   FC,
   PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
   useState,
 } from "react"
@@ -93,46 +94,49 @@ const QuizTapListProvider: FC<
   //   [userToken]
   // )
 
-  const resolveMessage = (data: { data: any; type: string }) => {
-    switch (data.type) {
-      case "user_enrolls":
-        setEnrollmentsList(data.data)
-        break
+  const resolveMessage = useCallback(
+    (data: { data: any; type: string }) => {
+      switch (data.type) {
+        case "user_enrolls":
+          setEnrollmentsList(data.data)
+          break
 
-      case "competition_list":
-        setCompetitionList(data.data)
-        break
+        case "competition_list":
+          setCompetitionList(data.data)
+          break
 
-      case "update_competition":
-        {
+        case "update_competition":
+          {
+            setCompetitionList((prev) => {
+              const index = prev.findIndex((item) => item.id === data.data.id)
+              if (index !== -1) {
+                prev[index] = data.data
+              } else {
+                prev.push(data.data)
+              }
+
+              return [...prev]
+            })
+          }
+          break
+
+        case "remove_competition":
           setCompetitionList((prev) => {
-            const index = prev.findIndex((item) => item.id === data.data.id)
-            if (index !== -1) {
-              prev[index] = data.data
-            } else {
-              prev.push(data.data)
-            }
-
-            return [...prev]
+            return [...prev.filter((item) => item.id !== data.data)]
           })
-        }
-        break
+          break
 
-      case "remove_competition":
-        setCompetitionList((prev) => {
-          return [...prev.filter((item) => item.id !== data.data)]
-        })
-        break
-
-      case "increase_enrollment":
-        const item = competitionList.find((item) => item.id === data.data)
-        if (item) {
-          item.participantsCount += 1
-        }
-        setCompetitionList([...competitionList])
-        break
-    }
-  }
+        case "increase_enrollment":
+          const item = competitionList.find((item) => item.id === data.data)
+          if (item) {
+            item.participantsCount += 1
+          }
+          setCompetitionList([...competitionList])
+          break
+      }
+    },
+    [competitionList, setCompetitionList, enrollmentsList, setEnrollmentsList]
+  )
 
   const {} = useSocket({
     basePath: "/ws/quiz/list/",
