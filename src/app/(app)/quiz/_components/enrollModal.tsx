@@ -57,7 +57,8 @@ const EnrollModal: FC<{}> = () => {
       hours === 0 &&
       minutes <= 1 &&
       modalState !== "closed" &&
-      !!competition
+      !!competition &&
+      isEnrolled
     ) {
       router.push(`/quiz/${competition.id}/`)
     }
