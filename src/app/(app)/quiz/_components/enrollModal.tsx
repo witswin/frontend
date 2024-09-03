@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { useQuizTapListContext } from "@/context/quiztapListProvider"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import Icon from "@/components/ui/Icon"
 import {
   ClaimAndEnrollButton,
@@ -13,6 +13,7 @@ import { enrollQuizApi } from "@/utils/api"
 import { useTimer } from "@/utils/hooks/timer"
 import Link from "next/link"
 import { fromWei } from "@/utils"
+import { useRouter } from "next/navigation"
 
 const EnrollModal: FC<{}> = () => {
   const {
@@ -23,11 +24,13 @@ const EnrollModal: FC<{}> = () => {
     enrollmentsList,
   } = useQuizTapListContext()
 
+  const router = useRouter()
+
   const [loading, setLoading] = useState(false)
 
   const competition = selecetedCompetition!
 
-  const { minutes, seconds, hours } = useTimer(competition?.startAt)
+  const { minutes, seconds, hours, days } = useTimer(competition?.startAt)
 
   const isEnrolled =
     enrollmentsList.findIndex(
@@ -47,6 +50,18 @@ const EnrollModal: FC<{}> = () => {
         setLoading(false)
       })
   }
+
+  useEffect(() => {
+    if (
+      days === 0 &&
+      hours === 0 &&
+      minutes <= 5 &&
+      modalState !== "closed" &&
+      !!competition
+    ) {
+      router.push(`/quiz/${competition.id}/`)
+    }
+  }, [minutes, seconds, days, hours, competition])
 
   return (
     <Modal
@@ -72,7 +87,7 @@ const EnrollModal: FC<{}> = () => {
           <p className="text-sm text-gray100">{competition?.details}</p>
 
           <div className="flex mt-2 gap-2 ">
-            <div className="flex px-2 justify-between flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
+            <div className="flex px-2 justify-evenly flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
               <p className="text-sm font-normal leading-[22px] text-gray100">
                 Prize
               </p>
@@ -82,7 +97,7 @@ const EnrollModal: FC<{}> = () => {
                   competition?.token}{" "}
               </p>
             </div>
-            <div className="flex px-2 flex-1 items-center rounded-xl border border-gray70 bg-gray50">
+            <div className="flex px-2 flex-1 items-center justify-evenly rounded-xl border border-gray70 bg-gray50">
               <Icon
                 alt="hint"
                 className="py-1 mr-2"
@@ -132,7 +147,7 @@ const EnrollModal: FC<{}> = () => {
                 }
               >
                 <EnrolledButton
-                  className="!w-full"
+                  className="!w-full hover:bg-space-green/20 transition-colors"
                   height="48px"
                   $fontSize="14px"
                 >

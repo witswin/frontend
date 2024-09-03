@@ -103,6 +103,7 @@ const QuestionChoice: FC<{
           ? "!border-space-green text-space-green !bg-dark-space-green"
           : ""
       } ${
+        !disabled &&
         activeQuestionChoiceIndex === index &&
         isRestTime &&
         timer > 8000 &&
