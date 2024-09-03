@@ -126,7 +126,11 @@ const EnrollModal: FC<{}> = () => {
                 </div>
               </ClaimAndEnrollButton>
             ) : (
-              <Link href={`/quiz/${competition.id}`}>
+              <Link
+                href={
+                  hours > 0 || minutes > 15 ? "#" : `/quiz/${competition.id}`
+                }
+              >
                 <EnrolledButton
                   className="!w-full"
                   height="48px"

@@ -153,7 +153,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
               </Link>
             )
           ) : isEnrolled ? (
-            enterState < 60 * 30 ? (
+            enterState < 60 * 5 ? (
               <Link href={`/quiz/${competition.id}`}>
                 <PrimaryOutlinedButton
                   height="48px"
