@@ -52,6 +52,10 @@ const QuizItemPage = () => {
                   },
                 })
               )
+
+              setTimeout(() => {
+                setIsLoading(false)
+              }, 1000)
             }}
             disabled={
               isLoading ||
