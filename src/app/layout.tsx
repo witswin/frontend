@@ -48,7 +48,7 @@ export default async function RootLayout({
               <EventContextProvider>
                 <div id="app">
                   <Header />
-                  <div className="py-14">{children}</div>
+                  <div className="pt-4">{children}</div>
 
                   <Footer />
                 </div>
