@@ -26,9 +26,9 @@ const QuizLayout: FC<PropsWithChildren & { params: { id: string } }> = async ({
     redirect("/quiz")
   }
 
-  if (new Date(quiz.startAt).getTime() - new Date().getTime() > 60000 * 5) {
-    redirect("/quiz")
-  }
+  // if (new Date(quiz.startAt).getTime() - new Date().getTime() > 60000 * 5) {
+  //   redirect("/quiz")
+  // }
 
   return (
     <QuizContextProvider quiz={quiz} userEnrollmentPk={enrollment}>

@@ -8,10 +8,12 @@ const Timer: FC<{
   timer: number
   className?: string
   isRestTime?: boolean
-}> = ({ timer, className, isRestTime }) => {
+  includeMinutes?: boolean
+}> = ({ timer, className, isRestTime, includeMinutes }) => {
   const formatTime = (time: number) => {
     const totalSeconds = Math.floor(time / 1000)
     const seconds = totalSeconds % 60
+    const minutes = (totalSeconds / 60) % 60
     const milliseconds = time % 60000
 
     const formattedMilliseconds = String(milliseconds).padStart(2, "0")
@@ -21,6 +23,8 @@ const Timer: FC<{
       seconds,
       formattedSeconds: formattedSeconds,
       formattedMilliSeconds: formattedMilliseconds.slice(-3, -1),
+      minutes: Math.floor(minutes),
+      totalSeconds,
     }
   }
 
@@ -31,7 +35,7 @@ const Timer: FC<{
       className={`absolute left-1/2 top-5 -translate-x-1/2 rounded-xl border-2 border-gray20 bg-[#1E1E2C33] p-2 ${className ?? ""}`}
     >
       <div
-        className={`flex items-center ${time.seconds < 3 && (time.seconds !== 0 || time.formattedMilliSeconds !== "0") ? "timer-blink" : ""} gap-3`}
+        className={`flex items-center ${time.totalSeconds < 3 && (time.seconds !== 0 || time.formattedMilliSeconds !== "0") ? "timer-blink" : ""} gap-3`}
       >
         <Icon
           alt="timer"
@@ -41,11 +45,11 @@ const Timer: FC<{
         />
 
         <p
-          className={`font-digital-numbers text-2xl ${time.seconds > 5 ? "text-white" : time.seconds > 2 ? "text-warn" : "text-error"} `}
+          className={`font-digital-numbers text-2xl ${time.totalSeconds > 5 ? "text-white" : time.totalSeconds > 2 ? "text-warn" : "text-error"} `}
         >
           {isRestTime
             ? `00:0`
-            : `${time.formattedSeconds}:${time.formattedMilliSeconds}`}
+            : `${includeMinutes ? `${time.minutes}:` : ""}${time.formattedSeconds}:${time.formattedMilliSeconds}`}
         </p>
       </div>
     </div>

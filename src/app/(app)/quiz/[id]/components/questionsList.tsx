@@ -33,7 +33,7 @@ const Separator: FC<{ index: number }> = ({ index }) => {
     <div className="relative mx-2 my-auto h-[2px] w-7 rounded-2xl bg-gray50">
       <div
         className="absolute bottom-0 left-0 top-0 rounded-2xl h-[2px] bg-gray100"
-        style={{ width }}
+        style={{ width, minWidth: width }}
       ></div>
     </div>
   )
@@ -95,7 +95,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
   if (stateIndex > index || isRestTime)
     return (
       <div
-        className={`relative grid h-9 w-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined || answersHistory[index - 1] === undefined || answersHistory[index - 1] === null ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-mid-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
+        className={`relative grid h-9 w-9 min-w-9 min-h-9 place-content-center rounded-lg border-2 ${index > stateIndex ? "border-gray50" : userAnswersHistory[index - 1] === null || userAnswersHistory[index - 1] === undefined || answersHistory[index - 1] === undefined || answersHistory[index - 1] === null ? "border-gray100" : userAnswersHistory[index - 1] === answersHistory[index - 1] ? "border-mid-dark-space-green" : "border-error/40"} bg-gray20 text-gray100`}
       >
         {index}
       </div>
@@ -103,7 +103,7 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
 
   return (
     <div
-      className={`progress relative  h-9 w-9  rounded-lg  ${index > stateIndex ? "border-2 border-gray50" : index === stateIndex ? "" : "border-2 border-dark-space-green"} bg-gray20 text-gray100`}
+      className={`progress relative min-w-9 min-h-9 h-9 w-9 rounded-lg  ${index > stateIndex ? "border-2 border-gray50" : index === stateIndex ? "" : "border-2 border-dark-space-green"} bg-gray20 text-gray100`}
     >
       <div className="absolute inset-0 grid place-content-center text-sm">
         {index}
