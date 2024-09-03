@@ -17,6 +17,7 @@ import {
 import { useUserProfileContext } from "./userProfile"
 import logger from "@/core/logger"
 import { Address } from "viem"
+import { shuffleArray } from "@/utils/random"
 
 export type QuizContextProps = {
   remainingPeople: number
@@ -245,6 +246,10 @@ const QuizContextProvider: FC<
             setQuestion((prev) => {
               if (prev?.id === data.question.id) {
                 return prev
+              }
+
+              if (quiz.shuffleAnswers) {
+                data.question.choices = shuffleArray(data.question.choices)
               }
 
               return data.question

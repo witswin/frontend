@@ -34,6 +34,7 @@ export type Sponsor = {
 }
 
 export type Competition = {
+  shuffleAnswers: boolean
   txHash?: number
   hintCount: number
   participantsCount: number
