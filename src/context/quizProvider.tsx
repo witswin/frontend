@@ -196,7 +196,7 @@ const QuizContextProvider: FC<
   }, [startAt])
 
   useEffect(() => {
-    if (!userToken) return
+    // if (!userToken) return
     let isMounted = true
 
     let interval: NodeJS.Timeout | undefined
@@ -206,8 +206,11 @@ const QuizContextProvider: FC<
     const initializeWebSocket = () => {
       if (!isMounted) return
 
-      const socketUrl =
+      let socketUrl =
         process.env.NEXT_PUBLIC_WS_URL! + "/ws/quiz/" + quiz.id + "/"
+
+      if (userToken) socketUrl += `?auth=${userToken}`
+
       socket.current.client = new WebSocket(socketUrl)
 
       socket.current.client.onopen = () => {
@@ -451,7 +454,9 @@ const QuizContextProvider: FC<
           setIsRestTime(true)
         } else {
           estimatedRemaining -= restPeriod
-          setDocTitle(`[Question ${newState}]. ${Math.floor(estimatedRemaining / 1000)}`)
+          setDocTitle(
+            `[Question ${newState}]. ${Math.floor(estimatedRemaining / 1000)}`
+          )
           setIsRestTime(false)
         }
 
