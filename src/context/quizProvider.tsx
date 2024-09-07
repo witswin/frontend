@@ -43,6 +43,7 @@ export type QuizContextProps = {
   hintData: { questionId: number; data: number[] } | null
   previousRoundLosses: number
   winners: { userProfile_WalletAddress: Address; txHash: string }[] | null
+  cachedAudios: { [key: string]: HTMLAudioElement }
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -68,6 +69,7 @@ export const QuizContext = createContext<QuizContextProps>({
   hintData: null,
   previousRoundLosses: 0,
   winners: null,
+  cachedAudios: {},
 })
 
 export const statePeriod = 10000
@@ -136,6 +138,8 @@ const QuizContextProvider: FC<
 
   const socket = useRef({ client: null as WebSocket | null })
 
+  const cachedAudios = useRef<{ [key: string]: HTMLAudioElement }>({})
+
   const [userAnswersHistory, setUserAnswersHistory] = useState<
     (number | null)[]
   >(Array.from(new Array(quiz.questions.length).fill(null)))
@@ -195,6 +199,14 @@ const QuizContextProvider: FC<
 
     return newState
   }, [startAt])
+
+  useEffect(() => {
+    cachedAudios.current.beforeStart = new Audio("/assets/sounds/new 3-2-1.wav")
+    cachedAudios.current.quizStart = new Audio("/assets/sounds/time up.mp3")
+    cachedAudios.current.beforeQuestion = new Audio(
+      "/assets/sounds/timer count down.wav"
+    )
+  }, [])
 
   useEffect(() => {
     // if (!userToken) return
@@ -419,6 +431,20 @@ const QuizContextProvider: FC<
   }, [stateIndex])
 
   useEffect(() => {
+    //  if (passedTime < 3000 && !isBeforeExecuted) {
+    //    console.log(cachedAudios)
+    //    cachedAudios.current.beforeStart?.play()
+    //    setTimeout(() => {
+    //      cachedAudios.current.quizStart?.play()
+    //    }, 3000)
+    //    isBeforeExecuted = true
+    //  }
+  }, [timer, stateIndex])
+
+  useEffect(() => {
+    let isBeforeExecuted = false
+    let isStartQuestionExecuted = false
+
     const timerInterval = setInterval(() => {
       const newState = recalculateState()
       setStateIndex(newState)
@@ -449,6 +475,7 @@ const QuizContextProvider: FC<
 
         if (newState <= 0) {
           const passedTime = startAt.getTime() - nowUTC.getTime()
+
           setDocTitle(`Start At ${formatTimeDifference(startAt, nowUTC)}`)
 
           return passedTime
@@ -460,7 +487,7 @@ const QuizContextProvider: FC<
         } else {
           estimatedRemaining -= restPeriod
           setDocTitle(
-            `[Question ${newState}]. ${Math.floor(estimatedRemaining / 1000)}`
+            `${newState}. Question ${Math.floor(estimatedRemaining / 1000)}s`
           )
           setIsRestTime(false)
         }
@@ -517,6 +544,7 @@ const QuizContextProvider: FC<
         hintData,
         previousRoundLosses,
         winners: winnersList,
+        cachedAudios: cachedAudios.current,
       }}
     >
       {children}
