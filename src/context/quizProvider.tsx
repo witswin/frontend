@@ -206,6 +206,10 @@ const QuizContextProvider: FC<
     cachedAudios.current.beforeQuestion = new Audio(
       "/assets/sounds/timer count down.wav"
     )
+
+    Object.values(cachedAudios.current).forEach(
+      (audio) => (audio.preload = "auto")
+    )
   }, [])
 
   useEffect(() => {
@@ -431,20 +435,6 @@ const QuizContextProvider: FC<
   }, [stateIndex])
 
   useEffect(() => {
-    //  if (passedTime < 3000 && !isBeforeExecuted) {
-    //    console.log(cachedAudios)
-    //    cachedAudios.current.beforeStart?.play()
-    //    setTimeout(() => {
-    //      cachedAudios.current.quizStart?.play()
-    //    }, 3000)
-    //    isBeforeExecuted = true
-    //  }
-  }, [timer, stateIndex])
-
-  useEffect(() => {
-    let isBeforeExecuted = false
-    let isStartQuestionExecuted = false
-
     const timerInterval = setInterval(() => {
       const newState = recalculateState()
       setStateIndex(newState)
