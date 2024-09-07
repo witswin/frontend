@@ -68,13 +68,19 @@ const QuestionItem: FC<{ index: number }> = ({ index }) => {
       const totalFrames = durationInSeconds * framesPerSecond
       const decrementAmount = borderLen / totalFrames
 
-      function progressBar() {
-        offset -= decrementAmount
-        progress.style.strokeDashoffset = offset
-        frameCount++
+      let startTime: number | null = null
 
-        // Stop animation when duration is reached
-        if (frameCount < totalFrames) {
+      function progressBar(timestamp: number) {
+        if (!startTime) {
+          startTime = timestamp
+        }
+
+        const elapsed = timestamp - startTime
+        const progressPercent = elapsed / (durationInSeconds * 1000)
+        offset = borderLen - progressPercent * borderLen
+        progress.style.strokeDashoffset = offset
+
+        if (elapsed < durationInSeconds * 1000) {
           anim = window.requestAnimationFrame(progressBar)
         } else {
           window.cancelAnimationFrame(anim)
