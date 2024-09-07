@@ -19,7 +19,7 @@ const QuizFinished: FC<{}> = () => {
         <div>
           <h3 className="text-center">Winners List</h3>
 
-          <span className="mt-5 h-80 inline-flex gap-4 flex-col overflow-y-auto text-sm bg-gray20 p-2 md:p-5 rounded-lg">
+          <span className="mt-5 h-80 inline-flex gap-4 flex-col overflow-y-auto text-sm p-2 md:p-5 rounded-lg">
             {winners.map((item, key) => (
               <span
                 key={key}
