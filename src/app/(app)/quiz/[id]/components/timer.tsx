@@ -39,6 +39,7 @@ const Timer: FC<{
       >
         <Icon
           alt="timer"
+          className="hidden md:inline-block"
           iconSrc="/assets/images/quizTap/timer.png"
           width="30px"
           height="31px"
