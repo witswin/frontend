@@ -202,9 +202,8 @@ export const RenderNavbarWalletAddress = () => {
     user,
     forkSession,
     linkWallet,
+    getAccessToken,
   } = usePrivy()
-
-  console.log(user)
 
   const { connection } = useUserWalletProvider()
 
@@ -217,8 +216,10 @@ export const RenderNavbarWalletAddress = () => {
         data-testid="wallet-connect"
         className="!w-36 h-[28px] !py-0 align-baseline"
         onClick={() => {
-          login({})
           linkWallet()
+          // connectOrCreateWallet()
+          // console.log(user)
+          // getAccessToken().then(console.log)
         }}
       >
         Connect Wallet

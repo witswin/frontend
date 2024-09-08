@@ -1,7 +1,10 @@
-import { cookieStorage, createConfig, createStorage, http } from "wagmi"
+"use client"
+
+import { cookieStorage, createStorage, http } from "wagmi"
 import { supportedChains } from "@/constants/chains"
 import { injected, safe, walletConnect } from "wagmi/connectors"
 import { HttpTransport } from "viem"
+import { createConfig } from "@privy-io/wagmi"
 
 const getConnectorProviders = () => {
   return [
@@ -30,3 +33,9 @@ export const config = createConfig({
   connectors: getConnectorProviders(),
   transports,
 })
+
+declare module "wagmi" {
+  interface Register {
+    config: typeof config
+  }
+}
