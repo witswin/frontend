@@ -15,7 +15,7 @@ import {
 } from "@nextui-org/react"
 import Image from "next/image"
 import Link from "next/link"
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { FaArrowRight } from "react-icons/fa"
 import { isAddressEqual } from "viem"
 
@@ -35,6 +35,7 @@ const WinnerModal: FC = () => {
     winners,
     amountWinPerUser,
     quiz,
+    cachedAudios,
   } = useQuizContext()
   const { address } = useWalletAccount()
 
@@ -51,6 +52,19 @@ const WinnerModal: FC = () => {
 
     window.open(twitterUrl, "_blank")
   }
+
+  useEffect(() => {
+    if (
+      !dismissWinnerModal &&
+      finished &&
+      !!address &&
+      !!winners?.find((winner) =>
+        isAddressEqual(address, winner.userProfile_WalletAddress)
+      )
+    ) {
+      cachedAudios.prizeClaimed?.play()
+    }
+  }, [dismissWinnerModal, finished, address, winners])
 
   return (
     <Modal
