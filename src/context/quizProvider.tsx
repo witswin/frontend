@@ -207,6 +207,20 @@ const QuizContextProvider: FC<
       "/assets/sounds/timer count down.wav"
     )
 
+    cachedAudios.current.seeResults = new Audio(
+      "/assets/sounds/see results.mp3"
+    )
+
+    cachedAudios.current.rightAnswer = new Audio(
+      "/assets/sounds/right answer.mp3"
+    )
+    cachedAudios.current.wrongAnswer = new Audio(
+      "/assets/sounds/wrong answer.mp3"
+    )
+    cachedAudios.current.prizeClaimed = new Audio(
+      "/assets/sounds/prize claimed.mp3"
+    )
+
     Object.values(cachedAudios.current).forEach(
       (audio) => (audio.preload = "auto")
     )

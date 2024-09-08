@@ -1,17 +1,20 @@
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
-import { FC, useEffect } from "react"
+import { FC, useEffect, useState } from "react"
 
 const QuestionPrompt: FC = () => {
   const {
     stateIndex,
     answerQuestion,
-    question: currentQuestion,
+    question,
     isRestTime,
     hintData,
+    timer,
+    answersHistory,
+    activeQuestionChoiceIndex,
+    cachedAudios,
+    userAnswersHistory,
   } = useQuizContext()
-
-  const question = currentQuestion
 
   useEffect(() => {
     const questionIndexes = ["A", "B", "C", "D"]
@@ -32,6 +35,50 @@ const QuestionPrompt: FC = () => {
       document.removeEventListener("keypress", onKeyPressed)
     }
   }, [answerQuestion, isRestTime, question?.isEligible])
+
+  const [isProjectedSound, setIsProjectedSound] = useState(false)
+  const [isPendingResultPlayed, setIsPendingResultPlayed] = useState(false)
+
+  useEffect(() => {
+    if (isProjectedSound || !isRestTime) return
+
+    if (
+      question &&
+      timer <= 8000 &&
+      answersHistory[question.number - 1] ===
+        userAnswersHistory[question.number - 1]
+    ) {
+      cachedAudios.rightAnswer?.play()
+      setIsProjectedSound(true)
+    } else if (
+      question &&
+      timer <= 8000 &&
+      answersHistory[question.number - 1] &&
+      answersHistory[question.number - 1] !==
+        userAnswersHistory[question.number - 1]
+    ) {
+      cachedAudios.wrongAnswer?.play()
+
+      setIsProjectedSound(true)
+    }
+  }, [
+    question,
+    isProjectedSound,
+    answersHistory,
+    activeQuestionChoiceIndex,
+    timer,
+    userAnswersHistory,
+    isRestTime,
+  ])
+
+  useEffect(() => {
+    if (isRestTime || isPendingResultPlayed) return
+
+    if (timer <= 3000) {
+      cachedAudios.seeResults?.play()
+      setIsPendingResultPlayed(true)
+    }
+  }, [isRestTime, isPendingResultPlayed, timer])
 
   if (stateIndex !== question?.number) return "Loading"
 
@@ -79,6 +126,7 @@ const QuestionChoice: FC<{
     isRestTime,
     answersHistory,
     timer,
+    cachedAudios,
   } = useQuizContext()
 
   return (

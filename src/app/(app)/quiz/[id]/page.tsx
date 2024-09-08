@@ -12,7 +12,7 @@ import {
 import QuestionPrompt from "./components/questionPrompt"
 import RestTime from "./components/restTime"
 import QuizFinished from "./components/finished"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import LoseModal from "./components/modals/loseModal"
 import WinnerModal from "./components/modals/winnerModal"
 
