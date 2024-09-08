@@ -13,6 +13,8 @@ import Styles from "./auth.module.scss"
 import { Noto_Sans_Mono } from "next/font/google"
 import Link from "next/link"
 import { useWalletManagementContext } from "@/context/walletProvider"
+import { usePrivy } from "@privy-io/react-auth"
+import { Button } from "@nextui-org/react"
 
 const NotoSansMono = Noto_Sans_Mono({
   weight: ["400", "500"],
@@ -190,6 +192,19 @@ export const RenderNavbarWalletAddress = () => {
   const { userProfile } = useUserProfileContext()
 
   const evmWallet = userProfile?.walletAddress
+  const {
+    isModalOpen,
+    init,
+    connectOrCreateWallet,
+    linkApple,
+    ready,
+    login,
+    user,
+    forkSession,
+    linkWallet,
+  } = usePrivy()
+
+  console.log(user)
 
   const { connection } = useUserWalletProvider()
 
@@ -197,13 +212,17 @@ export const RenderNavbarWalletAddress = () => {
 
   if (!userProfile || !address)
     return (
-      <button
+      <Button
+        disabled={!ready}
         data-testid="wallet-connect"
-        className="btn btn--sm btn--primary !w-36 h-[28px] !py-0 align-baseline"
-        onClick={() => setIsWalletPromptOpen(true)}
+        className="!w-36 h-[28px] !py-0 align-baseline"
+        onClick={() => {
+          login({})
+          linkWallet()
+        }}
       >
         Connect Wallet
-      </button>
+      </Button>
     )
 
   return (
