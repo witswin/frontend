@@ -14,6 +14,7 @@ const QuestionPrompt: FC = () => {
     activeQuestionChoiceIndex,
     cachedAudios,
     userAnswersHistory,
+    wrongAnswersCount,
   } = useQuizContext()
 
   useEffect(() => {
@@ -50,13 +51,7 @@ const QuestionPrompt: FC = () => {
     ) {
       cachedAudios.rightAnswer?.play()
       setIsProjectedSound(true)
-    } else if (
-      question &&
-      timer <= 8000 &&
-      answersHistory[question.number - 1] &&
-      answersHistory[question.number - 1] !==
-        userAnswersHistory[question.number - 1]
-    ) {
+    } else if (question && timer <= 8000 && wrongAnswersCount === 1) {
       cachedAudios.wrongAnswer?.play()
 
       setIsProjectedSound(true)
