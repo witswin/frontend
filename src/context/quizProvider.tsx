@@ -498,7 +498,7 @@ const QuizContextProvider: FC<
 
         return estimatedRemaining
       })
-    }, 20)
+    }, 70)
 
     return () => {
       clearInterval(timerInterval)
