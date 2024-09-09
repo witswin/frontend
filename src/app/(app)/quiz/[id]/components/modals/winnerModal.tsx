@@ -91,7 +91,10 @@ const WinnerModal: FC = () => {
           <p className="text-lg font-semibold text-space-green">
             Way to go! You won{" "}
             <span className="bg-g-primary bg-clip-text text-transparent">
-              {fromWei(amountWinPerUser, quiz?.tokenDecimals)} {quiz?.token}
+              {Number(fromWei(amountWinPerUser, quiz?.tokenDecimals)).toFixed(
+                2
+              )}{" "}
+              {quiz?.token}
             </span>
             .
           </p>
