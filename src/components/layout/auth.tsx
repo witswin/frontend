@@ -218,8 +218,8 @@ export const RenderNavbarWalletAddress = () => {
         onClick={() => {
           linkWallet()
           // connectOrCreateWallet()
-          // console.log(user)
-          // getAccessToken().then(console.log)
+          console.log(user)
+          getAccessToken().then(console.log)
         }}
       >
         Connect Wallet
