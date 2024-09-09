@@ -168,7 +168,7 @@ export const ProfileDropdown: FC<{
           {!!userProfile?.walletAddress && (
             <WalletItem wallet={userProfile?.walletAddress} isActive />
           )}
-          <button
+          {/* <button
             onClick={() => {
               setDropDownActive(false)
               setIsAddModalOpen(true)
@@ -178,7 +178,7 @@ export const ProfileDropdown: FC<{
             className="bg-gray60 mt-auto w-full rounded-lg py-2"
           >
             Add Or Switch Wallet
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

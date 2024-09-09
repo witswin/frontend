@@ -35,7 +35,7 @@ const QuizItemPage = () => {
     ping <= 100 ? "bg-space-green" : ping <= 300 ? "bg-yellow-500" : "bg-error"
 
   return (
-    <div className="quiz-main-wrapper pb-28 relative w-full">
+    <div className="quiz-main-wrapper relative w-full">
       <main className="quiz-main-content h-full w-full flex-1 rounded-2xl p-3">
         <div className="mt-5 flex pt-16 md:pt-0 flex-col md:flex-row gap-y-5 items-center justify-end px-5">
           {/* <p className="text-[#997EA4]">Quiz</p> */}
