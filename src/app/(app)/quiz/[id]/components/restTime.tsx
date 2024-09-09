@@ -52,7 +52,7 @@ const RestTime: FC<{}> = () => {
   }, [answersHistory, userAnswersHistory])
 
   useEffect(() => {
-    if (timer <= 3000 && timer >= 2950) {
+    if (timer <= 3000 && timer >= 2930) {
       cachedAudios.beforeQuestion?.play()
     }
   }, [timer])

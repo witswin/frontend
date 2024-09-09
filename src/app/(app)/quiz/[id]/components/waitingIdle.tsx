@@ -7,7 +7,7 @@ const WaitingIdle: FC<{}> = () => {
   const { quiz, timer, cachedAudios } = useQuizContext()
 
   useEffect(() => {
-    if (timer <= 3000 && timer >= 2950) {
+    if (timer <= 3000 && timer >= 2930) {
       cachedAudios.beforeStart?.play()
       setTimeout(() => {
         cachedAudios.quizStart?.play()
