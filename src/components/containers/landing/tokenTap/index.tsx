@@ -1,18 +1,17 @@
-import { numberWithCommas } from "@/utils";
-import RoutePath from "@/utils/routes";
-import Link from "next/link";
-import Widget from "../widget";
-import { serverFetch } from "@/utils/api";
-import { Token } from "@/types";
+import { numberWithCommas } from "@/utils"
+import Link from "next/link"
+import Widget from "../widget"
+import { serverFetch } from "@/utils/api"
+import { Token } from "@/types"
 
 const TokenTapLanding = async () => {
   const tokensList: Token[] = (
     await serverFetch("/api/tokentap/token-distribution-list/")
-  ).filter((item: Token) => item.status === "VERIFIED");
+  ).filter((item: Token) => item.status === "VERIFIED")
 
   return (
     <section className={"flex--1"}>
-      <Link className={"flex--1"} href={RoutePath.TOKEN}>
+      <Link className={"flex--1"} href={"/tokentap"}>
         <Widget
           id="tokentap"
           description={"Get the tasks done and claim your rewards"}
@@ -58,7 +57,7 @@ const TokenTapLanding = async () => {
         </Widget>
       </Link>
     </section>
-  );
-};
+  )
+}
 
-export default TokenTapLanding;
+export default TokenTapLanding

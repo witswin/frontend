@@ -1,36 +1,35 @@
-"use client";
+"use client"
 
-import { ClaimButton } from "@/components/ui/Button/button";
-import Icon from "@/components/ui/Icon";
-import { getSupportedChainId } from "@/constants";
+import { ClaimButton } from "@/components/ui/Button/button"
+import Icon from "@/components/ui/Icon"
+import { getSupportedChainId } from "@/constants"
 import {
   useReadUnitapPassBatchSaleBatchSoldCount,
   useReadUnitapPassBatchSaleBatchSize,
-} from "@/types/abis/contracts";
-import RoutePath from "@/utils/routes";
-import Link from "next/link";
+} from "@/types/abis/contracts"
+import Link from "next/link"
 
-const deadline = new Date("January 12, 2023 16:00:00 UTC");
+const deadline = new Date("January 12, 2023 16:00:00 UTC")
 
 const UnitapPass = () => {
   const maxBatches = useReadUnitapPassBatchSaleBatchSize({
     chainId: getSupportedChainId(),
-  });
+  })
 
   const batchSold = useReadUnitapPassBatchSaleBatchSoldCount({
     chainId: getSupportedChainId(),
-  });
+  })
 
   // const maxBatchAmount = maxBatches.data;
-  const maxBatchAmount = 500;
+  const maxBatchAmount = 500
 
-  const beforeMinted = 312;
+  const beforeMinted = 312
 
-  const batchSoldAmount = batchSold.data;
+  const batchSoldAmount = batchSold.data
 
   return (
     <Link
-      href={RoutePath.NFT}
+      href={"/pass"}
       id="home-nft"
       className={
         "uni-card flex-col items-center gap-4 px-12 py-3 text-center sm:text-left md:flex-row md:gap-0 " +
@@ -79,7 +78,7 @@ const UnitapPass = () => {
         </ClaimButton>
       </div>
     </Link>
-  );
-};
+  )
+}
 
-export default UnitapPass;
+export default UnitapPass
