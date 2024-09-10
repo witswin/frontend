@@ -1,5 +1,6 @@
 import { UserProfile } from "@/types"
 import { axiosInstance } from "./base"
+import { resolveUserTokenMethod } from "."
 
 export async function checkUsernameValid(username: string, token: string) {
   const response = await axiosInstance.post<{ exists: boolean }>(
@@ -9,7 +10,7 @@ export async function checkUsernameValid(username: string, token: string) {
     },
     {
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
   )
@@ -50,7 +51,7 @@ export async function loginOrRegister(
 export async function getUserProfileWithTokenAPI(token: string) {
   const response = await axiosInstance.get<UserProfile>(`/auth/info/`, {
     headers: {
-      Authorization: `Token ${token}`,
+      Authorization: resolveUserTokenMethod(token),
     },
   })
 
@@ -82,7 +83,7 @@ export async function setWalletAPI(
     },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
   )

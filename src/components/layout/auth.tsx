@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useRef, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { useOutsideClick } from "@/utils/hooks/dom"
 import { useUserProfileContext } from "@/context/userProfile"
 import { useUserWalletProvider, useWalletConnection } from "@/utils/wallet"
@@ -15,6 +15,8 @@ import Link from "next/link"
 import { useWalletManagementContext } from "@/context/walletProvider"
 import { usePrivy } from "@privy-io/react-auth"
 import { Button } from "@nextui-org/react"
+import { setCookie } from "@/utils/hooks"
+import { getUserProfileWithTokenAPI } from "@/utils/api"
 
 const NotoSansMono = Noto_Sans_Mono({
   weight: ["400", "500"],
@@ -35,26 +37,26 @@ export const UserAuthStatus = () => {
   return (
     <div ref={divRef} className="md:relative ml-5">
       <div className={`ml-5 p-[1px] rounded-lg mr-3`} id="profile-dropdown">
-        <div className="cursor-pointer flex rounded-lg h-9 items-center justify-between bg-gray40">
-          <div
-            onClick={() => {
-              if (!userProfile) return
-              setDropDownActive(!dropDownActive)
-            }}
-            className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between bg-gray40"
-          >
-            <span className="ml-2 hidden md:block text-sm">
+        {/* <div className="cursor-pointer flex rounded-lg h-9 items-center justify-between bg-gray40"> */}
+        <div
+          onClick={() => {
+            if (!userProfile) return
+            setDropDownActive(!dropDownActive)
+          }}
+          className="cursor-pointer relative z-20 pr-0.5 pl-2 flex rounded-lg h-9 items-center justify-between"
+        >
+          {/* <span className="ml-2 hidden md:block text-sm">
               @ {userProfile?.username}
-            </span>
+            </span> */}
 
-            <span className="text-gray90 hidden md:block ml-8 mr-5"></span>
-            <RenderNavbarWalletAddress />
-          </div>
-
-          {dropDownActive && (
-            <ProfileDropdown setDropDownActive={setDropDownActive} />
-          )}
+          {/* <span className="text-gray90 hidden md:block ml-8 mr-5"></span> */}
+          <RenderNavbarWalletAddress />
         </div>
+
+        {dropDownActive && (
+          <ProfileDropdown setDropDownActive={setDropDownActive} />
+        )}
+        {/* </div> */}
       </div>
     </div>
   )
@@ -170,17 +172,6 @@ export const ProfileDropdown: FC<{
           {!!userProfile?.walletAddress && (
             <WalletItem wallet={userProfile?.walletAddress} isActive />
           )}
-          <button
-            onClick={() => {
-              setDropDownActive(false)
-              setIsAddModalOpen(true)
-              setDuplicateWalletRaiseError(false)
-              setHoldUserLogout(true)
-            }}
-            className="bg-gray60 mt-auto w-full rounded-lg py-2"
-          >
-            Add Or Switch Wallet
-          </button>
         </div>
       </div>
     </div>
@@ -189,7 +180,7 @@ export const ProfileDropdown: FC<{
 
 export const RenderNavbarWalletAddress = () => {
   const { setIsWalletPromptOpen } = useGlobalContext()
-  const { userProfile } = useUserProfileContext()
+  const { userProfile, onWalletLogin } = useUserProfileContext()
 
   const evmWallet = userProfile?.walletAddress
   const {
@@ -203,23 +194,32 @@ export const RenderNavbarWalletAddress = () => {
     forkSession,
     linkWallet,
     getAccessToken,
+    authenticated,
   } = usePrivy()
 
   const { connection } = useUserWalletProvider()
 
   let address = connection.isConnected ? connection.address : evmWallet
 
-  if (!userProfile || !address)
+  useEffect(() => {
+    if (!authenticated || userProfile) return
+
+    getAccessToken().then((token) => {
+      if (!token) return
+
+      setCookie("userToken", token)
+      getUserProfileWithTokenAPI(token).then((res) => onWalletLogin(token, res))
+    })
+  }, [authenticated])
+
+  if (!userProfile)
     return (
       <Button
         disabled={!ready}
         data-testid="wallet-connect"
         className="!w-36 h-[28px] !py-0 align-baseline"
         onClick={() => {
-          linkWallet()
-          // connectOrCreateWallet()
-          console.log(user)
-          getAccessToken().then(console.log)
+          login()
         }}
       >
         Connect Wallet
@@ -232,13 +232,11 @@ export const RenderNavbarWalletAddress = () => {
         data-testid="wallet-address"
         className={`btn ${
           NotoSansMono.className
-        } btn--sm btn--address tracking-wider font-normal ${
-          connection.isConnected && "btn--address--active"
-        } !w-36 h-[28px] !py-0 ml-0 md:ml-3 align-baseline`}
+        } btn--sm btn--address tracking-wider font-normal btn--address--active !w-36 h-[28px] !py-0 ml-0 md:ml-3 align-baseline`}
         onClick={(e) => {
-          if (connection.isConnected) return
-          e.stopPropagation()
-          setIsWalletPromptOpen(true)
+          // if (connection.isConnected) return
+          // e.stopPropagation()
+          // setIsWalletPromptOpen(true)
         }}
       >
         {shortenAddress(address)}

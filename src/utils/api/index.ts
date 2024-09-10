@@ -16,3 +16,11 @@ export const serverFetch = async (url: string) => {
 
   return await res.json()
 }
+
+export const resolveUserTokenMethod = (token: string) => {
+  if (token.indexOf(".") !== -1) {
+    return `Bearer ${token}`
+  }
+
+  return `Token ${token}`
+}

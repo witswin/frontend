@@ -1,41 +1,42 @@
-import { Settings } from "@/types";
-import { axiosInstance } from "./base";
-import { Chain, ClaimReceipt, Faucet, FuelChampion } from "@/types/gastap";
+import { Settings } from "@/types"
+import { axiosInstance } from "./base"
+import { Chain, ClaimReceipt, Faucet, FuelChampion } from "@/types/gastap"
+import { resolveUserTokenMethod } from "."
 
 export const convertFaucetToChain = (faucet: Faucet) => {
   return {
     ...faucet.chain,
     ...faucet,
     chainPk: faucet.chain.pk,
-  } as Chain;
-};
+  } as Chain
+}
 
 export const snakeToCamel = (str: string) => {
   return str.replace(/_([a-z])/g, function (match, group) {
-    return group.toUpperCase();
-  });
-};
+    return group.toUpperCase()
+  })
+}
 
 export const parseFieldSetting = (value: string) => {
-  if (value === "True") return true;
-  if (value === "False") return false;
+  if (value === "True") return true
+  if (value === "False") return false
 
-  if (!isNaN(value as any)) return Number(value);
+  if (!isNaN(value as any)) return Number(value)
 
-  return value;
-};
+  return value
+}
 
 export async function getWeeklyChainClaimLimitAPI() {
   const response = await axiosInstance.get<{ index: string; value: string }[]>(
     "/api/gastap/settings/"
-  );
+  )
 
   const result: Settings = response.data.reduce((prev, curr) => {
-    (prev as any)[snakeToCamel(curr.index)] = parseFieldSetting(curr.value);
-    return prev;
-  }, {} as Settings);
+    ;(prev as any)[snakeToCamel(curr.index)] = parseFieldSetting(curr.value)
+    return prev
+  }, {} as Settings)
 
-  return result;
+  return result
 }
 
 export async function getRemainingClaimsAPI(token: string) {
@@ -43,18 +44,16 @@ export async function getRemainingClaimsAPI(token: string) {
     "/api/gastap/user/remainig-claims/",
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function getChainList() {
-  const response = await axiosInstance.get<Faucet[]>(
-    "/api/gastap/faucet/list/"
-  );
-  return response.data.map((item) => convertFaucetToChain(item));
+  const response = await axiosInstance.get<Faucet[]>("/api/gastap/faucet/list/")
+  return response.data.map((item) => convertFaucetToChain(item))
 }
 
 export async function getOneTimeClaimedChainList(token: string) {
@@ -62,15 +61,15 @@ export async function getOneTimeClaimedChainList(token: string) {
     "/api/gastap/user/one-time-claims/",
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
   return response.data.map((item) => ({
     ...item,
     chain: convertFaucetToChain((item as any).faucet),
-  }));
+  }))
 }
 
 export async function getActiveClaimHistory(token: string) {
@@ -78,15 +77,15 @@ export async function getActiveClaimHistory(token: string) {
     "/api/gastap/user/claims/",
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
   return response.data.map((item) => ({
     ...item,
     chain: convertFaucetToChain((item as any).faucet),
-  }));
+  }))
 }
 
 export async function claimMax(
@@ -101,14 +100,14 @@ export async function claimMax(
     },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
   return {
     ...response.data,
     chain: convertFaucetToChain((response.data as any).faucet),
-  };
+  }
 }
 
 export async function claimMaxNonEVMAPI(
@@ -121,11 +120,11 @@ export async function claimMaxNonEVMAPI(
     { address: address },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function submitDonationTxHash(
@@ -141,12 +140,12 @@ export async function submitDonationTxHash(
     },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
-  return response.data;
+  return response.data
 }
 
 export async function getUserDonation(token: string, page = 1) {
@@ -154,18 +153,18 @@ export async function getUserDonation(token: string, page = 1) {
     `api/v1/user/donation?chain_pk=9&page_size=${page}`,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
-  console.log(response.data);
+  console.log(response.data)
 }
 
 export async function getFuelChampionList() {
   const response = await axiosInstance.get<FuelChampion[]>(
     "/api/gastap/fuel-champion"
-  );
+  )
 
-  return response.data;
+  return response.data
 }

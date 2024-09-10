@@ -23,6 +23,7 @@ import { useWalletAccount } from "@/utils/wallet"
 import { NullCallback } from "@/utils"
 import { Address, isAddressEqual } from "viem"
 import { useDisconnect } from "wagmi"
+import { usePrivy } from "@privy-io/react-auth"
 
 export const UserProfileContext = createContext<
   Partial<Settings> & {
@@ -64,6 +65,8 @@ export const UserContextProvider: FC<
   const [loading, setLoading] = useState(false)
   const [userToken, setToken] = useLocalStorageState("userToken")
   const [holdUserLogout, setHoldUserLogout] = useState(false)
+
+  const { logout: privyLogout } = usePrivy()
 
   const { address, isConnected, isConnecting, isReconnecting } =
     useWalletAccount()
@@ -111,46 +114,12 @@ export const UserContextProvider: FC<
   const logout = () => {
     disconnect?.()
     localStorage.clear()
+    privyLogout()
     setCookie("userToken", "")
 
     setUserProfile(null)
     setToken("")
   }
-
-  useEffect(() => {
-    if (holdUserLogout || isConnecting || isReconnecting) {
-      // if (isConnected && !userToken) {
-      //   disconnect?.();
-      // }
-      return
-    }
-
-    if (
-      userToken &&
-      isConnected &&
-      userProfile &&
-      isAddressEqual(userProfile.walletAddress, address!)
-    )
-      return
-
-    console.log(userProfile, isConnected, userToken, holdUserLogout)
-
-    disconnect?.()
-    localStorage.removeItem("userToken")
-    setCookie("userToken", "")
-
-    setUserProfile(null)
-    setToken("")
-  }, [
-    userToken,
-    isConnected,
-    holdUserLogout,
-    userProfile,
-    address,
-    disconnect,
-    isConnecting,
-    isReconnecting,
-  ])
 
   return (
     <UserProfileContext.Provider

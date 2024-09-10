@@ -2,42 +2,43 @@ import {
   UserRafflesProps,
   ConstraintProps,
   UserTokenDistribution,
-} from "@/types";
+} from "@/types"
+import { resolveUserTokenMethod } from "../api"
 
 export const getUserRaffleListServerSide = async (token?: string) => {
-  if (!token) return [];
+  if (!token) return []
   const res = await fetch(
     process.env.NEXT_PUBLIC_API_URL! + "/api/prizetap/get-user-raffles/",
     {
       cache: "no-store",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  if (!Array.isArray(res)) return [];
+  if (!Array.isArray(res)) return []
 
-  return res as UserRafflesProps[];
-};
+  return res as UserRafflesProps[]
+}
 
 export const getUserDistributionListServerSide = async (token?: string) => {
-  if (!token) return [];
+  if (!token) return []
   const res = await fetch(
     process.env.NEXT_PUBLIC_API_URL! +
       "/api/tokentap/user-token-distributions/",
     {
       cache: "no-store",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  if (!Array.isArray(res)) return [];
+  if (!Array.isArray(res)) return []
 
-  return res as UserTokenDistribution[];
-};
+  return res as UserTokenDistribution[]
+}
 
 export const getConstraintListServer = async () => {
   const res = await fetch(
@@ -45,12 +46,12 @@ export const getConstraintListServer = async () => {
     {
       cache: "no-store",
     }
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  if (typeof res !== "object") return {};
+  if (typeof res !== "object") return {}
 
-  return res as { [key: string]: ConstraintProps[] };
-};
+  return res as { [key: string]: ConstraintProps[] }
+}
 
 export const getTokenTapConstraintListServer = async () => {
   const res = await fetch(
@@ -58,12 +59,12 @@ export const getTokenTapConstraintListServer = async () => {
     {
       cache: "no-store",
     }
-  ).then((res) => res.json());
+  ).then((res) => res.json())
 
-  if (typeof res !== "object") return {};
+  if (typeof res !== "object") return {}
 
-  return res as { [key: string]: ConstraintProps[] };
-};
+  return res as { [key: string]: ConstraintProps[] }
+}
 
 export const getUserDonationsServer = async (token?: string) => {
   const res = await fetch(
@@ -72,9 +73,9 @@ export const getUserDonationsServer = async (token?: string) => {
     {
       cache: "no-store",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: token ? resolveUserTokenMethod(token) : "",
       },
     }
-  ).then((res) => res.json());
-  return res;
-};
+  ).then((res) => res.json())
+  return res
+}

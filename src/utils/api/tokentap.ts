@@ -3,15 +3,16 @@ import {
   ClaimedToken,
   ShieldSignatureResponse,
   Token,
-} from "@/types/tokentap";
-import { axiosInstance } from "./base";
+} from "@/types/tokentap"
+import { axiosInstance } from "./base"
+import { resolveUserTokenMethod } from "."
 
 export async function getTokensListAPI() {
   const response = await axiosInstance.get<Token[]>(
     "/api/tokentap/token-distribution-list/"
-  );
+  )
 
-  return response.data.filter((item) => item.status === "VERIFIED");
+  return response.data.filter((item) => item.status === "VERIFIED")
 }
 
 export async function tokenClaimSignatureApi(
@@ -23,9 +24,9 @@ export async function tokenClaimSignatureApi(
     `https://shield.unitap.app/v1/?app=${
       process.env.NEXT_PUBLIC_IS_STAGE === "1" ? "stage_unitap" : "unitap"
     }&method=claim-token&params[claimId]=${claimId}&distributionId=${distributionId}&contract=${contractAddress}`
-  );
+  )
 
-  return res.data;
+  return res.data
 }
 
 export async function getClaimedTokensListAPI(token: string) {
@@ -33,11 +34,11 @@ export async function getClaimedTokensListAPI(token: string) {
     "/api/tokentap/claims-list/",
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function claimTokenAPI(
@@ -53,11 +54,11 @@ export async function claimTokenAPI(
       : { userWalletAddress: address },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data.signature;
+  )
+  return response.data.signature
 }
 
 export async function updateClaimFinished(
@@ -70,11 +71,11 @@ export async function updateClaimFinished(
     { txHash },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function getTokenConstraintsVerifications(
@@ -85,10 +86,10 @@ export async function getTokenConstraintsVerifications(
     "/api/tokentap/get-token-constraints/" + tokenPk + "/",
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
-  return response.data;
+  return response.data
 }

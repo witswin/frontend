@@ -1,4 +1,5 @@
-import { UserConnection } from "@/types";
+import { UserConnection } from "@/types"
+import { resolveUserTokenMethod } from "../api"
 
 export const getUserHistory = async (token?: string) => {
   const res = await fetch(
@@ -6,15 +7,15 @@ export const getUserHistory = async (token?: string) => {
     {
       cache: "no-store",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: token ? resolveUserTokenMethod(token) : "",
       },
-    },
-  );
+    }
+  )
 
-  const data = await res.json();
+  const data = await res.json()
 
-  return data as { gasClaim: number; tokenClaim: number; raffleWin: number };
-};
+  return data as { gasClaim: number; tokenClaim: number; raffleWin: number }
+}
 
 export const getAllConnections = async (token?: string) => {
   const res = await fetch(
@@ -22,21 +23,21 @@ export const getAllConnections = async (token?: string) => {
     {
       cache: "no-store",
       headers: {
-        Authorization: `token ${token}`,
+        Authorization: token ? resolveUserTokenMethod(token) : "",
       },
-    },
-  );
+    }
+  )
 
-  const data = (await res.json()) as UserConnection[];
+  const data = (await res.json()) as UserConnection[]
 
   const transformedData = data.reduce((prev, curr) => {
-    const name = Object.keys(curr)[0];
+    const name = Object.keys(curr)[0]
 
-    if (!curr[name].isConnected) return prev;
+    if (!curr[name].isConnected) return prev
 
-    prev[name] = curr[name];
-    return prev;
-  }, {} as UserConnection);
+    prev[name] = curr[name]
+    return prev
+  }, {} as UserConnection)
 
-  return transformedData;
-};
+  return transformedData
+}

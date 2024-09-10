@@ -1,5 +1,6 @@
-import { ConstraintProps } from "@/types";
-import { axiosInstance } from "./base";
+import { ConstraintProps } from "@/types"
+import { axiosInstance } from "./base"
+import { resolveUserTokenMethod } from "."
 
 export async function createRaffleApi(token: string, raffleData: any) {
   const response = await axiosInstance.post<any>(
@@ -7,12 +8,12 @@ export async function createRaffleApi(token: string, raffleData: any) {
     raffleData,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
         "Content-Type": "multipart/form-data",
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function updateCreateRaffleTx(
@@ -25,31 +26,31 @@ export async function updateCreateRaffleTx(
     { txHash },
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function getProviderDashboardValidChain() {
-  const response = await axiosInstance.get(`/api/prizetap/get-valid-chains/`);
-  return response.data.data;
+  const response = await axiosInstance.get(`/api/prizetap/get-valid-chains/`)
+  return response.data.data
 }
 
 export async function getTokenTapValidChain() {
-  const response = await axiosInstance.get(`/api/tokentap/get-valid-chains/`);
-  return response.data.data;
+  const response = await axiosInstance.get(`/api/tokentap/get-valid-chains/`)
+  return response.data.data
 }
 
 export async function getUserRaffles(token: string) {
   const response = await axiosInstance.get(`/api/prizetap/get-user-raffles/`, {
     headers: {
-      Authorization: `Token ${token}`,
+      Authorization: resolveUserTokenMethod(token),
     },
-  });
+  })
 
-  return response.data;
+  return response.data
 }
 
 export const getUserDistributions = async (token: string) => {
@@ -57,19 +58,19 @@ export const getUserDistributions = async (token: string) => {
     `/api/tokentap/user-token-distributions/`,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
-  return response.data;
-};
+  return response.data
+}
 
 export async function getConstraintsApi() {
   const response = await axiosInstance.get<{
-    [key: string]: ConstraintProps[];
-  }>(`/api/prizetap/get-constraints/`);
-  return response.data;
+    [key: string]: ConstraintProps[]
+  }>(`/api/prizetap/get-constraints/`)
+  return response.data
 }
 
 export async function createTokenDistribution(token: string, data: any) {
@@ -78,12 +79,12 @@ export async function createTokenDistribution(token: string, data: any) {
     data,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
         "Content-Type": "multipart/form-data",
       },
     }
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export const getUserDonations = async (token: string) => {
@@ -91,10 +92,10 @@ export const getUserDonations = async (token: string) => {
     `/api/gastap/user/donation/?page=1`,
     {
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: resolveUserTokenMethod(token),
       },
     }
-  );
+  )
 
-  return response.data;
-};
+  return response.data
+}
