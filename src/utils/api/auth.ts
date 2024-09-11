@@ -12,7 +12,7 @@ export async function checkUsernameValid(username: string, token: string) {
       headers: {
         Authorization: resolveUserTokenMethod(token),
       },
-    }
+    },
   )
 
   return response.data
@@ -23,7 +23,7 @@ export async function checkUserExists(walletAddress: string): Promise<boolean> {
     "/api/auth/user/check-exists/",
     {
       walletAddress,
-    }
+    },
   )
 
   return response.data.exists
@@ -32,7 +32,7 @@ export async function checkUserExists(walletAddress: string): Promise<boolean> {
 export async function loginOrRegister(
   walletAddress: string,
   signature: string,
-  message: string
+  message: string,
 ) {
   const response = await axiosInstance.post<UserProfile>(
     "/auth/authenticate/",
@@ -40,7 +40,7 @@ export async function loginOrRegister(
       address: walletAddress,
       signature,
       message,
-    }
+    },
   )
 
   response.data.username = response.data.username ?? `User${response.data?.pk}`
@@ -71,7 +71,7 @@ export async function setWalletAPI(
   wallet: string,
   walletType: string,
   message: string,
-  signedMessage: string
+  signedMessage: string,
 ) {
   const response = await axiosInstance.post(
     "/api/auth/user/wallets/",
@@ -85,22 +85,20 @@ export async function setWalletAPI(
       headers: {
         Authorization: resolveUserTokenMethod(token),
       },
-    }
+    },
   )
   return response.data
 }
 
-export const setUsernameApi = async (username: string, userToken: string) => {
-  const response = await axiosInstance.post(
-    "/api/auth/user/set-username/",
+export const setUsernameApi = async (username: string) => {
+  const response = await axiosInstance.put(
+    "/auth/info/",
     {
       username,
     },
     {
-      headers: {
-        Authorization: `Token ${userToken}`,
-      },
-    }
+      headers: {},
+    },
   )
 
   return response.data
@@ -113,7 +111,7 @@ export const deleteWalletApi = async (userToken: string, walletId: number) => {
       headers: {
         Authorization: `token ${userToken}`,
       },
-    }
+    },
   )
 
   return response.data
@@ -124,7 +122,7 @@ export const connectGitCoinPassport = async (address: string) => {
     "api/auth/user/connect/gitcoin-passport/",
     {
       userWalletAddress: address,
-    }
+    },
   )
 
   return response.data
@@ -132,13 +130,13 @@ export const connectGitCoinPassport = async (address: string) => {
 
 export const connectDynamicConnection = async (
   connectionName: string,
-  address: string
+  address: string,
 ) => {
   const response = await axiosInstance.post(
     "api/auth/user/connect/" + connectionName + "/",
     {
       userWalletAddress: address,
-    }
+    },
   )
 
   return response.data
@@ -152,7 +150,7 @@ export const getTwitterOAuthUrlApi = async () => {
 
 export const verifyTwitterApi = async (
   oauthToken: string,
-  oauthVerifier: string
+  oauthVerifier: string,
 ) => {
   const res = await axiosInstance.get(`/api/auth/twitter/callback/`, {
     params: {

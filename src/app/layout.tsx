@@ -10,13 +10,14 @@ import StyledJsxRegistry from "@/components/styled-components"
 import { ConnectWalletModal } from "@/components/containers/modals/ConnectWalletModal"
 import GoogleAnalytics from "@/components/google-analytics"
 
-import "./globals.scss"
-
 import { headers } from "next/headers"
 import { cookieToInitialState } from "wagmi"
 import { Providers } from "./providers"
 import AxiosApiManager from "@/components/axios-api-manager"
 import EventContextProvider from "@/context/eventProvider"
+import { ToastContainer } from "react-toastify"
+
+import "./globals.scss"
 
 const notoSansFont = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -59,6 +60,7 @@ export default async function RootLayout({
             <AxiosApiManager />
           </WitsProvider>
         </Providers>
+        <ToastContainer theme="dark" />
 
         <Progressbar />
 

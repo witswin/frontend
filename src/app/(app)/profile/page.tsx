@@ -1,9 +1,11 @@
 "use client"
 
 import TextInput from "@/components/forms/text"
+import { useUserProfileContext } from "@/context/userProfile"
+import { setUsernameApi } from "@/utils/api"
 import { Button, Card } from "@nextui-org/react"
 import { usePrivy } from "@privy-io/react-auth"
-import { FC } from "react"
+import { FC, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
   FaDiscord,
@@ -14,6 +16,7 @@ import {
 } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
 import { SiFarcaster } from "react-icons/si"
+import { toast } from "react-toastify"
 
 const IntegrationConnectButton: FC<{
   isConnected: boolean
@@ -33,9 +36,25 @@ const IntegrationConnectButton: FC<{
 }
 
 const ProfilePage = () => {
-  const { control, handleSubmit } = useForm()
+  const { userProfile, updateUsername } = useUserProfileContext()
 
-  const onSubmit = (data: any) => {}
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      username: userProfile?.username,
+    },
+  })
+
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = (data: any) => {
+    setLoading(true)
+    setUsernameApi(data.username)
+      .then(() => {
+        updateUsername(data.username)
+        toast.success("Username updated successfully")
+      })
+      .finally(() => setLoading(false))
+  }
 
   const {
     linkDiscord,
@@ -68,7 +87,9 @@ const ProfilePage = () => {
         </div>
 
         <div className="text-right mt-10">
-          <Button color="primary">Submit</Button>
+          <Button isLoading={loading} type="submit" color="primary">
+            Submit
+          </Button>
         </div>
       </form>
       <hr className="my-10 border-divider" />
