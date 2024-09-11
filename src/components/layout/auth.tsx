@@ -50,7 +50,7 @@ export const UserAuthStatus = () => {
             </span> */}
 
           {/* <span className="text-gray90 hidden md:block ml-8 mr-5"></span> */}
-          <RenderNavbarWalletAddress />
+          <RenderNavbarWalletAddress setDropDownActive={setDropDownActive} />
         </div>
 
         {dropDownActive && (
@@ -135,7 +135,7 @@ export const ProfileDropdown: FC<{
             onClick={() => {
               setDropDownActive(false)
             }}
-            href="#"
+            href="/profile"
             className="mb-1 font-semibold"
           >
             <button className="relative text-left px-2 h-8 flex items-center w-40 z-10 text-white">
@@ -178,7 +178,10 @@ export const ProfileDropdown: FC<{
   )
 }
 
-export const RenderNavbarWalletAddress = () => {
+export const RenderNavbarWalletAddress: FC<{
+  setDropDownActive: (value: boolean) => void
+  dropDownActive: boolean
+}> = ({ setDropDownActive, dropDownActive }) => {
   const { setIsWalletPromptOpen } = useGlobalContext()
   const { userProfile, onWalletLogin } = useUserProfileContext()
 
@@ -234,6 +237,9 @@ export const RenderNavbarWalletAddress = () => {
           NotoSansMono.className
         } btn btn--address bg-gray10 border border-divider text-white tracking-wider font-normal btn--address--active !py-0 ml-0 md:ml-3 align-baseline h-8`}
         onClick={(e) => {
+          if (!userProfile) return
+          setDropDownActive(!dropDownActive)
+
           // if (connection.isConnected) return
           // e.stopPropagation()
           // setIsWalletPromptOpen(true)
