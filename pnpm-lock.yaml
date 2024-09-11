@@ -77,6 +77,12 @@ dependencies:
   react-dom:
     specifier: latest
     version: 18.3.1(react@18.3.1)
+  react-form-hook:
+    specifier: ^0.0.1
+    version: 0.0.1
+  react-hook-form:
+    specifier: ^7.53.0
+    version: 7.53.0(react@18.3.1)
   react-icons:
     specifier: ^5.3.0
     version: 5.3.0(react@18.3.1)
@@ -14369,6 +14375,19 @@ packages:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-form-hook@0.0.1:
+    resolution: {integrity: sha512-uTC837MyrUs4gknm3UAt3ElwV/YUJ/ztUolJORBxb/W1po5NDZJYSTZkJz5Z9Cy9ZPxdfjOmZf+DwvVTm6v70Q==}
+    dev: false
+
+  /react-hook-form@7.53.0(react@18.3.1):
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 18.3.1
     dev: false
 
   /react-icons@5.3.0(react@18.3.1):

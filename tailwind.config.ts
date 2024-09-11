@@ -12,7 +12,23 @@ const config: Config = {
       themes: {},
     }),
   ],
+
   theme: {
+    "tap-ui": {
+      colors: {
+        primary: {
+          background: {
+            dark: "#18172c",
+            light: "#fafafa",
+          },
+
+          foreground: {
+            dark: "#fff",
+            light: "#000",
+          },
+        },
+      },
+    },
     extend: {
       fontFamily: {
         "digital-numbers": ["DigitalNumbers", "serif"],
@@ -32,8 +48,6 @@ const config: Config = {
       colors: {
         "background-main": "#15161E",
         neu90: "#373A4F",
-        primary: "#EF476F",
-        secondary: "#F59569",
         input: "#EFF3F8",
         label: "#565656",
         black: "#353535",
@@ -82,6 +96,8 @@ const config: Config = {
         3: "3px",
       },
       backgroundImage: {
+        "main-gradient":
+          "linear-gradient(145deg, #161623, #10101B 70%, #161623)",
         "twitter-image": "url('/share-on-x.svg')",
         "dark-primary":
           "linear-gradient(to right, #22222f, #21232e, #242130, #231f2f)",

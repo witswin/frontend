@@ -23,7 +23,7 @@ export const useProfileEditContext = () => useContext(ProfileEditContext)
 
 const ProfileEditLayout: FC<
   PropsWithChildren & { socialAccounts: ReactNode }
-> = ({ children, socialAccounts }) => {
+> = ({ children }) => {
   const [focusedWalletDeleteAddress, setFocusedWalletDeleteAddress] =
     useState<Address | null>(null)
 
@@ -35,7 +35,6 @@ const ProfileEditLayout: FC<
       }}
     >
       {children}
-      {socialAccounts}
     </ProfileEditContext.Provider>
   )
 }

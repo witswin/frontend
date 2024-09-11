@@ -228,11 +228,11 @@ export const RenderNavbarWalletAddress = () => {
 
   return (
     <>
-      <button
+      <Button
         data-testid="wallet-address"
-        className={`btn ${
+        className={`${
           NotoSansMono.className
-        } btn--sm btn--address tracking-wider font-normal btn--address--active !w-36 h-[28px] !py-0 ml-0 md:ml-3 align-baseline`}
+        } btn btn--address bg-gray10 border border-divider text-white tracking-wider font-normal btn--address--active !py-0 ml-0 md:ml-3 align-baseline h-8`}
         onClick={(e) => {
           // if (connection.isConnected) return
           // e.stopPropagation()
@@ -240,7 +240,7 @@ export const RenderNavbarWalletAddress = () => {
         }}
       >
         {shortenAddress(address)}
-      </button>
+      </Button>
     </>
   )
 }
