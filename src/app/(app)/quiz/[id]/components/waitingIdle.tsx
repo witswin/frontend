@@ -1,19 +1,22 @@
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import { fromWei } from "@/utils"
-import { FC, useEffect } from "react"
+import { FC, useEffect, useState } from "react"
 
 const WaitingIdle: FC<{}> = () => {
   const { quiz, timer, cachedAudios } = useQuizContext()
 
+  const [isPlayedSound, setIsPlayedSound] = useState(false)
+
   useEffect(() => {
-    if (timer <= 3000 && timer >= 2930) {
+    if (timer <= 3000 && !isPlayedSound) {
       cachedAudios.beforeStart?.play()
+      setIsPlayedSound(true)
       setTimeout(() => {
         cachedAudios.quizStart?.play()
       }, 3000)
     }
-  }, [timer])
+  }, [timer, isPlayedSound])
 
   return (
     <div className="mt-20 text-center">

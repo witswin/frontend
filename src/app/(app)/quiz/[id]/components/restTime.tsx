@@ -4,7 +4,7 @@ import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
 import logger from "@/core/logger"
 import { getRandomItem } from "@/utils/random"
-import { FC, useEffect, useMemo } from "react"
+import { FC, useEffect, useMemo, useState } from "react"
 
 const isArrayEqual = (array1: any[], array2: any[]) => {
   if (array1.length !== array2.length) return false
@@ -34,6 +34,8 @@ const RestTime: FC<{}> = () => {
     cachedAudios,
   } = useQuizContext()
 
+  const [isPlayedSound, setIsPlayedSound] = useState(false)
+
   const totalSeconds = Math.floor(timer / 1000)
   const seconds = totalSeconds % 60
 
@@ -52,10 +54,11 @@ const RestTime: FC<{}> = () => {
   }, [answersHistory, userAnswersHistory])
 
   useEffect(() => {
-    if (timer <= 3000 && timer >= 2930) {
+    if (timer <= 3000 && !isPlayedSound) {
       cachedAudios.beforeQuestion?.play()
+      setIsPlayedSound(true)
     }
-  }, [timer])
+  }, [timer, isPlayedSound])
 
   const title = useMemo(
     () => getRandomItem(isWonLastQuestion ? correctTitles : wrongAnswers),
