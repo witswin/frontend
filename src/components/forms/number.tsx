@@ -1,26 +1,17 @@
-"use client"
-
-import { Controller } from "react-hook-form"
 import { Input } from "@nextui-org/react"
-import { FC, useMemo } from "react"
+import { FC } from "react"
 import { InputBaseType } from "./types"
+import { Controller } from "react-hook-form"
+import { useFormValidations } from "./form"
 
-const TextInput: FC<InputBaseType> = ({
+const NumberField: FC<InputBaseType> = ({
   control,
   name,
-  label,
   className,
+  label,
   rules,
 }) => {
-  const validations = useMemo(() => {
-    const obj: Record<string, any> = {}
-
-    rules?.forEach((rule) => {
-      obj[rule.type] = rule.value
-    })
-
-    return obj
-  }, [rules])
+  const mappedRules = useFormValidations({ rules })
 
   return (
     <Controller
@@ -36,10 +27,10 @@ const TextInput: FC<InputBaseType> = ({
         />
       )}
       name={name}
+      rules={mappedRules}
       control={control}
-      rules={validations}
     />
   )
 }
 
-export default TextInput
+export default NumberField
