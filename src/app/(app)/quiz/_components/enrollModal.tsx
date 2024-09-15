@@ -14,6 +14,7 @@ import { useTimer } from "@/utils/hooks/timer"
 import Link from "next/link"
 import { fromWei } from "@/utils"
 import { useRouter } from "next/navigation"
+import { statePeriod } from "@/context/quizProvider"
 
 const EnrollModal: FC<{}> = () => {
   const {
@@ -121,7 +122,9 @@ const EnrollModal: FC<{}> = () => {
           </div>
           <div className="flex gap-2 ">
             <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
-              <h5 className="text-white font-semibold">10 Sec</h5>
+              <h5 className="text-white font-semibold">
+                {Math.floor(statePeriod / 1000)} Sec
+              </h5>
               <p className="mt-2 text-sm text-gray100">
                 Time for each Question
               </p>
