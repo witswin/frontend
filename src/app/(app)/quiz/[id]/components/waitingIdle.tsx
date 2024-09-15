@@ -4,19 +4,19 @@ import { fromWei } from "@/utils"
 import { FC, useEffect, useState } from "react"
 
 const WaitingIdle: FC<{}> = () => {
-  const { quiz, timer, cachedAudios } = useQuizContext()
+  const { quiz, timer, cachedAudios, stateIndex } = useQuizContext()
 
   const [isPlayedSound, setIsPlayedSound] = useState(false)
 
   useEffect(() => {
-    if (timer <= 3000 && !isPlayedSound) {
+    if (timer <= 3000 && !isPlayedSound && stateIndex < 0) {
       cachedAudios.beforeStart?.play()
       setIsPlayedSound(true)
       setTimeout(() => {
         cachedAudios.quizStart?.play()
       }, 3000)
     }
-  }, [timer, isPlayedSound])
+  }, [timer, isPlayedSound, stateIndex])
 
   return (
     <div className="mt-20 text-center">
