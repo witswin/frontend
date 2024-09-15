@@ -72,7 +72,7 @@ export const QuizContext = createContext<QuizContextProps>({
   cachedAudios: {},
 })
 
-export const statePeriod = 10000
+export const statePeriod = 13000
 export const restPeriod = 10000
 export const seeResultDuration = 5000
 const totalPeriod = restPeriod + statePeriod
