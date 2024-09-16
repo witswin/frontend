@@ -4,19 +4,24 @@ import { Controller } from "react-hook-form"
 import { Input } from "@nextui-org/react"
 import { FC, useMemo } from "react"
 import { InputBaseType } from "./types"
+import { FieldType } from "./form"
 
-const TextInput: FC<InputBaseType> = ({
+const TextInput: FC<InputBaseType & { type?: FieldType }> = ({
   control,
   name,
   label,
   className,
   rules,
+  type,
 }) => {
   const validations = useMemo(() => {
     const obj: Record<string, any> = {}
 
     rules?.forEach((rule) => {
-      obj[rule.type] = rule.value
+      obj[rule.type] = {
+        message: rule.message,
+        value: rule.value,
+      }
     })
 
     return obj
@@ -24,17 +29,22 @@ const TextInput: FC<InputBaseType> = ({
 
   return (
     <Controller
-      render={({ field, fieldState }) => (
-        <Input
-          name={name}
-          value={field.value ?? ""}
-          onChange={field.onChange}
-          label={label}
-          variant="bordered"
-          className={className}
-          errorMessage={fieldState.error?.message}
-        />
-      )}
+      render={({ field, fieldState }) => {
+        return (
+          <Input
+            type={type}
+            name={name}
+            onBlur={field.onBlur}
+            value={field.value ?? ""}
+            onChange={field.onChange}
+            label={label + (validations.required ? " *" : "")}
+            variant="bordered"
+            className={className}
+            isInvalid={fieldState.error !== undefined}
+            errorMessage={fieldState.error?.message}
+          />
+        )
+      }}
       name={name}
       control={control}
       rules={validations}

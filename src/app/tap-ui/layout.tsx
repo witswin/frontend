@@ -6,7 +6,7 @@ const TapUILayout: FC<PropsWithChildren> = ({ children }) => {
     <div className="border-t tap-ui bg-primary-background border-t-divider">
       <div className="flex h-screen">
         <Sidebar />
-        {children}
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   )

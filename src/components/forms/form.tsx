@@ -18,6 +18,8 @@ import { Control, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 import TextInput from "./text"
 import NumberField from "./number"
+import TextareaInput from "./textarea"
+import MediaInput from "./media"
 
 export type FunctionalFormProps = {
   beforeSubmit?: (data: any) => any
@@ -68,7 +70,7 @@ export const useFunctionalForm = ({
   const [loading, setLoading] = useState(false)
   const [ready, setReady] = useState(false)
 
-  const { formState, handleSubmit, reset, setError } = useForm({
+  const { formState, handleSubmit, reset, setError, control } = useForm({
     mode: validateStrategy,
     reValidateMode: validateStrategy,
     defaultValues: async () => {
@@ -143,11 +145,13 @@ export const useFunctionalForm = ({
     isValid: formState.isValid,
     ready,
     formState,
+    control,
   }
 }
 
 export type FieldType =
   | "text"
+  | "password"
   | "number"
   | "textarea"
   | "address"
@@ -168,7 +172,7 @@ export type FieldValidation = {
 }
 
 export type Field = {
-  className: string | undefined
+  className?: string
   name: string
   type: FieldType
   label?: string
@@ -219,6 +223,12 @@ export const FormBuilderContext = createContext<{
 
 export const useFormBuilderContext = () => useContext(FormBuilderContext)
 
+// export const FormBuilderWrapper = () => {
+//   return (
+//     <
+//   )
+// }
+
 export const FormBuilderProvider: FC<PropsWithChildren & FormBuilderProps> = ({
   children,
   apiRoute,
@@ -228,12 +238,12 @@ export const FormBuilderProvider: FC<PropsWithChildren & FormBuilderProps> = ({
   formTitle,
   fetchApi,
   mapFetchedValues,
-  validateStrategy,
+  validateStrategy = "onChange",
   baseGridSize = 12,
 }) => {
   const [tabIndex, setTabIndex] = useState<string | undefined>("")
 
-  const { isValid, loading, reset, setError, submit, formState } =
+  const { isValid, loading, reset, setError, submit, formState, control } =
     useFunctionalForm({
       apiRoute,
       afterSubmit,
@@ -261,9 +271,10 @@ export const FormBuilderProvider: FC<PropsWithChildren & FormBuilderProps> = ({
           ) !== -1,
         selectedTab: tabIndex,
         setSelectedTab: setTabIndex,
+        control,
       }}
     >
-      {children}
+      <form onSubmit={submit}>{children}</form>
     </FormBuilderContext.Provider>
   )
 }
@@ -294,12 +305,31 @@ export const FormTabRenderer: FC<{
   )
 }
 
+const componentGridSizes: Record<FieldType, number> = {
+  number: 6,
+  "chain-currency": 6,
+  address: 6,
+  checkbox: 12,
+  date: 6,
+  datetime: 6,
+  file: 12,
+  image: 12,
+  password: 6,
+  select: 6,
+  text: 6,
+  textarea: 12,
+  time: 6,
+}
+
 export const RenderFields: FC<{ fields: Field[] }> = ({ fields }) => {
   const { baseGridSize } = useFormBuilderContext()
   return (
     <div className={`grid grid-cols-${baseGridSize} gap-4 gap-y-8`}>
       {fields.map((field, index) => (
-        <div key={index} className={`col-span-${field.colSpan ?? 1}`}>
+        <div
+          key={index}
+          className={`col-span-${field.colSpan ?? componentGridSizes[field.type]}`}
+        >
           <FormField field={field} />
         </div>
       ))}
@@ -323,10 +353,32 @@ export const FormField: FC<{ field: Field }> = ({ field }) => {
           className={field.className}
         />
       )
+    case "textarea":
+      return (
+        <TextareaInput
+          control={control}
+          label={field.label}
+          rules={field.validations}
+          name={field.name}
+          className={field.className}
+        />
+      )
+
+    case "image":
+      return (
+        <MediaInput
+          control={control}
+          name={field.name}
+          className={field.className}
+          label={field.label}
+        />
+      )
+
     // TODO: add more fields here
     default:
       return (
         <TextInput
+          type={field.type}
           control={control}
           label={field.label}
           rules={field.validations}

@@ -12,7 +12,14 @@ const config: Config = {
       themes: {},
     }),
   ],
-
+  safelist: [
+    {
+      pattern: /col-span./,
+    },
+    {
+      pattern: /grid-cols./,
+    },
+  ],
   theme: {
     "tap-ui": {
       colors: {
