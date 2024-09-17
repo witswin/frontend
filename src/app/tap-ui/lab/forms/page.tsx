@@ -55,6 +55,47 @@ export default function LabForms() {
                   },
                 ],
               },
+              {
+                name: "multi",
+                type: "array-object",
+                label: "Multiple Field",
+                fields: [
+                  {
+                    name: "firstName",
+                    type: "text",
+                    label: "First Name",
+                  },
+                  {
+                    name: "lastName",
+                    type: "text",
+                    label: "Last Name",
+                  },
+                  {
+                    name: "username",
+                    type: "text",
+                    label: "Username",
+                    validations: [
+                      {
+                        type: "required",
+                        message: "Username is required",
+                        value: true,
+                      },
+                    ],
+                  },
+                  {
+                    name: "password",
+                    type: "password",
+                    label: "Password",
+                    validations: [
+                      {
+                        type: "required",
+                        message: "Password is required",
+                        value: true,
+                      },
+                    ],
+                  },
+                ],
+              },
             ],
             title: "Extra info",
           },

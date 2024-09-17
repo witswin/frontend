@@ -2,7 +2,7 @@
 
 import { NullCallback } from "@/utils"
 import { axiosInstance } from "@/utils/api/base"
-import { Tab, Tabs } from "@nextui-org/react"
+import { Card, CardHeader, Tab, Tabs } from "@nextui-org/react"
 import { AxiosError, AxiosResponse } from "axios"
 import {
   createContext,
@@ -20,6 +20,8 @@ import TextInput from "./text"
 import NumberField from "./number"
 import TextareaInput from "./textarea"
 import MediaInput from "./media"
+import { FaPlus } from "react-icons/fa"
+import ArrayObject from "./array-object"
 
 export type FunctionalFormProps = {
   beforeSubmit?: (data: any) => any
@@ -163,6 +165,7 @@ export type FieldType =
   | "checkbox"
   | "select"
   | "chain-currency"
+  | "array-object"
 
 export type FieldValidation = {
   type: "required" | "min" | "max" | "minLength" | "maxLength" | "pattern"
@@ -184,6 +187,8 @@ export type Field = {
     label: string
     value: string
   }[]
+
+  fields?: Field[]
 
   validations?: FieldValidation[]
 }
@@ -319,6 +324,7 @@ const componentGridSizes: Record<FieldType, number> = {
   text: 6,
   textarea: 12,
   time: 6,
+  "array-object": 12,
 }
 
 export const RenderFields: FC<{ fields: Field[] }> = ({ fields }) => {
@@ -371,6 +377,20 @@ export const FormField: FC<{ field: Field }> = ({ field }) => {
           name={field.name}
           className={field.className}
           label={field.label}
+        />
+      )
+
+    case "array-object":
+      if (!field.fields) return null
+
+      return (
+        <ArrayObject
+          control={control}
+          fields={field.fields}
+          name={field.name}
+          className={field.className}
+          label={field.label}
+          rules={field.validations}
         />
       )
 
