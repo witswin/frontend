@@ -5,7 +5,7 @@ import { Button, Card, CardBody, CardHeader, Input } from "@nextui-org/react"
 import { FC, useMemo } from "react"
 import { InputBaseType } from "./types"
 import { Field, FieldType, RenderFields } from "./form"
-import { FaPlus } from "react-icons/fa"
+import { FaPlus, FaTrashAlt } from "react-icons/fa"
 
 const ArrayObject: FC<InputBaseType & { fields: Field[] }> = ({
   control,
@@ -35,21 +35,34 @@ const ArrayObject: FC<InputBaseType & { fields: Field[] }> = ({
   })
 
   return (
-    <Card className={`p-4 ${className}`}>
-      <CardHeader className="justify-between">
-        <h4>{label}</h4>
+    <div className={`p-4 ${className}`}>
+      <div className="flex items-center justify-between">
+        <h3>{label}</h3>
 
-        <Button isIconOnly color="primary">
-          <FaPlus
-            onClick={() => field.onChange([...(field.value ?? []), {}])}
-          />
+        <Button
+          onClick={() =>
+            field.onChange(field.value ? [...field.value, {}] : [{}])
+          }
+          isIconOnly
+          color="primary"
+        >
+          <FaPlus />
         </Button>
-      </CardHeader>
+      </div>
 
-      <CardBody className="flex flex-col gap-6">
+      <div className="flex mt-5 flex-col gap-6">
         {(field.value ?? []).map((item: any, key: number) => (
-          <div key={key} className="p-2 border border-divider rounded-md">
-            <p className="mb-10">Item {key + 1}</p>
+          <div key={key} className="p-2 pb-5 border-b border-divider">
+            <div className="flex px-2 items-center justify-between mb-10">
+              <p className="">Item {key + 1}</p>
+              <FaTrashAlt
+                className="text-error/60 cursor-pointer"
+                onClick={() => {
+                  field.value.splice(key, 1)
+                  field.onChange([...field.value])
+                }}
+              />
+            </div>
             <RenderFields
               fields={fields.map((item) => ({
                 ...item,
@@ -58,8 +71,8 @@ const ArrayObject: FC<InputBaseType & { fields: Field[] }> = ({
             />
           </div>
         ))}
-      </CardBody>
-    </Card>
+      </div>
+    </div>
   )
 }
 

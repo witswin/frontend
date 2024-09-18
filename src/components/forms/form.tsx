@@ -20,8 +20,10 @@ import TextInput from "./text"
 import NumberField from "./number"
 import TextareaInput from "./textarea"
 import MediaInput from "./media"
+import CheckboxField from "./checkbox"
 import { FaPlus } from "react-icons/fa"
 import ArrayObject from "./array-object"
+import ArrayTableField from "./array-table"
 
 export type FunctionalFormProps = {
   beforeSubmit?: (data: any) => any
@@ -166,6 +168,7 @@ export type FieldType =
   | "select"
   | "chain-currency"
   | "array-object"
+  | "array-table"
 
 export type FieldValidation = {
   type: "required" | "min" | "max" | "minLength" | "maxLength" | "pattern"
@@ -286,24 +289,31 @@ export const FormBuilderProvider: FC<PropsWithChildren & FormBuilderProps> = ({
 
 export const FormTabRenderer: FC<{
   className?: string
+  color?: "default" | "primary" | "secondary" | "success" | "warning" | "danger"
+  variant?: "solid" | "light" | "underlined" | "bordered"
   placement?: "top" | "bottom" | "start" | "end"
   isVertical?: boolean
-}> = ({ className, placement, isVertical }) => {
+}> = ({ className, placement, isVertical, variant, color }) => {
   const { fields, selectedTab, setSelectedTab } = useFormBuilderContext()
 
   if (Array.isArray(fields)) return null
 
   return (
     <Tabs
+      radius="lg"
       placement={placement}
       isVertical={isVertical}
       selectedKey={selectedTab}
       onSelectionChange={(e) => setSelectedTab(e as any)}
       className={className}
+      variant={variant}
+      color={color}
     >
       {Object.keys(fields).map((key, index) => (
         <Tab key={key} title={fields[key].title}>
-          <RenderFields fields={fields[key].fields} />
+          <div className="mt-3">
+            <RenderFields fields={fields[key].fields} />
+          </div>
         </Tab>
       ))}
     </Tabs>
@@ -325,6 +335,7 @@ const componentGridSizes: Record<FieldType, number> = {
   textarea: 12,
   time: 6,
   "array-object": 12,
+  "array-table": 12,
 }
 
 export const RenderFields: FC<{ fields: Field[] }> = ({ fields }) => {
@@ -370,6 +381,17 @@ export const FormField: FC<{ field: Field }> = ({ field }) => {
         />
       )
 
+    case "checkbox":
+      return (
+        <CheckboxField
+          control={control}
+          label={field.label}
+          rules={field.validations}
+          name={field.name}
+          className={field.className}
+        />
+      )
+
     case "image":
       return (
         <MediaInput
@@ -385,6 +407,20 @@ export const FormField: FC<{ field: Field }> = ({ field }) => {
 
       return (
         <ArrayObject
+          control={control}
+          fields={field.fields}
+          name={field.name}
+          className={field.className}
+          label={field.label}
+          rules={field.validations}
+        />
+      )
+
+    case "array-table":
+      if (!field.fields) return null
+
+      return (
+        <ArrayTableField
           control={control}
           fields={field.fields}
           name={field.name}
