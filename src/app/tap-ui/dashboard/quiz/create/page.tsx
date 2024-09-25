@@ -1,10 +1,7 @@
-import {
-  FormBuilderProvider,
-  FormTabRenderer,
-  ProgressTab,
-} from "@/components/forms/form"
-import EditableTable from "./table"
+import { FormBuilderProvider, ProgressTab } from "@/components/forms/form"
 import { FaPhotoVideo, FaQuestion, FaUser } from "react-icons/fa"
+import Header from "./_components/header"
+import "../../../../(app)/quiz/[id]/styles.scss"
 
 const tabs: Record<string, ProgressTab> = {
   providerInfo: {
@@ -115,7 +112,7 @@ const CreateQuiz = () => {
           fields={tabs}
           formTitle="Create Quiz"
         >
-          <FormTabRenderer color="primary" variant="bordered"></FormTabRenderer>
+          <Header />
         </FormBuilderProvider>
       </div>
 

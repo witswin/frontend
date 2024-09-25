@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-   compiler: {
+  compiler: {
     styledComponents: true,
   },
+  swcMinify: true,
+
   images: {
     remotePatterns: [
       {
@@ -11,6 +13,6 @@ const nextConfig = {
       },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
