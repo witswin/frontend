@@ -25,7 +25,7 @@ const Footer: FC = () => {
         ></Icon>
       </Link>
 
-      <Link href="https://github.com/UnitapApp" target="_blank">
+      <Link href="https://github.com/witswin" target="_blank">
         <Icon
           iconSrc="/assets/images/footer/github.svg"
           width="34px"
