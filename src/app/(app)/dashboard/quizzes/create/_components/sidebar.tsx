@@ -6,6 +6,8 @@ import { useNumberLinearInterpolate } from "@/utils/interpolate"
 import Link from "next/link"
 import { FC, useEffect } from "react"
 import { fromWei, toWei } from "@/utils"
+import TextInput from "./text-input"
+import { useQuizCreateContext } from "../providers"
 
 const QuizTapSidebar: FC = () => {
   const {
@@ -15,6 +17,8 @@ const QuizTapSidebar: FC = () => {
     quiz,
     wrongAnswersCount,
   } = useQuizContext()
+
+  const { control } = useQuizCreateContext()
 
   const isUserLost = wrongAnswersCount > 0
 
@@ -55,14 +59,19 @@ const QuizTapSidebar: FC = () => {
       </div>
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
         <div className="text-gray100">
-          <p>Your Prize so Far</p>
+          <p>Total Prize</p>
 
-          <p className="mt-2">
-            <strong className="text-white">1.22</strong>{" "}
+          <p className="mt-2 inline-flex items-center gap-2">
+            <TextInput
+              className="font-bold !w-10"
+              control={control!}
+              name="prizeAmount"
+              type="number"
+            />
             <span
               className={`transition-colors ${isUserLost ? "text-error" : "text-space-green"}`}
             >
-              USDT
+              USDC
             </span>
           </p>
         </div>
@@ -90,7 +99,7 @@ const QuizTapSidebar: FC = () => {
                 <Icon
                   className="h-5 w-5 grayscale"
                   iconSrc={sponsor.image}
-                  alt="polygon"
+                  alt={sponsor.name}
                 />
               </Link>
             ))}

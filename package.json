@@ -43,7 +43,9 @@
     "react-multi-date-picker": "^4.4.1",
     "react-number-easing": "^1.0.2",
     "react-qrcode-logo": "^2.9.0",
+    "react-sortablejs": "^6.1.4",
     "react-toastify": "^10.0.5",
+    "sortablejs": "^1.15.3",
     "styled-components": "^6.1.0",
     "viem": "^2.7.16",
     "wagmi": "^2.5.7"
@@ -58,6 +60,7 @@
     "@types/react-csv": "^1.1.10",
     "@types/react-dom": "latest",
     "@types/react-lottie": "^1.2.10",
+    "@types/sortablejs": "^1.15.8",
     "@vercel/speed-insights": "^1.0.1",
     "@wagmi/cli": "^2.1.0",
     "@zxing/browser": "^0.1.4",

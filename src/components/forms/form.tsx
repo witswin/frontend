@@ -182,7 +182,7 @@ export type Field = {
   name: string
   type: FieldType
   label?: string
-  palceholder?: string
+  placeholder?: string
   required?: boolean
   disabled?: boolean
   colSpan?: number
@@ -190,7 +190,7 @@ export type Field = {
     label: string
     value: string
   }[]
-
+  icon?: ReactNode
   fields?: Field[]
 
   validations?: FieldValidation[]

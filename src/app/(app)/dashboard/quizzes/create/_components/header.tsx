@@ -1,10 +1,25 @@
 "use client"
 
+import { useQuizCreateContext } from "../providers"
+import TextInput from "./text-input"
+
 const Header = () => {
+  const { control } = useQuizCreateContext()
+
   return (
     <header className="quiztap-header rounded-xl border-2 border-gray20 p-5">
-      <h3 className="text-lg font-semibold text-white">Quiz Title</h3>
-      <p className="mt-3 text-[#B5B5C6]">This is the quiz details</p>
+      <TextInput
+        size="large"
+        control={control!}
+        name="title"
+        placeholder="Quiz Title"
+      />
+      <TextInput
+        className="mt-3"
+        control={control!}
+        name="details"
+        placeholder="This is the quiz details"
+      />
     </header>
   )
 }
