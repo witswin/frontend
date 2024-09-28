@@ -8,6 +8,7 @@ import { FC, useEffect } from "react"
 import { fromWei, toWei } from "@/utils"
 import TextInput from "./text-input"
 import { useQuizCreateContext } from "../providers"
+import { DateInput, TimeInput } from "@nextui-org/react"
 
 const QuizTapSidebar: FC = () => {
   const {
@@ -41,20 +42,10 @@ const QuizTapSidebar: FC = () => {
 
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
         <div className="text-gray100">
-          <p>Number of Players</p>
+          <p>Quiz Execution Date</p>
 
-          <p className="mt-2">
-            <strong className="text-white">0</strong> / {totalParticipantsCount}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Icon
-            width="35px"
-            height="35px"
-            iconSrc="/assets/images/quizTap/people.png"
-            alt="health"
-          />
+          <DateInput aria-label="date" variant="underlined" className="mt-2" />
+          <TimeInput aria-label="time" variant="underlined" className="mt-2" />
         </div>
       </div>
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
@@ -86,26 +77,24 @@ const QuizTapSidebar: FC = () => {
         </div>
       </div>
       <div className="mt-3"></div>
-      {!!quiz?.sponsors.length && (
-        <div className="mt-0 md:mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
-          <Icon
-            className="mx-auto w-48"
-            iconSrc="/assets/images/quizTap/sponsored.png"
-            alt="health"
-          />
-          <div className="mt-4 flex flex-col md:flex-row items-center justify-center gap-3">
-            {quiz?.sponsors.map((sponsor, key) => (
-              <Link href={sponsor.link} key={key} target="_blank">
-                <Icon
-                  className="h-5 w-5 grayscale"
-                  iconSrc={sponsor.image}
-                  alt={sponsor.name}
-                />
-              </Link>
-            ))}
-          </div>
+      <div className="mt-0 md:mt-auto justify-self-end rounded-2xl bg-gray10 p-3">
+        <Icon
+          className="mx-auto w-48"
+          iconSrc="/assets/images/quizTap/sponsored.png"
+          alt="health"
+        />
+        <div className="mt-4 flex flex-col md:flex-row items-center justify-center gap-3">
+          {quiz?.sponsors.map((sponsor, key) => (
+            <Link href={sponsor.link} key={key} target="_blank">
+              <Icon
+                className="h-5 w-5 grayscale"
+                iconSrc={sponsor.image}
+                alt={sponsor.name}
+              />
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </aside>
   )
 }

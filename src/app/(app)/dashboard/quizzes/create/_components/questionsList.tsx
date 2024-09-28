@@ -4,6 +4,7 @@ import { FC, Fragment, useEffect, useRef } from "react"
 import { useQuizCreateContext } from "../providers"
 import { useController } from "react-hook-form"
 import { Question } from "@/types"
+import { ReactSortable, Sortable } from "react-sortablejs"
 
 const QuestionsList = () => {
   const { control, setActiveQuestionIndex } = useQuizCreateContext()
@@ -16,20 +17,34 @@ const QuestionsList = () => {
 
   return (
     <div className="mt-10 px-2 max-w-[48rem]">
-      <div className="flex font-semibold overflow-x-auto  min-w-72 w-fit md:w-full justify-center rounded-xl border-2 border-gray50 bg-gray20/30 p-3">
-        {value?.map((question: Question, index: number) => (
-          <Fragment key={index}>
-            <QuestionItem index={index + 1} />
-            <Separator index={index + 1} />
-          </Fragment>
-        ))}
-
+      <div className="border-2 border-gray50 min-w-72 w-fit md:w-full rounded-xl flex justify-center overflow-x-auto font-semibold bg-gray20/30 p-3">
+        <ReactSortable
+          list={value}
+          setList={(value) => {
+            onChange([...value.filter((val) => !!val)])
+          }}
+          // setData={onChange}
+          className="flex gap-4 justify-center"
+        >
+          {value
+            .filter((item: Question) => !!item)
+            .sort((a: Question, b: Question) => a.number - b.number)
+            .map((question: Question, index: number) => (
+              // <Fragment>
+              <div key={question.number}>
+                <QuestionItem index={index + 1} />
+              </div>
+              // <Separator index={index + 1} />
+              // </Fragment>
+            ))}
+        </ReactSortable>
         <button
           onClick={() => {
             onChange([
               ...(value ?? []),
               {
-                text: `Question Sample text`,
+                text: `Question Number ${value.length + 1}`,
+                number: value.length + 1,
                 choices: [
                   { text: "Choice 1", isCorrect: true, isHintChoice: false },
                   { text: "Choice 2", isCorrect: false, isHintChoice: true },
@@ -40,7 +55,7 @@ const QuestionsList = () => {
             ])
             setActiveQuestionIndex(value?.length ?? 0)
           }}
-          className={`relative grid h-9 w-9 min-w-9 min-h-9 place-content-center rounded-lg border-2 border-dashed border-gray80 bg-gray20 text-gray100`}
+          className={`relative ml-4 grid h-9 w-9 min-w-9 min-h-9 place-content-center rounded-lg border-2 border-dashed border-gray80 bg-gray20 text-gray100`}
         >
           +
         </button>
