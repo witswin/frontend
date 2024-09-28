@@ -20,7 +20,7 @@ const TextInput: FC<{
     <input
       placeholder={placeholder}
       type={type}
-      className={`outline-none w-full placeholder:text-gray90 bg-transparent border-none h-5 ${size === "large" ? "text-lg font-semibold" : ""} ${className ?? ""}`}
+      className={`w-full placeholder:text-gray90 bg-transparent border-none h-5 ${size === "large" ? "text-lg font-semibold" : ""} ${className ?? ""}`}
       name={name}
       onBlur={onBlur}
       value={value}

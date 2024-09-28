@@ -10,12 +10,15 @@ export type QuizCreateContextType = {
   activeQuestionIndex: number
   watch?: UseFormWatch<any>
   setActiveQuestionIndex: (value: number) => void
+  forceRefresh?: boolean
+  setForceRefresh: () => void
 }
 
 export const QuizCreateContext = createContext<QuizCreateContextType>({
   submit: NullCallback,
   setActiveQuestionIndex: NullCallback,
   activeQuestionIndex: -1,
+  setForceRefresh: NullCallback,
 })
 
 export const useQuizCreateContext = () => useContext(QuizCreateContext)
@@ -32,6 +35,7 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
     },
   })
 
+  const [forceRefresh, setForceRefresh] = useState(false)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
 
   const onCreateQuiz = async (data: any) => {}
@@ -44,6 +48,8 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
         setActiveQuestionIndex,
         activeQuestionIndex,
         watch,
+        forceRefresh,
+        setForceRefresh: () => setForceRefresh(!forceRefresh),
       }}
     >
       {children}

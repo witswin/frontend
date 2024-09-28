@@ -93,6 +93,12 @@ const QuizTapSidebar: FC = () => {
               />
             </Link>
           ))}
+
+          <button
+            className={`relative ml-4 grid h-9 w-9 min-w-9 min-h-9 place-content-center rounded-lg border-2 border-dashed border-gray80 bg-gray20 text-gray100`}
+          >
+            +
+          </button>
         </div>
       </div>
     </aside>

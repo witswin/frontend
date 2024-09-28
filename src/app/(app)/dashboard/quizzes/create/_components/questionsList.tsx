@@ -7,7 +7,8 @@ import { Question } from "@/types"
 import { ReactSortable, Sortable } from "react-sortablejs"
 
 const QuestionsList = () => {
-  const { control, setActiveQuestionIndex } = useQuizCreateContext()
+  const { control, setActiveQuestionIndex, setForceRefresh } =
+    useQuizCreateContext()
   const {
     field: { value, onChange },
   } = useController({
@@ -16,11 +17,12 @@ const QuestionsList = () => {
   })
 
   return (
-    <div className="mt-10 px-2 max-w-[48rem]">
+    <div className="mt-10 px-2">
       <div className="border-2 border-gray50 min-w-72 w-fit md:w-full rounded-xl flex justify-center overflow-x-auto font-semibold bg-gray20/30 p-3">
         <ReactSortable
           list={value}
           setList={(value) => {
+            setForceRefresh()
             onChange([...value.filter((val) => !!val)])
           }}
           // setData={onChange}

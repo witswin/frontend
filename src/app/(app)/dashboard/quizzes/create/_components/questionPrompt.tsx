@@ -7,6 +7,7 @@ import { useQuizCreateContext } from "../providers"
 import { Choice, Question } from "@/types"
 import TextInput from "./text-input"
 import { Checkbox } from "@nextui-org/react"
+import { FaTrashAlt } from "react-icons/fa"
 
 const QuestionPrompt: FC = () => {
   const { control, setActiveQuestionIndex, activeQuestionIndex } =
@@ -32,6 +33,16 @@ const QuestionPrompt: FC = () => {
           size="large"
           control={control!}
           name={`questions.${activeQuestionIndex}.text`}
+        />
+        <FaTrashAlt
+          className="ml-auto text-error cursor-pointer"
+          onClick={() =>
+            onChange(
+              value.filter(
+                (_: never, index: number) => index !== activeQuestionIndex,
+              ),
+            )
+          }
         />
       </h3>
 
