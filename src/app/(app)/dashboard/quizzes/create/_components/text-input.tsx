@@ -1,3 +1,4 @@
+import { Input } from "@nextui-org/react"
 import { FC } from "react"
 import { Control, useController } from "react-hook-form"
 
@@ -17,12 +18,15 @@ const TextInput: FC<{
   })
 
   return (
-    <input
+    <Input
+      aria-label={name}
       placeholder={placeholder}
       type={type}
-      className={`w-full placeholder:text-gray90 bg-transparent border-none h-5 ${size === "large" ? "text-lg font-semibold" : ""} ${className ?? ""}`}
+      className={`placeholder:text-gray90 bg-transparent border-none ${className ?? ""}`}
+      size={size === "large" ? "md" : "sm"}
       name={name}
       onBlur={onBlur}
+      variant="underlined"
       value={value}
       onChange={onChange}
     />
