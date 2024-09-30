@@ -11,10 +11,9 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
+    "@hookform/resolvers": "^3.9.0",
     "@metamask/logo": "^3.1.2",
     "@nextui-org/react": "^2.4.6",
-    "@privy-io/react-auth": "^1.82.0",
-    "@privy-io/wagmi": "^0.2.12",
     "@sentry/nextjs": "7.105.0",
     "@solana/web3.js": "^1.89.1",
     "@tanstack/react-query": "^5.17.12",
@@ -48,7 +47,8 @@
     "sortablejs": "^1.15.3",
     "styled-components": "^6.1.0",
     "viem": "^2.7.16",
-    "wagmi": "^2.5.7"
+    "wagmi": "^2.5.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@ethersproject/experimental": "^5.7.0",

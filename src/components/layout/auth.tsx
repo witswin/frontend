@@ -13,7 +13,6 @@ import Styles from "./auth.module.scss"
 import { Noto_Sans_Mono } from "next/font/google"
 import Link from "next/link"
 import { useWalletManagementContext } from "@/context/walletProvider"
-import { usePrivy } from "@privy-io/react-auth"
 import { Button } from "@nextui-org/react"
 import { setCookie } from "@/utils/hooks"
 import { getUserProfileWithTokenAPI } from "@/utils/api"
@@ -189,44 +188,41 @@ export const RenderNavbarWalletAddress: FC<{
   const { userProfile, onWalletLogin } = useUserProfileContext()
 
   const evmWallet = userProfile?.walletAddress
-  const {
-    isModalOpen,
-    init,
-    connectOrCreateWallet,
-    linkApple,
-    ready,
-    login,
-    user,
-    forkSession,
-    linkWallet,
-    getAccessToken,
-    authenticated,
-  } = usePrivy()
+  // const {
+  //   isModalOpen,
+  //   init,
+  //   connectOrCreateWallet,
+  //   linkApple,
+  //   ready,
+  //   login,
+  //   user,
+  //   forkSession,
+  //   linkWallet,
+  //   getAccessToken,
+  //   authenticated,
+  // } = usePrivy()
 
   const { connection } = useUserWalletProvider()
 
   let address = connection.isConnected ? connection.address : evmWallet
 
-  useEffect(() => {
-    if (!authenticated || userProfile) return
+  // useEffect(() => {
+  //   if (!authenticated || userProfile) return
 
-    getAccessToken().then((token) => {
-      if (!token) return
+  //   getAccessToken().then((token) => {
+  //     if (!token) return
 
-      setCookie("userToken", token)
-      getUserProfileWithTokenAPI(token).then((res) => onWalletLogin(token, res))
-    })
-  }, [authenticated])
+  //     setCookie("userToken", token)
+  //     getUserProfileWithTokenAPI(token).then((res) => onWalletLogin(token, res))
+  //   })
+  // }, [authenticated])
 
   if (!userProfile)
     return (
       <Button
-        disabled={!ready}
         data-testid="wallet-connect"
         className="!w-36 h-[28px] !py-0 align-baseline"
-        onClick={() => {
-          login()
-        }}
+        onClick={() => setIsWalletPromptOpen(true)}
       >
         Connect Wallet
       </Button>

@@ -23,7 +23,6 @@ import { useWalletAccount } from "@/utils/wallet"
 import { NullCallback } from "@/utils"
 import { Address, isAddressEqual } from "viem"
 import { useDisconnect } from "wagmi"
-import { usePrivy } from "@privy-io/react-auth"
 
 export const UserProfileContext = createContext<
   Partial<Settings> & {
@@ -66,8 +65,6 @@ export const UserContextProvider: FC<
   const [userToken, setToken] = useLocalStorageState("userToken")
   const [holdUserLogout, setHoldUserLogout] = useState(false)
 
-  const { logout: privyLogout } = usePrivy()
-
   const { address, isConnected, isConnecting, isReconnecting } =
     useWalletAccount()
   const { disconnect } = useDisconnect()
@@ -108,13 +105,12 @@ export const UserContextProvider: FC<
       }
     },
     FAST_INTERVAL,
-    [userToken, setUserProfile]
+    [userToken, setUserProfile],
   )
 
   const logout = () => {
     disconnect?.()
     localStorage.clear()
-    privyLogout()
     setCookie("userToken", "")
 
     setUserProfile(null)

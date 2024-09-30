@@ -74,7 +74,7 @@ const QuestionChoice: FC<{
 
   return (
     <div
-      className={`relative flex items-center rounded-xl pl-16 border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors `}
+      className={`relative flex gap-2 items-center rounded-xl pl-16 border-2 border-gray40 bg-gray20 py-3 text-center text-white transition-colors `}
     >
       <TextInput
         control={control!}

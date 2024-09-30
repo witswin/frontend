@@ -18,7 +18,12 @@ const HintInput = () => {
       <span className="py-1">50% Hint</span>
 
       <span className="ml-2 border-l-2 border-gray70 py-1 pl-2">
-        <TextInput control={control!} name="hintCount" className="!w-4" />
+        <TextInput
+          type="number"
+          control={control!}
+          name="hintCount"
+          className="!w-4"
+        />
       </span>
     </div>
   )

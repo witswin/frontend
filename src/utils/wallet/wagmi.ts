@@ -1,10 +1,9 @@
 "use client"
 
-import { cookieStorage, createStorage, http } from "wagmi"
+import { cookieStorage, createStorage, http, createConfig } from "wagmi"
 import { supportedChains } from "@/constants/chains"
 import { injected, safe, walletConnect } from "wagmi/connectors"
 import { HttpTransport } from "viem"
-import { createConfig } from "@privy-io/wagmi"
 
 const getConnectorProviders = () => {
   return [

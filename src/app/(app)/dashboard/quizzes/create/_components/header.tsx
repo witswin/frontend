@@ -6,7 +6,7 @@ import TextInput from "./text-input"
 import { FaSave } from "react-icons/fa"
 
 const Header = () => {
-  const { control } = useQuizCreateContext()
+  const { control, loading, submit } = useQuizCreateContext()
 
   return (
     <header className="quiztap-header rounded-xl border-2 border-gray20 p-5">
@@ -18,7 +18,9 @@ const Header = () => {
           placeholder="Quiz Title"
         />
 
-        <Button startContent={<FaSave />}>Save</Button>
+        <Button isLoading={loading} onClick={submit} startContent={<FaSave />}>
+          Save
+        </Button>
       </div>
       <TextInput
         className="mt-3"

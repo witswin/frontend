@@ -2,9 +2,10 @@
 
 import TextInput from "@/components/forms/text"
 import { useUserProfileContext } from "@/context/userProfile"
+import { NullCallback } from "@/utils"
 import { setUsernameApi } from "@/utils/api"
 import { Button, Card } from "@nextui-org/react"
-import { usePrivy } from "@privy-io/react-auth"
+
 import { FC, useState } from "react"
 import { useForm } from "react-hook-form"
 import {
@@ -56,17 +57,6 @@ const ProfilePage = () => {
       .finally(() => setLoading(false))
   }
 
-  const {
-    linkDiscord,
-    linkEmail,
-    linkTwitter,
-    linkGithub,
-    linkLinkedIn,
-    linkFarcaster,
-    linkGoogle,
-    user,
-  } = usePrivy()
-
   return (
     <div>
       <h3>Profile</h3>
@@ -104,8 +94,8 @@ const ProfilePage = () => {
             <FaGoogle size={20} />
             <span>Google</span>
             <IntegrationConnectButton
-              isConnected={!!user?.google}
-              onClick={linkGoogle}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
           <Card
@@ -115,8 +105,8 @@ const ProfilePage = () => {
             <FaXTwitter size={20} />
             <span>Twitter</span>
             <IntegrationConnectButton
-              isConnected={!!user?.twitter}
-              onClick={linkTwitter}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
           <Card
@@ -126,8 +116,8 @@ const ProfilePage = () => {
             <FaDiscord size={20} />
             <span>Discord</span>
             <IntegrationConnectButton
-              isConnected={!!user?.discord}
-              onClick={linkDiscord}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
           <Card
@@ -137,8 +127,8 @@ const ProfilePage = () => {
             <FaLinkedin size={20} />
             <span>Linked In</span>
             <IntegrationConnectButton
-              isConnected={!!user?.linkedin}
-              onClick={linkLinkedIn}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
           <Card
@@ -148,8 +138,8 @@ const ProfilePage = () => {
             <FaGithub size={20} />
             <span>Github</span>
             <IntegrationConnectButton
-              isConnected={!!user?.github}
-              onClick={linkGithub}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
           <Card
@@ -159,8 +149,8 @@ const ProfilePage = () => {
             <SiFarcaster size={20} />
             <span>Farcaster</span>
             <IntegrationConnectButton
-              isConnected={!!user?.farcaster}
-              onClick={linkFarcaster}
+              isConnected={!!false}
+              onClick={NullCallback}
             />
           </Card>
         </div>

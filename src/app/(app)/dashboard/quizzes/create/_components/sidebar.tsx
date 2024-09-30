@@ -1,27 +1,16 @@
 "use client"
 
 import Icon from "@/components/ui/Icon"
-import { useQuizContext } from "@/context/quizProvider"
-import { useNumberLinearInterpolate } from "@/utils/interpolate"
+
 import Link from "next/link"
-import { FC, useEffect } from "react"
-import { fromWei, toWei } from "@/utils"
+import { FC } from "react"
 import TextInput from "./text-input"
 import { useQuizCreateContext } from "../providers"
 import { DateInput, TimeInput } from "@nextui-org/react"
+import { Controller } from "react-hook-form"
 
 const QuizTapSidebar: FC = () => {
-  const {
-    totalParticipantsCount,
-    remainingPeople,
-    amountWinPerUser,
-    quiz,
-    wrongAnswersCount,
-  } = useQuizContext()
-
   const { control } = useQuizCreateContext()
-
-  const isUserLost = wrongAnswersCount > 0
 
   return (
     <aside className="quiz-sidebar flex md:w-72 flex-col gap-1 rounded-2xl p-1">
@@ -29,7 +18,7 @@ const QuizTapSidebar: FC = () => {
         <p className="text-gray100">Lives</p>
 
         <div className="flex items-center gap-4">
-          <span className="text-lg">{Math.max(1 - wrongAnswersCount, 0)}</span>
+          <span className="text-lg">1</span>
 
           <Icon
             width="30px"
@@ -43,9 +32,32 @@ const QuizTapSidebar: FC = () => {
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
         <div className="text-gray100">
           <p>Quiz Execution Date</p>
-
-          <DateInput aria-label="date" variant="underlined" className="mt-2" />
-          <TimeInput aria-label="time" variant="underlined" className="mt-2" />
+          <Controller
+            control={control}
+            name="date"
+            render={({ field }) => (
+              <DateInput
+                aria-label="date"
+                variant="underlined"
+                className="mt-2"
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="time"
+            render={({ field }) => (
+              <TimeInput
+                aria-label="time"
+                variant="underlined"
+                value={field.value}
+                onChange={field.onChange}
+                className="mt-2"
+              />
+            )}
+          />
         </div>
       </div>
       <div className="mt-1 flex justify-between rounded-lg bg-gray10 p-5">
@@ -54,16 +66,12 @@ const QuizTapSidebar: FC = () => {
 
           <p className="mt-2 inline-flex items-center gap-2">
             <TextInput
-              className="font-bold !w-10"
+              className="font-bold !w-14"
               control={control!}
               name="prizeAmount"
               type="number"
             />
-            <span
-              className={`transition-colors ${isUserLost ? "text-error" : "text-space-green"}`}
-            >
-              USDC
-            </span>
+            <span className={`transition-colors text-space-green`}>USDC</span>
           </p>
         </div>
 
@@ -84,7 +92,7 @@ const QuizTapSidebar: FC = () => {
           alt="health"
         />
         <div className="mt-4 flex flex-col md:flex-row items-center justify-center gap-3">
-          {quiz?.sponsors.map((sponsor, key) => (
+          {/* {quiz?.sponsors.map((sponsor, key) => (
             <Link href={sponsor.link} key={key} target="_blank">
               <Icon
                 className="h-5 w-5 grayscale"
@@ -92,7 +100,7 @@ const QuizTapSidebar: FC = () => {
                 alt={sponsor.name}
               />
             </Link>
-          ))}
+          ))} */}
 
           <button
             className={`relative ml-4 grid h-9 w-9 min-w-9 min-h-9 place-content-center rounded-lg border-2 border-dashed border-gray80 bg-gray20 text-gray100`}
