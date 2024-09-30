@@ -1,34 +1,19 @@
-"use client";
+"use client"
 
-import { UserConnection } from "@/types";
-import { FC, useState } from "react";
-import SocialAccount from "../components/socialAccounts";
-import { useFastRefresh } from "@/utils/hooks/refresh";
-import { getAllConnections } from "@/utils/serverApis";
-import { useUserProfileContext } from "@/context/userProfile";
-import { SocialAccountContext } from "@/context/socialAccountContext";
-import GitCoinPassportAccount from "../components/socialAccounts/gitcoinPassport";
-import TwitterAccount from "../components/socialAccounts/twitter";
-import EnsAccount from "../components/socialAccounts/ensAccount";
-import LensAccount from "../components/socialAccounts/lensAccount";
-import FarcasterAccount from "../components/socialAccounts/farcasterAccount";
+import { UserConnection } from "@/types"
+import { FC, useState } from "react"
+import SocialAccount from "../components/socialAccounts"
+import { SocialAccountContext } from "@/context/socialAccountContext"
+import GitCoinPassportAccount from "../components/socialAccounts/gitcoinPassport"
+import TwitterAccount from "../components/socialAccounts/twitter"
+import EnsAccount from "../components/socialAccounts/ensAccount"
+import LensAccount from "../components/socialAccounts/lensAccount"
+import FarcasterAccount from "../components/socialAccounts/farcasterAccount"
 
 const SocialAccountContent: FC<{ initialConnections: UserConnection }> = ({
   initialConnections,
 }) => {
-  const [connections, setConnections] = useState(initialConnections ?? []);
-
-  const { userToken } = useUserProfileContext();
-
-  console.log(connections);
-
-  useFastRefresh(() => {
-    if (!userToken) return;
-
-    getAllConnections(userToken).then((res) => {
-      setConnections(res);
-    });
-  }, [userToken]);
+  const [connections, setConnections] = useState(initialConnections ?? [])
 
   return (
     <SocialAccountContext.Provider
@@ -71,7 +56,7 @@ const SocialAccountContent: FC<{ initialConnections: UserConnection }> = ({
         />
       </div>
     </SocialAccountContext.Provider>
-  );
-};
+  )
+}
 
-export default SocialAccountContent;
+export default SocialAccountContent

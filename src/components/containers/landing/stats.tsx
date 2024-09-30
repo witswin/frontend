@@ -1,33 +1,18 @@
-import { countGasClaimedAPI, countUsersAPI } from "@/utils/api";
-import Widget from "./widget";
-import { FC } from "react";
-import { Chain } from "@/types";
-import { numberWithCommas } from "@/utils";
+import { countStatsAPI } from "@/utils/api"
+import Widget from "./widget"
+import { FC } from "react"
+import { numberWithCommas } from "@/utils"
 
-export const getTotalNetworks = (chains: Chain[]) => {
-  return chains.reduce((total, chain) => total + (!chain.isTestnet ? 1 : 0), 0);
-};
-
-export const getTotalTestNetworks = (chains: Chain[]) => {
-  return chains.reduce((total, chain) => total + (chain.isTestnet ? 1 : 0), 0);
-};
-
-const LandingStats: FC<{ chains: Chain[] }> = async ({ chains }) => {
-  const usersCount = await countUsersAPI();
-  const gasClaimedCount = await countGasClaimedAPI();
-
-  const stats = [
-    { name: "Main Networks", number: getTotalNetworks(chains) },
-    { name: "Test Networks", number: getTotalTestNetworks(chains) },
-  ];
+const LandingStats: FC = async ({}) => {
+  const stats = await countStatsAPI()
 
   return (
-    <section id="home-stats" className={"flex justify-between gap-4"}>
+    <section id="home-stats" className={"flex mb-12 justify-between gap-4"}>
       <Widget
         className={
           "flex-1 px-20 !pb-7 !pt-5 after:inset-auto after:left-0 after:top-0 after:h-28 after:w-36 after:bg-stats-texture"
         }
-        title={"Unitap Stats"}
+        title={"Wits Stats"}
         titleClass={"!justify-center"}
       >
         <div
@@ -37,37 +22,44 @@ const LandingStats: FC<{ chains: Chain[] }> = async ({ chains }) => {
         >
           <div className="flex flex-col items-center gap-2">
             <p className={"text-xl font-semibold text-space-green"}>
-              {numberWithCommas(usersCount)}
+              {numberWithCommas(stats.allUsersCount)}
             </p>
             <p className={"text-gradient-primary text-xs font-medium"}>
               {" "}
-              Unitap Users
+              Wits Users
             </p>
           </div>
-          {stats.map((stat) => (
-            <div key={stat.name} className={"flex flex-col items-center gap-2"}>
-              <p className={"text-xl font-semibold text-space-green"}>
-                {/* {numberWithCommas(typeof stat.number == 'string' ? parseFloat(stat.number) : stat.number)} */}
-                {numberWithCommas(stat.number)}
-              </p>
-              <p className={"text-gradient-primary text-xs font-medium"}>
-                {stat.name}
-              </p>
-            </div>
-          ))}
           <div className="flex flex-col items-center gap-2">
             <p className={"text-xl font-semibold text-space-green"}>
-              {numberWithCommas(gasClaimedCount)}
+              {numberWithCommas(stats.competitionsCount)}
             </p>
             <p className={"text-gradient-primary text-xs font-medium"}>
               {" "}
-              Gas Fees Claimed
+              Competitions Created
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className={"text-xl font-semibold text-space-green"}>
+              {numberWithCommas(stats.userEnrollmentsCount)}
+            </p>
+            <p className={"text-gradient-primary text-xs font-medium"}>
+              {" "}
+              Users participated
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className={"text-xl font-semibold text-space-green"}>
+              {stats.totalPrizeAmount}
+            </p>
+            <p className={"text-gradient-primary text-xs font-medium"}>
+              {" "}
+              Total Prize Amount
             </p>
           </div>
         </div>
       </Widget>
     </section>
-  );
-};
+  )
+}
 
-export default LandingStats;
+export default LandingStats

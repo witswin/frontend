@@ -1,7 +1,5 @@
 "use client"
 
-import { useOutsideClick } from "@/utils/hooks/dom"
-import RoutePath from "@/utils/routes"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -41,44 +39,35 @@ type NavbarDropdownProps = {
 const navItems = [
   {
     name: "Home",
-    link: RoutePath.HOME,
+    link: "/",
     icon: "/assets/images/navbar/navbar-dropdown-home.svg",
     iconWidth: "auto",
     iconHeight: "28px",
-    route: RoutePath.HOME,
+    route: "/",
   },
   {
     name: "Gas Tap",
-    link: RoutePath.FAUCET,
+    link: "/gastap",
     icon: "/assets/images/navbar/navbar-dropdown-gas-tap.svg",
     iconWidth: "auto",
     iconHeight: "28px",
-    route: RoutePath.FAUCET,
+    route: "/gastap",
   },
   {
     name: "Token Tap",
-    link: RoutePath.TOKEN,
+    link: "/tokentap",
     icon: "/assets/images/navbar/navbar-dropdown-token-tap.svg",
     iconWidth: "auto",
     iconHeight: "28px",
-    route: RoutePath.TOKEN,
+    route: "/tokentap",
   },
   {
     name: "Prize Tap",
-    link: RoutePath.PRIZE,
+    link: "/prizetap",
     icon: "/assets/images/landing/prizetap-icon.png",
     iconWidth: "33px",
     iconHeight: "auto",
-    route: RoutePath.PRIZE,
-  },
-
-  {
-    name: "Incentive Center",
-    link: RoutePath.PROVIDERDASHBOARD,
-    icon: "/assets/images/landing/contributionHub.svg",
-    iconWidth: "33px",
-    iconHeight: "auto",
-    route: RoutePath.PROVIDERDASHBOARD,
+    route: "/prizetap",
   },
 ]
 
@@ -118,7 +107,7 @@ const NavbarDropdown = ({ className, closeDropdown }: NavbarDropdownProps) => {
 
       <Link
         onClick={() => closeDropdown?.()}
-        href={RoutePath.NFT}
+        href={"/"}
         className={`navbar-dropdown__item relative z-10 mt-12 flex !h-auto cursor-pointer items-center justify-between overflow-hidden rounded-xl border-gray00 bg-gray00 bg-g-primary p-1 py-2.5 pl-4 pr-2 transition-all duration-75 before:absolute before:inset-[2px] before:-z-10 before:block before:rounded-lg before:bg-gray00 before:content-[''] hover:bg-gray20`}
       >
         <p className="bg-primaryGradient bg-clip-text text-sm font-semibold text-transparent">

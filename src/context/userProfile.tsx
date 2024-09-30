@@ -105,7 +105,7 @@ export const UserContextProvider: FC<
       }
     },
     FAST_INTERVAL,
-    [userToken, setUserProfile]
+    [userToken, setUserProfile],
   )
 
   const logout = () => {
@@ -116,41 +116,6 @@ export const UserContextProvider: FC<
     setUserProfile(null)
     setToken("")
   }
-
-  useEffect(() => {
-    if (holdUserLogout || isConnecting || isReconnecting) {
-      // if (isConnected && !userToken) {
-      //   disconnect?.();
-      // }
-      return
-    }
-
-    if (
-      userToken &&
-      isConnected &&
-      userProfile &&
-      isAddressEqual(userProfile.walletAddress, address!)
-    )
-      return
-
-    console.log(userProfile, isConnected, userToken, holdUserLogout)
-
-    disconnect?.()
-    localStorage.removeItem("userToken")
-    setCookie("userToken", "")
-
-    setUserProfile(null)
-    setToken("")
-  }, [
-    userToken,
-    isConnected,
-    holdUserLogout,
-    userProfile,
-    address,
-    disconnect,
-    isConnecting,
-    isReconnecting,
-  ])
 
   return (
     <UserProfileContext.Provider

@@ -1,10 +1,9 @@
-import { FC } from "react";
-import Widget from "../widget";
-import Link from "next/link";
-import RoutePath from "@/utils/routes";
-import { RaffleCardTimerLandingPage } from "./raffleTimer";
-import { serverFetch } from "@/utils/api";
-import { Prize } from "@/types";
+import { FC } from "react"
+import Widget from "../widget"
+import Link from "next/link"
+import { RaffleCardTimerLandingPage } from "./raffleTimer"
+import { serverFetch } from "@/utils/api"
+import { Prize } from "@/types"
 
 // const nftImage = (tokenUri: string | undefined | null) => {
 //   let tokenImgLink: string | undefined = tokenUri
@@ -20,8 +19,8 @@ const PrizeTapLanding: FC = async () => {
     await serverFetch("/api/prizetap/raffle-list/")
   ).filter(
     (raffle: Prize) =>
-      raffle.status !== "PENDING" && raffle.status !== "REJECTED",
-  );
+      raffle.status !== "PENDING" && raffle.status !== "REJECTED"
+  )
 
   // const validRaffles = rafflesList.sort(
   //   (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
@@ -30,12 +29,12 @@ const PrizeTapLanding: FC = async () => {
   const availableRaffles = rafflesList.filter(
     (raffle) =>
       new Date(raffle.deadline).getTime() > new Date().getTime() &&
-      new Date().getTime() > new Date(raffle.startAt).getTime(),
-  );
+      new Date().getTime() > new Date(raffle.startAt).getTime()
+  )
 
   return (
     <section className={"flex--1"}>
-      <Link className={"flex--1"} href={RoutePath.PRIZE}>
+      <Link className={"flex--1"} href={"/prizetap"}>
         <Widget
           id="prizetap"
           description={
@@ -133,7 +132,7 @@ const PrizeTapLanding: FC = async () => {
         </Widget>
       </Link>
     </section>
-  );
-};
+  )
+}
 
-export default PrizeTapLanding;
+export default PrizeTapLanding

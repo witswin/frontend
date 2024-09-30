@@ -16,12 +16,25 @@ const queryClient = new QueryClient()
 
 export function Providers({ children, initialState }: Props) {
   return (
-    <WagmiProvider config={config} initialState={initialState}>
-      <NextUIProvider>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </NextUIProvider>
-    </WagmiProvider>
+    // <PrivyProvider
+    //   appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
+    //   config={{
+    //     appearance: {
+    //       theme: "dark",
+    //       accentColor: "#676FFF",
+    //       logo: "https://wits.win/logo.svg",
+    //     },
+    //     // Create embedded wallets for users who don't have a wallet
+    //     embeddedWallets: {
+    //       createOnLogin: "users-without-wallets",
+    //     },
+    //   }}
+    // >
+    <QueryClientProvider client={queryClient}>
+      <WagmiProvider config={config} initialState={initialState}>
+        <NextUIProvider>{children}</NextUIProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
+    // </PrivyProvider>
   )
 }
