@@ -61,6 +61,7 @@ const QuizCard: FC<{ competition: Competition }> = ({ competition }) => {
               " " +
               competition.token
             }
+            className="rounded-full"
             width="135"
             height="133"
           />
