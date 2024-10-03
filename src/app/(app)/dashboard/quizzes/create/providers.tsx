@@ -137,7 +137,7 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
 
     data.startAt = startAt.toISOString()
 
-    data.prizeAmount *= 10 ** 18
+    data.prizeAmount *= 10 ** 6
 
     setLoading(true)
     try {
