@@ -2,7 +2,13 @@
 
 import Image from "next/image"
 import { useQuizTapListContext } from "@/context/quiztapListProvider"
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
+import {
+  Checkbox,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from "@nextui-org/react"
 import { FC, useEffect, useState } from "react"
 import Icon from "@/components/ui/Icon"
 import {
@@ -15,6 +21,100 @@ import Link from "next/link"
 import { fromWei } from "@/utils"
 import { useRouter } from "next/navigation"
 import { statePeriod } from "@/context/quizProvider"
+import { Hint } from "@/types"
+
+const HintItem: FC<{ hint: Hint; count?: number }> = ({ hint, count = 1 }) => {
+  return (
+    <div className="flex px-2 flex-1 items-center justify-evenly rounded-xl border border-gray70 bg-gray50">
+      <Icon
+        alt="hint"
+        className="py-1 mr-2"
+        iconSrc={hint.icon}
+        width="25px"
+        height="25px"
+      />
+      <span className="py-1">{hint.title}</span>
+      <span className="ml-auto border-l-2 text-sm border-gray70 py-1 pl-2">
+        x {count}
+      </span>
+    </div>
+  )
+}
+
+const ChooseHintEnroll: FC<{
+  addedHints: number[]
+  setAddedHints: (value: number[]) => void
+}> = ({ addedHints, setAddedHints }) => {
+  const { userHints, selecetedCompetition } = useQuizTapListContext()
+
+  const achivements = userHints.achivements.filter(
+    (c) =>
+      !c.isUsed &&
+      selecetedCompetition &&
+      selecetedCompetition.allowedHintTypes.find((item) => item.id === c.hint),
+  )
+
+  const availableHintCount = Math.max(
+    (selecetedCompetition?.hintCount ?? 0) -
+      (selecetedCompetition?.builtInHints?.reduce(
+        (prev, curr) => curr.count + prev,
+        0,
+      ) ?? 0),
+    0,
+  )
+
+  if (!achivements.length) return null
+
+  return (
+    <div className="my-2">
+      <p className="text-left text-sm mb-3">
+        achived hints ({availableHintCount})
+      </p>
+      <div className="flex-wrap flex items-center gap-2">
+        {achivements.map((achivement, key) => (
+          <div
+            key={key}
+            className={"p-2 px-4 rounded-3xl bg-gray10 border border-divider"}
+          >
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={addedHints.includes(achivement.pk)}
+                onChange={() => {
+                  const index = addedHints.findIndex(
+                    (item) => item === achivement.pk,
+                  )
+                  if (index !== -1) {
+                    addedHints.splice(index, 1)
+                    setAddedHints([...addedHints])
+                  } else {
+                    setAddedHints([...addedHints, achivement.pk])
+                  }
+                }}
+                isDisabled={availableHintCount <= 0}
+                size="sm"
+              ></Checkbox>
+              <div>
+                <p className="text-gray100 text-sm">
+                  {userHints.hints[achivement.hint]?.title}
+                </p>
+              </div>
+
+              {!!userHints.hints[achivement.hint]?.icon && (
+                <Icon
+                  iconSrc={userHints.hints[achivement.hint].icon}
+                  alt={userHints.hints[achivement.hint].title}
+                  width="20"
+                  height="20"
+                  className="w-4 h-4"
+                />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const EnrollModal: FC<{}> = () => {
   const {
@@ -24,6 +124,8 @@ const EnrollModal: FC<{}> = () => {
     addEnrollment,
     enrollmentsList,
   } = useQuizTapListContext()
+
+  const [addedHints, setAddedHints] = useState<number[]>([])
 
   const router = useRouter()
 
@@ -38,12 +140,12 @@ const EnrollModal: FC<{}> = () => {
       (raffle) =>
         (typeof raffle.competition === "number"
           ? raffle.competition
-          : raffle.competition.id) === competition?.id
+          : raffle.competition.id) === competition?.id,
     ) !== -1
 
   const onEnroll = () => {
     setLoading(true)
-    enrollQuizApi(competition.id)
+    enrollQuizApi(competition.id, addedHints)
       .then((res) => {
         addEnrollment(res)
       })
@@ -93,9 +195,7 @@ const EnrollModal: FC<{}> = () => {
             height="133"
           />
           <h4 className="mt-3 text-white">{competition?.title}</h4>
-          <p className="text-sm text-gray100">{competition?.details}</p>
-
-          <div className="flex mt-2 gap-2 ">
+          <div className="grid grid-cols-2 mt-2 gap-2 ">
             <div className="flex px-2 justify-evenly flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
               <p className="text-sm font-normal leading-[22px] text-gray100">
                 Prize
@@ -106,24 +206,15 @@ const EnrollModal: FC<{}> = () => {
                   competition?.token}{" "}
               </p>
             </div>
-            <div className="flex px-2 flex-1 items-center justify-evenly rounded-xl border border-gray70 bg-gray50">
-              <Icon
-                alt="hint"
-                className="py-1 mr-2"
-                iconSrc="/assets/images/quizTap/fifty-fifty.png"
-                width="25px"
-                height="25px"
-              />
-              <span className="py-1">50% Hint</span>
-              <span className="ml-auto border-l-2 text-sm border-gray70 py-1 pl-2">
-                x {competition?.hintCount}
-              </span>
-            </div>
+
+            {competition?.builtInHints.map((hint, key) => (
+              <HintItem hint={hint.hint} count={hint.count} key={key} />
+            ))}
           </div>
           <div className="flex gap-2 ">
             <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
               <h5 className="text-white font-semibold">
-                {Math.floor(statePeriod / 1000)} Sec
+                {selecetedCompetition?.questionTimeSeconds} Sec
               </h5>
               <p className="mt-2 text-sm text-gray100">
                 Time for each Question
@@ -136,6 +227,16 @@ const EnrollModal: FC<{}> = () => {
               <p className="mt-2 text-sm text-gray100">Number of Questions</p>
             </div>
           </div>
+
+          {isEnrolled ? (
+            <div></div>
+          ) : (
+            <ChooseHintEnroll
+              addedHints={addedHints}
+              setAddedHints={setAddedHints}
+            />
+          )}
+
           <div className="mt-2 mb-1">
             {!isEnrolled ? (
               <ClaimAndEnrollButton

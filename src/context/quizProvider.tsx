@@ -131,7 +131,7 @@ const QuizContextProvider: FC<
   const [ping, setPing] = useState(-1)
 
   const [answersHistory, setAnswersHistory] = useState<(number | null)[]>(
-    Array.from(new Array(quiz.questions.length).fill(null))
+    Array.from(new Array(quiz.questions.length).fill(null)),
   )
 
   const { userToken } = useUserProfileContext()
@@ -150,7 +150,7 @@ const QuizContextProvider: FC<
 
   const wrongAnswersCount = useMemo(() => {
     const userAnswerHistoryCount = userAnswersHistory.filter((item) =>
-      answersHistory.includes(item)
+      answersHistory.includes(item),
     ).length
 
     return answersHistory.length - userAnswerHistoryCount
@@ -162,7 +162,7 @@ const QuizContextProvider: FC<
 
       setUserAnswersHistory([...userAnswersHistory])
     },
-    [question, userAnswersHistory]
+    [question, userAnswersHistory],
   )
 
   const getNextQuestionPk = useCallback(
@@ -171,7 +171,7 @@ const QuizContextProvider: FC<
 
       return result
     },
-    [quiz.questions]
+    [quiz.questions],
   )
 
   const recalculateState = useCallback(() => {
@@ -185,8 +185,8 @@ const QuizContextProvider: FC<
         now.getUTCHours(),
         now.getUTCMinutes(),
         now.getUTCSeconds(),
-        now.getUTCMilliseconds()
-      )
+        now.getUTCMilliseconds(),
+      ),
     )
 
     if (startAt > nowUTC) {
@@ -204,25 +204,25 @@ const QuizContextProvider: FC<
     cachedAudios.current.beforeStart = new Audio("/assets/sounds/new 3-2-1.wav")
     cachedAudios.current.quizStart = new Audio("/assets/sounds/time up.mp3")
     cachedAudios.current.beforeQuestion = new Audio(
-      "/assets/sounds/timer count down.wav"
+      "/assets/sounds/timer count down.wav",
     )
 
     cachedAudios.current.seeResults = new Audio(
-      "/assets/sounds/see results.mp3"
+      "/assets/sounds/see results.mp3",
     )
 
     cachedAudios.current.rightAnswer = new Audio(
-      "/assets/sounds/right answer.mp3"
+      "/assets/sounds/right answer.mp3",
     )
     cachedAudios.current.wrongAnswer = new Audio(
-      "/assets/sounds/wrong answer.mp3"
+      "/assets/sounds/wrong answer.mp3",
     )
     cachedAudios.current.prizeClaimed = new Audio(
-      "/assets/sounds/prize claimed.mp3"
+      "/assets/sounds/prize claimed.mp3",
     )
 
     Object.values(cachedAudios.current).forEach(
-      (audio) => (audio.preload = "auto")
+      (audio) => (audio.preload = "auto"),
     )
   }, [])
 
@@ -285,7 +285,7 @@ const QuizContextProvider: FC<
               return data.question
             })
             const correctAnswer = data.question.choices.find(
-              (item: any) => item.isCorrect
+              (item: any) => item.isCorrect,
             )
             if (correctAnswer) {
               setAnswersHistory((prev) => {
@@ -299,6 +299,14 @@ const QuizContextProvider: FC<
             setAnswersHistory((answerHistory) => {
               answerHistory[answerData.questionNumber - 1] =
                 answerData.correctChoice
+              return [...answerHistory]
+            })
+          } else if (data.type === "correct_answer") {
+            const answerData = data.data
+
+            setAnswersHistory((answerHistory) => {
+              answerHistory[answerData.questionNumber - 1] = answerData.answerId
+
               return [...answerHistory]
             })
           } else if (data.type === "quiz_stats") {
@@ -323,11 +331,11 @@ const QuizContextProvider: FC<
 
             setAnswersHistory(
               answers.map((item: any) =>
-                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1
-              )
+                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1,
+              ),
             )
             setUserAnswersHistory(
-              answers.map((item: any) => item.selectedChoice.id)
+              answers.map((item: any) => item.selectedChoice.id),
             )
           }
         }
@@ -369,39 +377,24 @@ const QuizContextProvider: FC<
     const currentQuestionIndex = getNextQuestionPk(stateIndex)
 
     if (!question?.isEligible) {
-      setAnswersHistory((prev) => [...prev, -1])
-      socket.current.client?.send(
-        JSON.stringify({
-          command: "GET_QUESTION",
-          args: {
-            index: currentQuestionIndex,
-          },
-        })
-      )
+      // setAnswersHistory((prev) => [...prev, -1])
+      // socket.current.client?.send(
+      //   JSON.stringify({
+      //     command: "GET_QUESTION",
+      //     args: {
+      //       index: currentQuestionIndex,
+      //     },
+      //   }),
+      // )
       return
     }
 
     if (
       userAnswersHistory[question.number - 1] !== -1 &&
-      currentQuestionIndex !== -1
+      currentQuestionIndex !== -1 &&
+      userAnswersHistory[question.number - 1] !== undefined
     ) {
       const questionNumber = question.number - 1
-
-      if (
-        userAnswersHistory[questionNumber] === null ||
-        userAnswersHistory[questionNumber] === undefined
-      ) {
-        setAnswersHistory((prev) => [...prev, -1])
-        socket.current.client?.send(
-          JSON.stringify({
-            command: "GET_QUESTION",
-            args: {
-              index: currentQuestionIndex,
-            },
-          })
-        )
-        return
-      }
 
       socket.current.client?.send(
         JSON.stringify({
@@ -410,7 +403,7 @@ const QuizContextProvider: FC<
             questionId: currentQuestionIndex,
             selectedChoiceId: userAnswersHistory[questionNumber]!,
           },
-        })
+        }),
       )
     }
   }, [
@@ -439,7 +432,7 @@ const QuizContextProvider: FC<
       socket.current.client?.send(
         JSON.stringify({
           command: "GET_STATS",
-        })
+        }),
       )
     }, 5000)
 
@@ -470,8 +463,8 @@ const QuizContextProvider: FC<
             now.getUTCHours(),
             now.getUTCMinutes(),
             now.getUTCSeconds(),
-            now.getUTCMilliseconds()
-          )
+            now.getUTCMilliseconds(),
+          ),
         ) // Current UTC time
 
         let estimatedRemaining =
@@ -491,7 +484,7 @@ const QuizContextProvider: FC<
         } else {
           estimatedRemaining -= restPeriod
           setDocTitle(
-            `${newState}. Question ${Math.floor(estimatedRemaining / 1000)}s`
+            `${newState}. Question ${Math.floor(estimatedRemaining / 1000)}s`,
           )
           setIsRestTime(false)
         }
@@ -515,10 +508,10 @@ const QuizContextProvider: FC<
   ])
 
   useEffect(() => {
-    if (!isRestTime) return
+    // if (!isRestTime) return
 
     submitUserAnswer()
-  }, [isRestTime, submitUserAnswer])
+  }, [userAnswersHistory, submitUserAnswer])
 
   return (
     <QuizContext.Provider

@@ -1,4 +1,10 @@
-import { Competition, CompetitionStatus, QuestionResponse } from "@/types"
+import {
+  Competition,
+  CompetitionStatus,
+  Hint,
+  HintAchivement,
+  QuestionResponse,
+} from "@/types"
 import { WithPagination } from "../pagination"
 import { serverFetch } from "."
 import { axiosInstance } from "./base"
@@ -53,10 +59,11 @@ export const FetchUserQuizzes = async () => {
   return response.data
 }
 
-export const enrollQuizApi = async (id: number) => {
+export const enrollQuizApi = async (id: number, addedHints: number[]) => {
   const response: { id: number; competition: Competition } = (
     await axiosInstance.post("/quiz/competitions/enroll/", {
       competition: id,
+      userHints: addedHints,
     })
   ).data
 
@@ -93,4 +100,28 @@ export const fetchUsersQuizEnrollments = async () => {
   >("/quiz/competitions/enroll/")
 
   return res.data
+}
+
+export const fetchUserHintAchivements = async () => {
+  const res = await axiosInstance.get<HintAchivement[]>("/quiz/user-hints/")
+
+  return res.data
+}
+
+export const fetchHints = async () => {
+  const res = await axiosInstance.get<Hint[]>("/quiz/hints/")
+
+  return res.data
+}
+
+export const fetchHintsAndAchivements = async () => {
+  const [achivements, hints] = await Promise.all([
+    fetchUserHintAchivements(),
+    fetchHints(),
+  ])
+
+  return {
+    achivements,
+    hints,
+  }
 }
