@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  Choice,
   Competition,
   QuestionResponse,
   UserAnswer,
@@ -119,6 +120,8 @@ const QuizContextProvider: FC<
   const userEnrollmentPk = userEnrollment.id
 
   const [health, setHealth] = useState(1)
+  const [userCompetition, setUserCompetition] = useState(userEnrollment)
+
   const [hint, setHint] = useState(1)
   const [remainingPeople, setRemainingPeople] = useState(1)
   const [scoresHistory, setScoresHistory] = useState<number[]>([])
@@ -132,6 +135,7 @@ const QuizContextProvider: FC<
   const [hintData, setHintData] = useState<{
     questionId: number
     data: number[]
+    hintType: string
   } | null>(null)
   const [winnersList, setWinnersList] = useState<
     { userProfile_WalletAddress: Address; txHash: string }[] | null
@@ -236,7 +240,6 @@ const QuizContextProvider: FC<
   }, [])
 
   useEffect(() => {
-    // if (!userToken) return
     let isMounted = true
 
     let interval: NodeJS.Timeout | undefined
@@ -333,7 +336,16 @@ const QuizContextProvider: FC<
             setHintData({
               data: data.data,
               questionId: data.questionId,
+              hintType: data.hintType,
             })
+            const hint = userCompetition.registeredHints.findIndex(
+              (item) => item.id === data.id,
+            )
+
+            if (hint !== -1) {
+              userCompetition.registeredHints.splice(hint, 1)
+              setUserCompetition({ ...userCompetition })
+            }
           } else if (data.type === "answers_history") {
             const answers =
               typeof data.data === "string" ? JSON.parse(data.data) : data.data
@@ -344,7 +356,9 @@ const QuizContextProvider: FC<
               ),
             )
             setUserAnswersHistory(
-              answers.map((item: any) => item.selectedChoice.id),
+              answers.map(
+                (item: { selectedChoice: Choice }) => item.selectedChoice.id,
+              ),
             )
           }
         }
@@ -382,21 +396,13 @@ const QuizContextProvider: FC<
   }, [userToken])
 
   const submitUserAnswer = useCallback(async () => {
-    if (question?.number && question?.number > stateIndex) return
-    const currentQuestionIndex = getNextQuestionPk(stateIndex)
-
-    if (!question?.isEligible) {
-      // setAnswersHistory((prev) => [...prev, -1])
-      // socket.current.client?.send(
-      //   JSON.stringify({
-      //     command: "GET_QUESTION",
-      //     args: {
-      //       index: currentQuestionIndex,
-      //     },
-      //   }),
-      // )
+    if (
+      (question?.number && question?.number > stateIndex) ||
+      !question?.isEligible
+    )
       return
-    }
+
+    const currentQuestionIndex = getNextQuestionPk(stateIndex)
 
     if (
       userAnswersHistory[question.number - 1] !== -1 &&
@@ -551,7 +557,7 @@ const QuizContextProvider: FC<
         previousRoundLosses,
         winners: winnersList,
         cachedAudios: cachedAudios.current,
-        userCompetition: userEnrollment,
+        userCompetition,
       }}
     >
       {children}

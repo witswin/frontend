@@ -30,6 +30,7 @@ export default function HintItems() {
     },
     {} as Record<string, Hint & { count: number }>,
   )
+
   return Object.values(hints || {}).map((hint, key) => (
     <button
       key={key}
@@ -39,9 +40,9 @@ export default function HintItems() {
           JSON.stringify({
             command: "GET_HINT",
             args: {
-              question_id: question?.id,
-              hint_type: hint.hintType,
-              hint_id: hint.id,
+              questionId: question?.id,
+              hintType: hint.hintType,
+              hintId: hint.id,
             },
           }),
         )

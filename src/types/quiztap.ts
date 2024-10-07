@@ -67,6 +67,7 @@ export type Competition = {
 }
 
 export type UserCompetition = {
+  id: number
   userProfile: UserProfile
   competition: number | Competition
   isWinner: boolean
