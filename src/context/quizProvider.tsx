@@ -1,6 +1,11 @@
 "use client"
 
-import { Competition, QuestionResponse, UserAnswer } from "@/types"
+import {
+  Competition,
+  QuestionResponse,
+  UserAnswer,
+  UserCompetition,
+} from "@/types"
 import { NullCallback } from "@/utils"
 import { fetchQuizApi } from "@/utils/api"
 import {
@@ -44,6 +49,7 @@ export type QuizContextProps = {
   previousRoundLosses: number
   winners: { userProfile_WalletAddress: Address; txHash: string }[] | null
   cachedAudios: { [key: string]: HTMLAudioElement }
+  userCompetition: UserCompetition | null
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -70,6 +76,7 @@ export const QuizContext = createContext<QuizContextProps>({
   previousRoundLosses: 0,
   winners: null,
   cachedAudios: {},
+  userCompetition: null,
 })
 
 export const statePeriod = 13000
@@ -107,8 +114,10 @@ const setDocTitle = (title?: string) => {
 }
 
 const QuizContextProvider: FC<
-  PropsWithChildren & { quiz: Competition; userEnrollmentPk: number }
-> = ({ children, quiz, userEnrollmentPk }) => {
+  PropsWithChildren & { quiz: Competition; userEnrollment: UserCompetition }
+> = ({ children, quiz, userEnrollment }) => {
+  const userEnrollmentPk = userEnrollment.id
+
   const [health, setHealth] = useState(1)
   const [hint, setHint] = useState(1)
   const [remainingPeople, setRemainingPeople] = useState(1)
@@ -542,6 +551,7 @@ const QuizContextProvider: FC<
         previousRoundLosses,
         winners: winnersList,
         cachedAudios: cachedAudios.current,
+        userCompetition: userEnrollment,
       }}
     >
       {children}

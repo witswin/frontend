@@ -1,7 +1,7 @@
 "use client"
 
 import { FAST_INTERVAL } from "@/constants"
-import { Competition, Hint, HintAchivement } from "@/types"
+import { Competition, Hint, HintAchivement, UserCompetition } from "@/types"
 import { NullCallback } from "@/utils"
 import {
   fetchHintsAndAchivements,

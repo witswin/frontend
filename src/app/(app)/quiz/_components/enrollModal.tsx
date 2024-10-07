@@ -20,10 +20,13 @@ import { useTimer } from "@/utils/hooks/timer"
 import Link from "next/link"
 import { fromWei } from "@/utils"
 import { useRouter } from "next/navigation"
-import { statePeriod } from "@/context/quizProvider"
+
 import { Hint } from "@/types"
 
-const HintItem: FC<{ hint: Hint; count?: number }> = ({ hint, count = 1 }) => {
+export const HintItem: FC<{ hint: Hint; count?: number }> = ({
+  hint,
+  count = 1,
+}) => {
   return (
     <div className="flex px-2 flex-1 items-center justify-evenly rounded-xl border border-gray70 bg-gray50">
       <Icon

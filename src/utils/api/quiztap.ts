@@ -4,6 +4,7 @@ import {
   Hint,
   HintAchivement,
   QuestionResponse,
+  UserCompetition,
 } from "@/types"
 import { WithPagination } from "../pagination"
 import { serverFetch } from "."
@@ -82,7 +83,7 @@ export const fetchUserQuizEnrollment = async (
   userToken: string,
   competitionPk: number,
 ) => {
-  const res = await axiosInstance.get<{ id: number }[]>(
+  const res = await axiosInstance.get<UserCompetition[]>(
     "/quiz/competitions/enroll/?competition_pk=" + competitionPk,
     {
       headers: {
@@ -91,7 +92,7 @@ export const fetchUserQuizEnrollment = async (
     },
   )
 
-  return res.data[0]?.id
+  return res.data[0]
 }
 
 export const fetchUsersQuizEnrollments = async () => {
