@@ -1,5 +1,4 @@
-import Icon from "@/components/ui/Icon"
-import { statePeriod, useQuizContext } from "@/context/quizProvider"
+import { useQuizContext } from "@/context/quizProvider"
 import { fromWei } from "@/utils"
 import { FC, useEffect, useState } from "react"
 import { HintItem } from "../../_components/enrollModal"
@@ -45,7 +44,7 @@ const WaitingIdle: FC<{}> = () => {
         <div className="flex flex-wrap flex-col md:flex-row mt-2 gap-2">
           <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
             <h5 className="text-white font-semibold">
-              {Math.floor(statePeriod / 1000)} Sec
+              {quiz?.questionTimeSeconds} Sec
             </h5>
             <p className="mt-2 text-sm text-gray100">Time for each Question</p>
           </div>

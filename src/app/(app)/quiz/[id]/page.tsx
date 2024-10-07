@@ -3,15 +3,10 @@
 import Timer from "./components/timer"
 import QuestionsList from "./components/questionsList"
 import WaitingIdle from "./components/waitingIdle"
-import {
-  restPeriod,
-  seeResultDuration,
-  useQuizContext,
-} from "@/context/quizProvider"
+import { seeResultDuration, useQuizContext } from "@/context/quizProvider"
 import QuestionPrompt from "./components/questionPrompt"
-import RestTime from "./components/restTime"
+import RestTime from "./components/rest-time"
 import QuizFinished from "./components/finished"
-import { useEffect, useState } from "react"
 import LoseModal from "./components/modals/loseModal"
 import WinnerModal from "./components/modals/winnerModal"
 import HintItems from "./components/hint-items"
@@ -48,7 +43,15 @@ const QuizItemPage = () => {
 }
 
 const RenderQuizItemBody = () => {
-  const { stateIndex, isRestTime, finished, timer, quiz } = useQuizContext()
+  const {
+    stateIndex,
+    isRestTime,
+    finished,
+    timer,
+    quiz,
+    statePeriod,
+    restPeriod,
+  } = useQuizContext()
 
   if (
     finished ||

@@ -25,7 +25,7 @@ const QuestionPrompt: FC = () => {
 
       if (questionIndexes.includes(selectedKey)) {
         answerQuestion(
-          question.choices[questionIndexes.indexOf(selectedKey)].id
+          question.choices[questionIndexes.indexOf(selectedKey)].id,
         )
       }
     }
@@ -88,8 +88,10 @@ const QuestionPrompt: FC = () => {
           <QuestionChoice
             disabled={
               hintData?.questionId === question.id &&
+              hintData.hintType === "fifty" &&
               hintData.data.includes(item.id)
             }
+            id={item.id}
             title={item.text}
             index={item.id}
             choiceIndex={key}
@@ -113,7 +115,8 @@ const QuestionChoice: FC<{
   title: string
   disabled?: boolean
   choiceIndex: number
-}> = ({ index, title, disabled, choiceIndex }) => {
+  id: number
+}> = ({ index, title, disabled, choiceIndex, id }) => {
   const {
     answerQuestion,
     activeQuestionChoiceIndex,
@@ -121,8 +124,13 @@ const QuestionChoice: FC<{
     isRestTime,
     answersHistory,
     timer,
-    cachedAudios,
+    hintData,
   } = useQuizContext()
+
+  const choiceProgress =
+    hintData && hintData.hintType === "stats" ? hintData.data[id] : 0
+
+  console.log(choiceProgress)
 
   return (
     <button

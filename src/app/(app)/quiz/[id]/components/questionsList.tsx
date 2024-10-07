@@ -1,4 +1,4 @@
-import { restPeriod, statePeriod, useQuizContext } from "@/context/quizProvider"
+import { useQuizContext } from "@/context/quizProvider"
 import { FC, Fragment, useEffect, useRef } from "react"
 
 const QuestionsList = () => {
@@ -20,7 +20,7 @@ const QuestionsList = () => {
 }
 
 const Separator: FC<{ index: number }> = ({ index }) => {
-  const { stateIndex, timer, isRestTime } = useQuizContext()
+  const { stateIndex, timer, isRestTime, restPeriod } = useQuizContext()
 
   const width =
     isRestTime && index === stateIndex
@@ -40,8 +40,14 @@ const Separator: FC<{ index: number }> = ({ index }) => {
 }
 
 const QuestionItem: FC<{ index: number }> = ({ index }) => {
-  const { stateIndex, timer, isRestTime, answersHistory, userAnswersHistory } =
-    useQuizContext()
+  const {
+    stateIndex,
+    timer,
+    isRestTime,
+    answersHistory,
+    userAnswersHistory,
+    statePeriod,
+  } = useQuizContext()
 
   const ref = useRef<SVGRectElement>(null)
 

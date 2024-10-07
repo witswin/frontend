@@ -46,11 +46,14 @@ export type QuizContextProps = {
   ping: number
   wrongAnswersCount: number
   socketInstance: WebSocket | null
-  hintData: { questionId: number; data: number[] } | null
+  hintData: { questionId: number; data: number[]; hintType: string } | null
   previousRoundLosses: number
   winners: { userProfile_WalletAddress: Address; txHash: string }[] | null
   cachedAudios: { [key: string]: HTMLAudioElement }
   userCompetition: UserCompetition | null
+  statePeriod: number
+  restPeriod: number
+  totalPeriod: number
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -78,12 +81,12 @@ export const QuizContext = createContext<QuizContextProps>({
   winners: null,
   cachedAudios: {},
   userCompetition: null,
+  statePeriod: 13000,
+  restPeriod: 10000,
+  totalPeriod: 23000,
 })
 
-export const statePeriod = 13000
-export const restPeriod = 10000
 export const seeResultDuration = 5000
-const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
 
@@ -185,6 +188,14 @@ const QuizContextProvider: FC<
       return result
     },
     [quiz.questions],
+  )
+
+  const statePeriod = useMemo(() => quiz.questionTimeSeconds * 1000, [quiz])
+  const restPeriod = useMemo(() => quiz.restTimeSeconds * 1000, [quiz])
+
+  const totalPeriod = useMemo(
+    () => statePeriod + restPeriod,
+    [statePeriod, restPeriod],
   )
 
   const recalculateState = useCallback(() => {
@@ -558,6 +569,9 @@ const QuizContextProvider: FC<
         winners: winnersList,
         cachedAudios: cachedAudios.current,
         userCompetition,
+        statePeriod,
+        restPeriod,
+        totalPeriod,
       }}
     >
       {children}
