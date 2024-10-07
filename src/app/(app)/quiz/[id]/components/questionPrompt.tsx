@@ -130,8 +130,6 @@ const QuestionChoice: FC<{
   const choiceProgress =
     hintData && hintData.hintType === "stats" ? hintData.data[id] : 0
 
-  console.log(choiceProgress)
-
   return (
     <button
       disabled={disabled}

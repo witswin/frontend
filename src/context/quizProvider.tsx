@@ -439,6 +439,7 @@ const QuizContextProvider: FC<
     stateIndex,
     userAnswersHistory,
     userEnrollmentPk,
+    setAnswersHistory,
   ])
 
   const fetchFinalResults = useCallback(async () => {
