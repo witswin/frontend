@@ -71,7 +71,7 @@ export type UserCompetition = {
   competition: number | Competition
   isWinner: boolean
   amountWon?: number
-  hints: Hint[]
+  registeredHints: Hint[]
 }
 
 export type Question = {
@@ -104,7 +104,7 @@ export type QuizAnswerQuestionResponse = {
 
 export type Hint = {
   id: number
-  hint_type: string
+  hintType: string
   title: string
   description: string
   isActive: boolean

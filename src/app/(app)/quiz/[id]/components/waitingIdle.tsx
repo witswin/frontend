@@ -27,7 +27,7 @@ const WaitingIdle: FC<{}> = () => {
         the quiz begins as soon as everyone’s in.
       </p>
       <div className="w-auto md:w-96 mx-auto mt-5">
-        <div className="flex flex-wrap flex-col md:flex-row mt-2 gap-2 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div className="flex px-2 justify-evenly flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
             <p className="text-sm font-normal leading-[22px] text-gray100">
               Prize
@@ -42,7 +42,7 @@ const WaitingIdle: FC<{}> = () => {
             <HintItem hint={hint.hint} count={hint.count} key={key} />
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2 ">
+        <div className="flex flex-wrap flex-col md:flex-row mt-2 gap-2">
           <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
             <h5 className="text-white font-semibold">
               {Math.floor(statePeriod / 1000)} Sec
