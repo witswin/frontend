@@ -350,7 +350,7 @@ const QuizContextProvider: FC<
               hintType: data.hintType,
             })
             const hint = userCompetition.registeredHints.findIndex(
-              (item) => item.id === data.id,
+              (item) => item.id === data.hintId,
             )
 
             if (hint !== -1) {
