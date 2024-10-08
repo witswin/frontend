@@ -24,7 +24,8 @@ const QuizItemPage = () => {
             includeMinutes={stateIndex <= 0}
             isRestTime={isRestTime}
           />
-
+        </div>
+        <div className="mt-12 gap-2 flex flex-col md:flex-row gap-y-5 items-center justify-end px-5">
           <HintItems />
         </div>
 

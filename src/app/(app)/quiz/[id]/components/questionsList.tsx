@@ -4,7 +4,7 @@ import { FC, Fragment, useEffect, useRef } from "react"
 const QuestionsList = () => {
   const { quiz } = useQuizContext()
   return (
-    <div className="mt-10 overflow-x-auto">
+    <div className="mt-4 overflow-x-auto">
       <div className="flex min-w-72 w-fit sm:w-full justify-center rounded-xl border-2 border-gray50 bg-gray20/30 p-3">
         {quiz?.questions.map((question, index) => (
           <Fragment key={index}>

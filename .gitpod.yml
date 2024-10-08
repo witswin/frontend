@@ -9,3 +9,9 @@ tasks:
     command: yarn run tdev
 
 
+ports:
+  - port: 3000
+    visibility: public
+
+    
+
