@@ -22,6 +22,7 @@ import { fromWei } from "@/utils"
 import { useRouter } from "next/navigation"
 
 import { Hint } from "@/types"
+import { toast } from "react-toastify"
 
 export const HintItem: FC<{ hint: Hint; count?: number }> = ({
   hint,
@@ -151,6 +152,11 @@ const EnrollModal: FC<{}> = () => {
     enrollQuizApi(competition.id, addedHints)
       .then((res) => {
         addEnrollment(res)
+      })
+      .catch((err) => {
+        if (err.response.data) {
+          toast.error(err.response.data.message)
+        }
       })
       .finally(() => {
         setLoading(false)
