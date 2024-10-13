@@ -57,17 +57,22 @@ export type Competition = {
   emailUrl?: string
   telegramUrl?: string
   image?: string
-  restTimeSeconds: number
   tokenImageUrl?: string
   isActive: boolean
   tokenDecimals: number
+  questionTimeSeconds: number
+  restTimeSeconds: number
+  builtInHints: { count: number; id: number; hint: Hint }[]
+  allowedHintTypes: Hint[]
 }
 
 export type UserCompetition = {
+  id: number
   userProfile: UserProfile
   competition: number | Competition
   isWinner: boolean
   amountWon?: number
+  registeredHints: Hint[]
 }
 
 export type Question = {
@@ -102,6 +107,23 @@ export type Hint = {
   id: number
   type: string
   title: string
-  image?: string
   description: string
+  isActive: boolean
+  icon?: string
+}
+
+export type HintAchivement = {
+  isUsed: boolean
+  hint: number
+  usedAt: string
+  createdAt: string
+  pk: number
+}
+
+export type ExpandedHintAchivement = {
+  isUsed: boolean
+  hint: Hint
+  usedAt: string
+  createdAt: string
+  pk: number
 }

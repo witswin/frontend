@@ -1,9 +1,12 @@
 "use client"
 
 import { FAST_INTERVAL } from "@/constants"
-import { Competition } from "@/types"
+import { Competition, Hint, HintAchivement, UserCompetition } from "@/types"
 import { NullCallback } from "@/utils"
-import { fetchUsersQuizEnrollments } from "@/utils/api"
+import {
+  fetchHintsAndAchivements,
+  fetchUsersQuizEnrollments,
+} from "@/utils/api"
 import { useFastRefresh, useRefreshWithInitial } from "@/utils/hooks/refresh"
 import {
   FC,
@@ -31,6 +34,10 @@ export const QuizTapListContext = createContext<{
   setModalState: (state: EnrollModalState) => void
   selecetedCompetition: Competition | null
   setSelectedCompetition: (value: Competition | null) => void
+  userHints: {
+    achivements: HintAchivement[]
+    hints: Record<number, Hint>
+  }
 }>({
   quizList: [],
   pageIndex: 1,
@@ -41,6 +48,10 @@ export const QuizTapListContext = createContext<{
   setModalState: NullCallback,
   selecetedCompetition: null,
   setSelectedCompetition: NullCallback,
+  userHints: {
+    achivements: [],
+    hints: [],
+  },
 })
 
 export const useQuizTapListContext = () => useContext(QuizTapListContext)
@@ -62,10 +73,8 @@ const QuizTapListProvider: FC<
   const [competitionList, setCompetitionList] = useState(competitionInitialList)
   const [modalState, setModalState] = useState("closed" as EnrollModalState)
   const [selecetedCompetition, setSelectedCompetition] = useState(
-    null as Competition | null
+    null as Competition | null,
   )
-
-  const { userToken } = useUserProfileContext()
 
   const [enrollmentsList, setEnrollmentsList] = useState<
     {
@@ -81,18 +90,34 @@ const QuizTapListProvider: FC<
     currentPage: 1,
   })
 
-  const refreshCompetitionList = (currentPage: number) => {}
+  const [hints, setHints] = useState<{
+    achivements: HintAchivement[]
+    hints: Record<number, Hint>
+  }>({
+    achivements: [],
+    hints: {},
+  })
 
-  // useRefreshWithInitial(
-  //   () => {
-  //     if (!userToken) return
-  //     fetchUsersQuizEnrollments().then((res) => {
-  //       setEnrollmentsList(res)
-  //     })
-  //   },
-  //   FAST_INTERVAL,
-  //   [userToken]
-  // )
+  useRefreshWithInitial(
+    () => {
+      fetchHintsAndAchivements().then((res) => {
+        setHints({
+          achivements: res.achivements,
+          hints: res.hints.reduce(
+            (prev, curr) => {
+              prev[curr.id] = curr
+
+              return prev
+            },
+            {} as Record<number, Hint>,
+          ),
+        })
+      })
+    },
+    FAST_INTERVAL,
+    [],
+  )
+  const refreshCompetitionList = (currentPage: number) => {}
 
   const resolveMessage = useCallback(
     (data: { data: any; type: string }) => {
@@ -135,7 +160,7 @@ const QuizTapListProvider: FC<
           break
       }
     },
-    [competitionList, setCompetitionList, enrollmentsList, setEnrollmentsList]
+    [competitionList, setCompetitionList, enrollmentsList, setEnrollmentsList],
   )
 
   const {} = useSocket({
@@ -158,6 +183,7 @@ const QuizTapListProvider: FC<
         setSelectedCompetition,
         addEnrollment: (value) =>
           setEnrollmentsList([...enrollmentsList, value]),
+        userHints: hints,
       }}
     >
       {children}

@@ -2,19 +2,8 @@
 
 import Icon from "@/components/ui/Icon"
 import { useQuizContext } from "@/context/quizProvider"
-import logger from "@/core/logger"
 import { getRandomItem } from "@/utils/random"
 import { FC, useEffect, useMemo, useState } from "react"
-
-const isArrayEqual = (array1: any[], array2: any[]) => {
-  if (array1.length !== array2.length) return false
-
-  for (let i = 0; i < array1.length; i++) {
-    if (array1[i] !== array2[i]) return false
-  }
-
-  return true
-}
 
 const correctTitles = ["Nailed it!", "Correct!", "Spot on!", "Nice job!"]
 const wrongAnswers = [
@@ -62,7 +51,7 @@ const RestTime: FC<{}> = () => {
 
   const title = useMemo(
     () => getRandomItem(isWonLastQuestion ? correctTitles : wrongAnswers),
-    [isWonLastQuestion]
+    [isWonLastQuestion],
   )
 
   if (answersHistory[stateIndex - 1] === null) {

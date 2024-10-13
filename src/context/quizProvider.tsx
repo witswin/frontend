@@ -1,6 +1,12 @@
 "use client"
 
-import { Competition, QuestionResponse, UserAnswer } from "@/types"
+import {
+  Choice,
+  Competition,
+  QuestionResponse,
+  UserAnswer,
+  UserCompetition,
+} from "@/types"
 import { NullCallback } from "@/utils"
 import { fetchQuizApi } from "@/utils/api"
 import {
@@ -40,10 +46,14 @@ export type QuizContextProps = {
   ping: number
   wrongAnswersCount: number
   socketInstance: WebSocket | null
-  hintData: { questionId: number; data: number[] } | null
+  hintData: { questionId: number; data: number[]; hintType: string } | null
   previousRoundLosses: number
   winners: { userProfile_WalletAddress: Address; txHash: string }[] | null
   cachedAudios: { [key: string]: HTMLAudioElement }
+  userCompetition: UserCompetition | null
+  statePeriod: number
+  restPeriod: number
+  totalPeriod: number
 }
 
 export const QuizContext = createContext<QuizContextProps>({
@@ -70,12 +80,13 @@ export const QuizContext = createContext<QuizContextProps>({
   previousRoundLosses: 0,
   winners: null,
   cachedAudios: {},
+  userCompetition: null,
+  statePeriod: 13000,
+  restPeriod: 10000,
+  totalPeriod: 23000,
 })
 
-export const statePeriod = 13000
-export const restPeriod = 10000
 export const seeResultDuration = 5000
-const totalPeriod = restPeriod + statePeriod
 
 export const useQuizContext = () => useContext(QuizContext)
 
@@ -107,9 +118,13 @@ const setDocTitle = (title?: string) => {
 }
 
 const QuizContextProvider: FC<
-  PropsWithChildren & { quiz: Competition; userEnrollmentPk: number }
-> = ({ children, quiz, userEnrollmentPk }) => {
+  PropsWithChildren & { quiz: Competition; userEnrollment: UserCompetition }
+> = ({ children, quiz, userEnrollment }) => {
+  const userEnrollmentPk = userEnrollment.id
+
   const [health, setHealth] = useState(1)
+  const [userCompetition, setUserCompetition] = useState(userEnrollment)
+
   const [hint, setHint] = useState(1)
   const [remainingPeople, setRemainingPeople] = useState(1)
   const [scoresHistory, setScoresHistory] = useState<number[]>([])
@@ -123,6 +138,7 @@ const QuizContextProvider: FC<
   const [hintData, setHintData] = useState<{
     questionId: number
     data: number[]
+    hintType: string
   } | null>(null)
   const [winnersList, setWinnersList] = useState<
     { userProfile_WalletAddress: Address; txHash: string }[] | null
@@ -131,7 +147,7 @@ const QuizContextProvider: FC<
   const [ping, setPing] = useState(-1)
 
   const [answersHistory, setAnswersHistory] = useState<(number | null)[]>(
-    Array.from(new Array(quiz.questions.length).fill(null))
+    Array.from(new Array(quiz.questions.length).fill(null)),
   )
 
   const { userToken } = useUserProfileContext()
@@ -150,7 +166,7 @@ const QuizContextProvider: FC<
 
   const wrongAnswersCount = useMemo(() => {
     const userAnswerHistoryCount = userAnswersHistory.filter((item) =>
-      answersHistory.includes(item)
+      answersHistory.includes(item),
     ).length
 
     return answersHistory.length - userAnswerHistoryCount
@@ -162,7 +178,7 @@ const QuizContextProvider: FC<
 
       setUserAnswersHistory([...userAnswersHistory])
     },
-    [question, userAnswersHistory]
+    [question, userAnswersHistory],
   )
 
   const getNextQuestionPk = useCallback(
@@ -171,7 +187,15 @@ const QuizContextProvider: FC<
 
       return result
     },
-    [quiz.questions]
+    [quiz.questions],
+  )
+
+  const statePeriod = useMemo(() => quiz.questionTimeSeconds * 1000, [quiz])
+  const restPeriod = useMemo(() => quiz.restTimeSeconds * 1000, [quiz])
+
+  const totalPeriod = useMemo(
+    () => statePeriod + restPeriod,
+    [statePeriod, restPeriod],
   )
 
   const recalculateState = useCallback(() => {
@@ -185,8 +209,8 @@ const QuizContextProvider: FC<
         now.getUTCHours(),
         now.getUTCMinutes(),
         now.getUTCSeconds(),
-        now.getUTCMilliseconds()
-      )
+        now.getUTCMilliseconds(),
+      ),
     )
 
     if (startAt > nowUTC) {
@@ -204,30 +228,29 @@ const QuizContextProvider: FC<
     cachedAudios.current.beforeStart = new Audio("/assets/sounds/new 3-2-1.wav")
     cachedAudios.current.quizStart = new Audio("/assets/sounds/time up.mp3")
     cachedAudios.current.beforeQuestion = new Audio(
-      "/assets/sounds/timer count down.wav"
+      "/assets/sounds/timer count down.wav",
     )
 
     cachedAudios.current.seeResults = new Audio(
-      "/assets/sounds/see results.mp3"
+      "/assets/sounds/see results.mp3",
     )
 
     cachedAudios.current.rightAnswer = new Audio(
-      "/assets/sounds/right answer.mp3"
+      "/assets/sounds/right answer.mp3",
     )
     cachedAudios.current.wrongAnswer = new Audio(
-      "/assets/sounds/wrong answer.mp3"
+      "/assets/sounds/wrong answer.mp3",
     )
     cachedAudios.current.prizeClaimed = new Audio(
-      "/assets/sounds/prize claimed.mp3"
+      "/assets/sounds/prize claimed.mp3",
     )
 
     Object.values(cachedAudios.current).forEach(
-      (audio) => (audio.preload = "auto")
+      (audio) => (audio.preload = "auto"),
     )
   }, [])
 
   useEffect(() => {
-    // if (!userToken) return
     let isMounted = true
 
     let interval: NodeJS.Timeout | undefined
@@ -285,7 +308,7 @@ const QuizContextProvider: FC<
               return data.question
             })
             const correctAnswer = data.question.choices.find(
-              (item: any) => item.isCorrect
+              (item: any) => item.isCorrect,
             )
             if (correctAnswer) {
               setAnswersHistory((prev) => {
@@ -299,6 +322,14 @@ const QuizContextProvider: FC<
             setAnswersHistory((answerHistory) => {
               answerHistory[answerData.questionNumber - 1] =
                 answerData.correctChoice
+              return [...answerHistory]
+            })
+          } else if (data.type === "correct_answer") {
+            const answerData = data.data
+
+            setAnswersHistory((answerHistory) => {
+              answerHistory[answerData.questionNumber - 1] = answerData.answerId
+
               return [...answerHistory]
             })
           } else if (data.type === "quiz_stats") {
@@ -316,18 +347,29 @@ const QuizContextProvider: FC<
             setHintData({
               data: data.data,
               questionId: data.questionId,
+              hintType: data.hintType,
             })
+            const hint = userCompetition.registeredHints.findIndex(
+              (item) => item.id === data.hintId,
+            )
+
+            if (hint !== -1) {
+              userCompetition.registeredHints.splice(hint, 1)
+              setUserCompetition({ ...userCompetition })
+            }
           } else if (data.type === "answers_history") {
             const answers =
               typeof data.data === "string" ? JSON.parse(data.data) : data.data
 
             setAnswersHistory(
               answers.map((item: any) =>
-                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1
-              )
+                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1,
+              ),
             )
             setUserAnswersHistory(
-              answers.map((item: any) => item.selectedChoice.id)
+              answers.map(
+                (item: { selectedChoice: Choice }) => item.selectedChoice.id,
+              ),
             )
           }
         }
@@ -365,43 +407,20 @@ const QuizContextProvider: FC<
   }, [userToken])
 
   const submitUserAnswer = useCallback(async () => {
-    if (question?.number && question?.number > stateIndex) return
-    const currentQuestionIndex = getNextQuestionPk(stateIndex)
-
-    if (!question?.isEligible) {
-      setAnswersHistory((prev) => [...prev, -1])
-      socket.current.client?.send(
-        JSON.stringify({
-          command: "GET_QUESTION",
-          args: {
-            index: currentQuestionIndex,
-          },
-        })
-      )
+    if (
+      (question?.number && question?.number > stateIndex) ||
+      !question?.isEligible
+    )
       return
-    }
+
+    const currentQuestionIndex = getNextQuestionPk(stateIndex)
 
     if (
       userAnswersHistory[question.number - 1] !== -1 &&
-      currentQuestionIndex !== -1
+      currentQuestionIndex !== -1 &&
+      userAnswersHistory[question.number - 1] !== undefined
     ) {
       const questionNumber = question.number - 1
-
-      if (
-        userAnswersHistory[questionNumber] === null ||
-        userAnswersHistory[questionNumber] === undefined
-      ) {
-        setAnswersHistory((prev) => [...prev, -1])
-        socket.current.client?.send(
-          JSON.stringify({
-            command: "GET_QUESTION",
-            args: {
-              index: currentQuestionIndex,
-            },
-          })
-        )
-        return
-      }
 
       socket.current.client?.send(
         JSON.stringify({
@@ -410,7 +429,7 @@ const QuizContextProvider: FC<
             questionId: currentQuestionIndex,
             selectedChoiceId: userAnswersHistory[questionNumber]!,
           },
-        })
+        }),
       )
     }
   }, [
@@ -420,6 +439,7 @@ const QuizContextProvider: FC<
     stateIndex,
     userAnswersHistory,
     userEnrollmentPk,
+    setAnswersHistory,
   ])
 
   const fetchFinalResults = useCallback(async () => {
@@ -439,7 +459,7 @@ const QuizContextProvider: FC<
       socket.current.client?.send(
         JSON.stringify({
           command: "GET_STATS",
-        })
+        }),
       )
     }, 5000)
 
@@ -470,8 +490,8 @@ const QuizContextProvider: FC<
             now.getUTCHours(),
             now.getUTCMinutes(),
             now.getUTCSeconds(),
-            now.getUTCMilliseconds()
-          )
+            now.getUTCMilliseconds(),
+          ),
         ) // Current UTC time
 
         let estimatedRemaining =
@@ -491,7 +511,7 @@ const QuizContextProvider: FC<
         } else {
           estimatedRemaining -= restPeriod
           setDocTitle(
-            `${newState}. Question ${Math.floor(estimatedRemaining / 1000)}s`
+            `${newState}. Question ${Math.floor(estimatedRemaining / 1000)}s`,
           )
           setIsRestTime(false)
         }
@@ -515,10 +535,10 @@ const QuizContextProvider: FC<
   ])
 
   useEffect(() => {
-    if (!isRestTime) return
+    // if (!isRestTime) return
 
     submitUserAnswer()
-  }, [isRestTime, submitUserAnswer])
+  }, [userAnswersHistory, submitUserAnswer])
 
   return (
     <QuizContext.Provider
@@ -549,6 +569,10 @@ const QuizContextProvider: FC<
         previousRoundLosses,
         winners: winnersList,
         cachedAudios: cachedAudios.current,
+        userCompetition,
+        statePeriod,
+        restPeriod,
+        totalPeriod,
       }}
     >
       {children}

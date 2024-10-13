@@ -1,4 +1,11 @@
-import { Competition, CompetitionStatus, QuestionResponse } from "@/types"
+import {
+  Competition,
+  CompetitionStatus,
+  Hint,
+  HintAchivement,
+  QuestionResponse,
+  UserCompetition,
+} from "@/types"
 import { WithPagination } from "../pagination"
 import { serverFetch } from "."
 import { axiosInstance } from "./base"
@@ -53,10 +60,11 @@ export const FetchUserQuizzes = async () => {
   return response.data
 }
 
-export const enrollQuizApi = async (id: number) => {
+export const enrollQuizApi = async (id: number, addedHints: number[]) => {
   const response: { id: number; competition: Competition } = (
     await axiosInstance.post("/quiz/competitions/enroll/", {
       competition: id,
+      userHints: addedHints,
     })
   ).data
 
@@ -75,7 +83,7 @@ export const fetchUserQuizEnrollment = async (
   userToken: string,
   competitionPk: number,
 ) => {
-  const res = await axiosInstance.get<{ id: number }[]>(
+  const res = await axiosInstance.get<UserCompetition[]>(
     "/quiz/competitions/enroll/?competition_pk=" + competitionPk,
     {
       headers: {
@@ -84,7 +92,7 @@ export const fetchUserQuizEnrollment = async (
     },
   )
 
-  return res.data[0]?.id
+  return res.data[0]
 }
 
 export const fetchUsersQuizEnrollments = async () => {
@@ -95,13 +103,33 @@ export const fetchUsersQuizEnrollments = async () => {
   return res.data
 }
 
-
 export const fetchHintsApi = async () => {
- const res = await axiosInstance.get(
-  "/quiz/hints/"
- )
+  const res = await axiosInstance.get("/quiz/hints/")
 
- console.log(res.data)
+  console.log(res.data)
 
- return res.data
+  return res.data
+}
+export const fetchUserHintAchivements = async () => {
+  const res = await axiosInstance.get<HintAchivement[]>("/quiz/user-hints/")
+
+  return res.data
+}
+
+export const fetchHints = async () => {
+  const res = await axiosInstance.get<Hint[]>("/quiz/hints/")
+
+  return res.data
+}
+
+export const fetchHintsAndAchivements = async () => {
+  const [achivements, hints] = await Promise.all([
+    fetchUserHintAchivements(),
+    fetchHints(),
+  ])
+
+  return {
+    achivements,
+    hints,
+  }
 }

@@ -1,7 +1,7 @@
-import Icon from "@/components/ui/Icon"
-import { statePeriod, useQuizContext } from "@/context/quizProvider"
+import { useQuizContext } from "@/context/quizProvider"
 import { fromWei } from "@/utils"
 import { FC, useEffect, useState } from "react"
+import { HintItem } from "../../_components/enrollModal"
 
 const WaitingIdle: FC<{}> = () => {
   const { quiz, timer, cachedAudios, stateIndex } = useQuizContext()
@@ -26,7 +26,7 @@ const WaitingIdle: FC<{}> = () => {
         the quiz begins as soon as everyone’s in.
       </p>
       <div className="w-auto md:w-96 mx-auto mt-5">
-        <div className="flex flex-wrap flex-col md:flex-row mt-2 gap-2 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-2">
           <div className="flex px-2 justify-evenly flex-1 py-1 items-center rounded-xl border border-gray70 bg-gray50">
             <p className="text-sm font-normal leading-[22px] text-gray100">
               Prize
@@ -37,24 +37,14 @@ const WaitingIdle: FC<{}> = () => {
                 quiz?.token}{" "}
             </p>
           </div>
-          <div className="flex px-2 flex-1 items-center justify-evenly rounded-xl border border-gray70 bg-gray50">
-            <Icon
-              alt="hint"
-              className="py-1 mr-2"
-              iconSrc="/assets/images/quizTap/fifty-fifty.png"
-              width="25px"
-              height="25px"
-            />
-            <span className="py-1">50% Hint</span>
-            <span className="border-l-2 text-sm border-gray70 py-1 pl-2">
-              x {quiz?.hintCount}
-            </span>
-          </div>
+          {quiz?.builtInHints.map((hint, key) => (
+            <HintItem hint={hint.hint} count={hint.count} key={key} />
+          ))}
         </div>
-        <div className="flex flex-wrap flex-col md:flex-row mt-5 gap-2 ">
+        <div className="flex flex-wrap flex-col md:flex-row mt-2 gap-2">
           <div className="p-3 flex-1 rounded-xl text-center border border-gray60 bg-gray40">
             <h5 className="text-white font-semibold">
-              {Math.floor(statePeriod / 1000)} Sec
+              {quiz?.questionTimeSeconds} Sec
             </h5>
             <p className="mt-2 text-sm text-gray100">Time for each Question</p>
           </div>

@@ -25,7 +25,7 @@ const QuestionPrompt: FC = () => {
 
       if (questionIndexes.includes(selectedKey)) {
         answerQuestion(
-          question.choices[questionIndexes.indexOf(selectedKey)].id
+          question.choices[questionIndexes.indexOf(selectedKey)].id,
         )
       }
     }
@@ -88,8 +88,10 @@ const QuestionPrompt: FC = () => {
           <QuestionChoice
             disabled={
               hintData?.questionId === question.id &&
+              hintData.hintType === "fifty" &&
               hintData.data.includes(item.id)
             }
+            id={item.id}
             title={item.text}
             index={item.id}
             choiceIndex={key}
@@ -113,7 +115,8 @@ const QuestionChoice: FC<{
   title: string
   disabled?: boolean
   choiceIndex: number
-}> = ({ index, title, disabled, choiceIndex }) => {
+  id: number
+}> = ({ index, title, disabled, choiceIndex, id }) => {
   const {
     answerQuestion,
     activeQuestionChoiceIndex,
@@ -121,11 +124,23 @@ const QuestionChoice: FC<{
     isRestTime,
     answersHistory,
     timer,
-    cachedAudios,
+    hintData,
   } = useQuizContext()
+
+  const isHintedChoice =
+    hintData &&
+    hintData.hintType === "stats" &&
+    question?.id === hintData.questionId
+
+  const choiceProgress = isHintedChoice ? hintData.data[id] : 0
 
   return (
     <button
+      style={{
+        background: isHintedChoice
+          ? `linear-gradient(90deg, rgb(71 79 157 / 23%) ${choiceProgress}%, rgba(31,41,55,0) ${choiceProgress}%)`
+          : undefined,
+      }}
       disabled={disabled}
       onClick={() =>
         isRestTime || !question?.isEligible || answerQuestion(index)
@@ -166,6 +181,12 @@ const QuestionChoice: FC<{
         />
         <span>{indexesToABC[choiceIndex + 1]}</span>
       </div>
+
+      {isHintedChoice && (
+        <div className="absolute right-4 top-2 text-xs text-gray100">
+          {choiceProgress ?? 0}%
+        </div>
+      )}
     </button>
   )
 }

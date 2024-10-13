@@ -1,10 +1,10 @@
-import { restPeriod, statePeriod, useQuizContext } from "@/context/quizProvider"
+import { useQuizContext } from "@/context/quizProvider"
 import { FC, Fragment, useEffect, useRef } from "react"
 
 const QuestionsList = () => {
   const { quiz } = useQuizContext()
   return (
-    <div className="mt-10 overflow-x-auto">
+    <div className="mt-4 overflow-x-auto">
       <div className="flex min-w-72 w-fit sm:w-full justify-center rounded-xl border-2 border-gray50 bg-gray20/30 p-3">
         {quiz?.questions.map((question, index) => (
           <Fragment key={index}>
@@ -20,7 +20,7 @@ const QuestionsList = () => {
 }
 
 const Separator: FC<{ index: number }> = ({ index }) => {
-  const { stateIndex, timer, isRestTime } = useQuizContext()
+  const { stateIndex, timer, isRestTime, restPeriod } = useQuizContext()
 
   const width =
     isRestTime && index === stateIndex
@@ -40,8 +40,14 @@ const Separator: FC<{ index: number }> = ({ index }) => {
 }
 
 const QuestionItem: FC<{ index: number }> = ({ index }) => {
-  const { stateIndex, timer, isRestTime, answersHistory, userAnswersHistory } =
-    useQuizContext()
+  const {
+    stateIndex,
+    timer,
+    isRestTime,
+    answersHistory,
+    userAnswersHistory,
+    statePeriod,
+  } = useQuizContext()
 
   const ref = useRef<SVGRectElement>(null)
 

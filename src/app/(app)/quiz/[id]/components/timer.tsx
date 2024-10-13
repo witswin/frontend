@@ -1,7 +1,6 @@
 "use client"
 
 import Icon from "@/components/ui/Icon"
-import { restPeriod, seeResultDuration } from "@/context/quizProvider"
 import { FC } from "react"
 
 const Timer: FC<{

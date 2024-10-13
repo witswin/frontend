@@ -7,10 +7,14 @@ import Link from "next/link"
 import { FC, useEffect, useState } from "react"
 
 const LoseModal: FC = () => {
-  const { wrongAnswersCount, finished, previousRoundLosses } = useQuizContext()
+  const { wrongAnswersCount, finished, previousRoundLosses, timer } =
+    useQuizContext()
 
   const [isDissmissed, setIsDissmissed] = useState(false)
   const [watchAsSpectator, setWatchAsSpectator] = useState(true)
+
+  const totalSeconds = Math.floor(timer / 1000)
+  const seconds = totalSeconds % 60
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
@@ -51,7 +55,9 @@ const LoseModal: FC = () => {
             </strong>{" "}
             <span>people lost the game in the previous round.</span>
           </p>
-          <p className="text-sm text-gray90">Next Questions in 5 seconds...</p>
+          <p className="text-sm text-gray90">
+            Next Questions in {seconds} seconds...
+          </p>
 
           <button
             onClick={() => {

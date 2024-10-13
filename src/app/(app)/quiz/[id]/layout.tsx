@@ -19,7 +19,7 @@ const QuizLayout: FC<PropsWithChildren & { params: { id: string } }> = async ({
   try {
     enrollment = await fetchUserQuizEnrollment(
       cookieStorage.get("userToken")?.value!,
-      Number(params.id)
+      Number(params.id),
     )
   } catch (e) {
     console.log(e)
@@ -31,7 +31,7 @@ const QuizLayout: FC<PropsWithChildren & { params: { id: string } }> = async ({
   // }
 
   return (
-    <QuizContextProvider quiz={quiz} userEnrollmentPk={enrollment}>
+    <QuizContextProvider quiz={quiz} userEnrollment={enrollment}>
       <Header />
 
       <div className="mt-5 pb-28 select-none flex flex-col-reverse gap-2 md:flex-row">
