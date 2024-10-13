@@ -1,43 +1,43 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ClaimButton } from "@/components/ui/Button/button";
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { ClaimButton } from "@/components/ui/Button/button"
 
-import Icon from "@/components/ui/Icon";
+import Icon from "@/components/ui/Icon"
 import {
   unitapEvmTokenTapAbi,
   unitapPassBatchSaleAbi,
-} from "@/types/abis/contracts";
+} from "@/types/abis/contracts"
 import {
   UNITAP_PASS_BATCH_SALE_ADDRESS,
   getSupportedChainId,
-} from "@/constants";
+} from "@/constants"
 import {
   useAccountBalance,
   useNetworkSwitcher,
   useWalletAccount,
-} from "@/utils/wallet";
-import { SupportedChainId } from "@/constants/chains";
-import { useReadContracts, useWriteContract } from "wagmi";
-import { base } from "wagmi/chains";
-import { goerli } from "viem/chains";
-import { CurrencyAmount } from "@uniswap/sdk-core";
-import { nativeOnChain } from "@/constants/tokens";
-import { useGlobalContext } from "@/context/globalProvider";
-import Image from "next/image";
-import { useUserProfileContext } from "@/context/userProfile";
-import { toWei } from "@/utils";
+} from "@/utils/wallet"
+import { SupportedChainId } from "@/constants/chains"
+import { useReadContracts, useWriteContract } from "wagmi"
+import { base } from "wagmi/chains"
+import { goerli } from "viem/chains"
+import { CurrencyAmount } from "@uniswap/sdk-core"
+import { nativeOnChain } from "@/constants/tokens"
+import { useGlobalContext } from "@/context/globalProvider"
+import Image from "next/image"
+import { useUserProfileContext } from "@/context/userProfile"
+import { toWei } from "@/utils"
 
 export const unitCost = (unitCount: number | bigint, decimals: number) =>
-  BigInt(unitCount) * BigInt(10) ** BigInt(decimals);
+  BigInt(unitCount) * BigInt(10) ** BigInt(decimals)
 
 export const costToUnit = (price: bigint, decimals: bigint) =>
-  price / BigInt(10) ** decimals;
+  price / BigInt(10) ** decimals
 
-const supportedChainId = getSupportedChainId();
+const supportedChainId = getSupportedChainId()
 
-const saleAddress = UNITAP_PASS_BATCH_SALE_ADDRESS[supportedChainId];
+const saleAddress = UNITAP_PASS_BATCH_SALE_ADDRESS[supportedChainId]
 
 const MintNFTCard = () => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(1)
 
   const { data: contractsRes, isLoading: isContractLoading } = useReadContracts(
     {
@@ -63,10 +63,10 @@ const MintNFTCard = () => {
         },
       ],
     },
-  );
+  )
 
-  const batchSize = 500;
-  const beforeMinted = 312;
+  const batchSize = 500
+  const beforeMinted = 312
   // const remainingCount = useMemo(
   //   () =>
   //     contractsRes
@@ -79,46 +79,46 @@ const MintNFTCard = () => {
   const remainingCount = useMemo(
     () =>
       contractsRes
-        ? batchSize - ((contractsRes[0].result as number) + beforeMinted ?? 0)
+        ? batchSize - ((contractsRes[0].result as number) + beforeMinted)
         : undefined,
     [contractsRes],
-  );
+  )
 
-  const { setIsWalletPromptOpen } = useGlobalContext();
+  const { setIsWalletPromptOpen } = useGlobalContext()
 
   const { selectedNetwork, switchChain: addAndSwitchToChain } =
-    useNetworkSwitcher();
+    useNetworkSwitcher()
 
-  const { isConnected, address } = useWalletAccount();
-  const { userProfile } = useUserProfileContext();
+  const { isConnected, address } = useWalletAccount()
+  const { userProfile } = useUserProfileContext()
 
-  const { data: accountBalance } = useAccountBalance(address, supportedChainId);
+  const { data: accountBalance } = useAccountBalance(address, supportedChainId)
 
-  const chainId = selectedNetwork?.id;
+  const chainId = selectedNetwork?.id
 
   const isRightChain = useMemo(() => {
-    if (!chainId) return false;
-    return chainId === supportedChainId;
-  }, [chainId]);
+    if (!chainId) return false
+    return chainId === supportedChainId
+  }, [chainId])
 
   const priceAmount = useMemo(() => {
-    const chain = supportedChainId === SupportedChainId.BASE ? base : goerli;
+    const chain = supportedChainId === SupportedChainId.BASE ? base : goerli
 
-    if (!contractsRes?.[1].result) return undefined;
+    if (!contractsRes?.[1].result) return undefined
 
     return CurrencyAmount.fromRawAmount(
       nativeOnChain(chain.id),
       contractsRes[1].result.toString(),
-    );
-  }, [contractsRes]);
+    )
+  }, [contractsRes])
 
   const totalPriceAmount = useMemo(() => {
-    if (!priceAmount) return undefined;
+    if (!priceAmount) return undefined
 
-    return priceAmount.multiply(count);
-  }, [count, priceAmount]);
+    return priceAmount.multiply(count)
+  }, [count, priceAmount])
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const {
     writeContractAsync,
@@ -131,38 +131,38 @@ const MintNFTCard = () => {
     isIdle,
     status,
     isPaused,
-  } = useWriteContract({});
+  } = useWriteContract({})
 
   const chainScanLink = useMemo(() => {
     if (data) {
       if (chainId === SupportedChainId.BASE) {
-        return `https://basescan.org/tx/${data}`;
+        return `https://basescan.org/tx/${data}`
       }
     }
-  }, [chainId, data]);
+  }, [chainId, data])
 
   const switchNetwork = () => {
     if (supportedChainId === SupportedChainId.BASE) {
-      addAndSwitchToChain(SupportedChainId.BASE);
+      addAndSwitchToChain(SupportedChainId.BASE)
     }
-  };
+  }
 
-  const [sufficientAmount, setSufficientAmount] = useState<boolean>(false);
+  const [sufficientAmount, setSufficientAmount] = useState<boolean>(false)
 
   useEffect(() => {
     if (supportedChainId === SupportedChainId.BASE) {
       setSufficientAmount(
         BigInt(toWei(0.1) * count) > (accountBalance?.value ?? BigInt(0)),
-      );
+      )
     }
-  }, [count, accountBalance, supportedChainId]);
+  }, [count, accountBalance, supportedChainId])
 
   const mintPass = useCallback(async () => {
-    if (loading) return;
+    if (loading) return
 
-    if (!UNITAP_PASS_BATCH_SALE_ADDRESS[supportedChainId]) return;
+    if (!UNITAP_PASS_BATCH_SALE_ADDRESS[supportedChainId]) return
 
-    setLoading(true);
+    setLoading(true)
 
     // console.log(count);
 
@@ -175,9 +175,9 @@ const MintNFTCard = () => {
         functionName: "multiMint",
         chainId: supportedChainId,
         address: UNITAP_PASS_BATCH_SALE_ADDRESS[supportedChainId]!,
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
 
     // try {
@@ -203,7 +203,7 @@ const MintNFTCard = () => {
     //   console.log("mint failed")
     //   console.log(e)
     // }
-  }, [address, contractsRes, count, loading, writeContractAsync]);
+  }, [address, contractsRes, count, loading, writeContractAsync])
 
   return (
     <div className={`mint-nft-card flex h-full flex-col justify-between`}>
@@ -428,7 +428,7 @@ const MintNFTCard = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default MintNFTCard;
+export default MintNFTCard

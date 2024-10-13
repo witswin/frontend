@@ -220,7 +220,7 @@ const HintsView = () => {
 
             {!!hints.hints[achivement.hint].icon && (
               <Icon
-                iconSrc={hints.hints[achivement.hint].icon}
+                iconSrc={hints.hints[achivement.hint].icon!}
                 alt={hints.hints[achivement.hint].title}
                 width="30"
                 height="30"

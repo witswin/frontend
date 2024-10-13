@@ -33,7 +33,7 @@ export const HintItem: FC<{ hint: Hint; count?: number }> = ({
       <Icon
         alt="hint"
         className="py-1 mr-2"
-        iconSrc={hint.icon}
+        iconSrc={hint.icon!}
         width="25px"
         height="25px"
       />
@@ -105,7 +105,7 @@ const ChooseHintEnroll: FC<{
 
               {!!userHints.hints[achivement.hint]?.icon && (
                 <Icon
-                  iconSrc={userHints.hints[achivement.hint].icon}
+                  iconSrc={userHints.hints[achivement.hint].icon!}
                   alt={userHints.hints[achivement.hint].title}
                   width="20"
                   height="20"

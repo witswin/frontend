@@ -1,25 +1,8 @@
 "use client"
 
-import {
-  FC,
-  PropsWithChildren,
-  ReactNode,
-  createContext,
-  useContext,
-  useState,
-} from "react"
-import { NullCallback } from "@/utils"
+import { FC, PropsWithChildren, ReactNode, useState } from "react"
 import { Address } from "viem"
-
-export const ProfileEditContext = createContext<{
-  focusedWalletDeleteAddress: Address | null
-  setFocusedWalletDeleteAddress: (walletPk: Address | null) => void
-}>({
-  focusedWalletDeleteAddress: null,
-  setFocusedWalletDeleteAddress: NullCallback,
-})
-
-export const useProfileEditContext = () => useContext(ProfileEditContext)
+import { ProfileEditContext } from "./context"
 
 const ProfileEditLayout: FC<
   PropsWithChildren & { socialAccounts: ReactNode }

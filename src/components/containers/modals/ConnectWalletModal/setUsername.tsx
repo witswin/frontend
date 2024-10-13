@@ -1,64 +1,64 @@
-"use client";
+"use client"
 
-import { ClaimButton } from "@/components/ui/Button/button";
-import Input from "@/components/ui/input";
-import Image from "next/image";
-import { FC, useEffect, useState } from "react";
-import { ConnectionProvider, WalletState } from ".";
-import { checkUsernameValid, setUsernameApi } from "@/utils/api";
-import { useWalletAccount } from "@/utils/wallet";
-import { useUserProfileContext } from "@/context/userProfile";
-import { AxiosError } from "axios";
+import { ClaimButton } from "@/components/ui/Button/button"
+import Input from "@/components/ui/input"
+import Image from "next/image"
+import { FC, useEffect, useState } from "react"
+import { ConnectionProvider, WalletState } from "."
+import { checkUsernameValid, setUsernameApi } from "@/utils/api"
+import { useWalletAccount } from "@/utils/wallet"
+import { useUserProfileContext } from "@/context/userProfile"
+import { AxiosError } from "axios"
 
 const SetUsernameBody: FC<{
-  walletProvider: ConnectionProvider;
-  setWalletState: (state: WalletState) => void;
+  walletProvider: ConnectionProvider
+  setWalletState: (state: WalletState) => void
 }> = ({ setWalletState }) => {
-  const { address } = useWalletAccount();
-  const { userToken, updateUsername, userProfile } = useUserProfileContext();
+  const { address } = useWalletAccount()
+  const { userToken, updateUsername, userProfile } = useUserProfileContext()
 
-  const [username, setUsername] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const onSubmit = async () => {
-    if (!address || !userToken) return;
+    if (!address || !userToken) return
 
-    setError("");
-    setLoading(true);
+    setError("")
+    setLoading(true)
     try {
-      await setUsernameApi(username, userToken);
-      updateUsername(username);
-      setWalletState(WalletState.LoggedIn);
+      await setUsernameApi(username)
+      updateUsername(username)
+      setWalletState(WalletState.LoggedIn)
     } catch (e) {
-      if (!(e instanceof AxiosError) || !e.response) return;
-      setError(e.response.data.message);
+      if (!(e instanceof AxiosError) || !e.response) return
+      setError(e.response.data.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (!userToken || username === userProfile?.username || !username) return;
-      setLoading(true);
+      if (!userToken || username === userProfile?.username || !username) return
+      setLoading(true)
       checkUsernameValid(username, userToken)
         .catch((err) => {
           if (err instanceof AxiosError) {
             setError(
-              err.response?.data.message || err.response?.data.username?.[0]
-            );
-            return;
+              err.response?.data.message || err.response?.data.username?.[0],
+            )
+            return
           }
 
-          setError(err.message);
+          setError(err.message)
         })
-        .finally(() => setLoading(false));
-    }, 300);
+        .finally(() => setLoading(false))
+    }, 300)
 
-    setError("");
-    return () => clearTimeout(timerId);
-  }, [userProfile?.username, userToken, username]);
+    setError("")
+    return () => clearTimeout(timerId)
+  }, [userProfile?.username, userToken, username])
 
   return (
     <div className="text-center w-full">
@@ -104,7 +104,7 @@ const SetUsernameBody: FC<{
         </p>
       </ClaimButton>
     </div>
-  );
-};
+  )
+}
 
-export default SetUsernameBody;
+export default SetUsernameBody

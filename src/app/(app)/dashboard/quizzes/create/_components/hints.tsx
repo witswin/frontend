@@ -92,7 +92,7 @@ function BuiltinHints({
                 alt={hint.title}
                 className="flex-shrink-0"
                 size="sm"
-                src={hint.image}
+                src={hint.icon}
               />
               <div className="flex flex-col">
                 <span className="text-small">{hint.title}</span>

@@ -18,10 +18,10 @@ export default function HintItems() {
 
   const hints = userCompetition?.registeredHints.reduce(
     (prev, curr) => {
-      if (prev[curr.hintType]) {
-        prev[curr.hintType].count += 1
+      if (prev[curr.type]) {
+        prev[curr.type].count += 1
       } else {
-        prev[curr.hintType] = {
+        prev[curr.type] = {
           ...curr,
           count: 1,
         }
@@ -41,7 +41,7 @@ export default function HintItems() {
             command: "GET_HINT",
             args: {
               questionId: question?.id,
-              hintType: hint.hintType,
+              hintType: hint.type,
               hintId: hint.id,
             },
           }),
@@ -64,7 +64,7 @@ export default function HintItems() {
       <Icon
         alt="hint"
         className="py-1 mr-2"
-        iconSrc={hint.icon}
+        iconSrc={hint.icon!}
         width="20px"
         height="20px"
       />
