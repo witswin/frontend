@@ -94,3 +94,14 @@ export const fetchUsersQuizEnrollments = async () => {
 
   return res.data
 }
+
+
+export const fetchHintsApi = async () => {
+ const res = await axiosInstance.get(
+  "/quiz/hints/"
+ )
+
+ console.log(res.data)
+
+ return res.data
+}

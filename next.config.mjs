@@ -2,8 +2,12 @@
 const nextConfig = {
   compiler: {
     styledComponents: true,
+    
   },
   swcMinify: true,
+  sassOptions: {
+    api: 'modern-compiler',
+  },
 
   images: {
     remotePatterns: [

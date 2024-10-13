@@ -1,6 +1,7 @@
 "use client"
 
 import { useQuizCreateContext } from "../providers"
+import Hints from "./hints"
 import TextInput from "./text-input"
 
 export default function PersonalData() {
@@ -31,6 +32,8 @@ export default function PersonalData() {
         className="mt-10"
         label="Discord URL"
       />
+
+      <Hints />
     </div>
   )
 }

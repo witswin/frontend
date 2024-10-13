@@ -97,3 +97,11 @@ export type QuizAnswerQuestionResponse = {
   selectedChoice: Choice
   question: number
 }
+
+export type Hint = {
+  id: number
+  type: string
+  title: string
+  image?: string
+  description: string
+}

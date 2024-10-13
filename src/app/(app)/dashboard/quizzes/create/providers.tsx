@@ -4,7 +4,7 @@ import { z } from "zod"
 import { createContext, PropsWithChildren, useContext, useState } from "react"
 import { useForm, Control, UseFormWatch } from "react-hook-form"
 import { NullCallback } from "@/utils"
-import { createQuizApi } from "@/utils/api/quiztap"
+import { createQuizApi, fetchHintsApi } from "@/utils/api/quiztap"
 import {
   DateValue,
   CalendarDateTime,
@@ -13,6 +13,9 @@ import {
 } from "@internationalized/date"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
+import { useFastRefresh, useRefreshWithInitial } from "@/utils/hooks/refresh"
+import { FAST_INTERVAL } from "@/constants"
+import { Hint } from "@/types"
 
 export type QuizCreateContextType = {
   control?: Control<any, any>
@@ -24,6 +27,7 @@ export type QuizCreateContextType = {
   setForceRefresh: () => void
   loading: boolean
   errors?: any
+  availableHints: Hint[]
 }
 
 export const quizValidation = z.object({
@@ -69,9 +73,14 @@ export const quizValidation = z.object({
         ),
     )
     .min(4, { message: "Enter at least 4 questions" }),
-  hintCount: z.number().min(0),
   chainId: z.number(),
   tokenAddress: z.string(),
+  builtinHints: z.array(
+    z.object({
+      hint: z.number(),
+      count: z.number().default(0),
+    }),
+  ),
 })
 
 type QuizCreateSchema = z.infer<typeof quizValidation>
@@ -82,6 +91,7 @@ export const QuizCreateContext = createContext<QuizCreateContextType>({
   activeQuestionIndex: -1,
   setForceRefresh: NullCallback,
   loading: false,
+  availableHints: [],
 })
 
 export const useQuizCreateContext = () => useContext(QuizCreateContext)
@@ -98,7 +108,6 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
       details: "Quiz details",
       questions: [],
       token: "USDC",
-      hintCount: 1,
       prizeAmount: 12.12,
       date: today("utc") as DateValue,
       time: new Time(11, 45),
@@ -106,14 +115,26 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
       tokenAddress: "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58",
       emailUrl: "",
       telegramUrl: "",
+      builtinHints: [],
     },
     resolver: zodResolver(quizValidation),
   })
 
   const [forceRefresh, setForceRefresh] = useState(false)
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
+  const [availableHints, setAvailableHints] = useState<Hint[]>([])
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  useRefreshWithInitial(
+    () => {
+      fetchHintsApi().then((res) => {
+        setAvailableHints(res)
+      })
+    },
+    FAST_INTERVAL,
+    [],
+  )
 
   const onCreateQuiz = async (
     data: QuizCreateSchema & { startAt?: string },
@@ -131,19 +152,18 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
       0,
     ).toDate("utc")
 
-    // if (startAt.getTime() < new Date().getTime()) {
-    //   toast.error("Start at")
-    // }
-
     data.startAt = startAt.toISOString()
 
     data.prizeAmount *= 10 ** 6
 
     setLoading(true)
     try {
-      const res = await createQuizApi(data)
-
-      console.log(res)
+      const res = await createQuizApi({
+        ...data,
+        hintCount: data.builtinHints.length,
+        allowedHintTypes: data.builtinHints.map((item) => item.hint),
+        tokenDecimals: 6,
+      })
 
       toast.success("Quiz created successfully")
       router.push("/dashboard/quizzes")
@@ -166,6 +186,7 @@ export default function QuizCreateProvider({ children }: PropsWithChildren) {
         setForceRefresh: () => setForceRefresh(!forceRefresh),
         loading,
         errors,
+        availableHints,
       }}
     >
       {children}

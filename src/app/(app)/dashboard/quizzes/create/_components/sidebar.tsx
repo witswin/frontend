@@ -64,7 +64,7 @@ const QuizTapSidebar: FC = () => {
         <div className="text-gray100">
           <p>Total Prize</p>
 
-          <p className="mt-2 inline-flex items-center gap-2">
+          <div className="mt-2 inline-flex items-center gap-2">
             <TextInput
               className="font-bold !w-14"
               control={control!}
@@ -72,7 +72,7 @@ const QuizTapSidebar: FC = () => {
               type="number"
             />
             <span className={`transition-colors text-space-green`}>USDC</span>
-          </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
