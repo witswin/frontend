@@ -105,7 +105,7 @@ export type QuizAnswerQuestionResponse = {
 
 export type Hint = {
   id: number
-  type: string
+  hintType: string
   title: string
   description: string
   isActive: boolean
