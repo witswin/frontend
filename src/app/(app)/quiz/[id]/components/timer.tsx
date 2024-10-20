@@ -47,9 +47,7 @@ const Timer: FC<{
         <p
           className={`font-digital-numbers text-2xl ${time.totalSeconds > 5 ? "text-white" : time.totalSeconds > 2 ? "text-warn" : "text-error"} `}
         >
-          {isRestTime
-            ? `00:0`
-            : `${includeMinutes ? `${time.minutes}:` : ""}${time.formattedSeconds}:${time.formattedMilliSeconds}`}
+          {`${includeMinutes ? `${time.minutes}:` : ""}${time.formattedSeconds}:${time.formattedMilliSeconds}`}
         </p>
       </div>
     </div>
