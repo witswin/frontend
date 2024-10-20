@@ -2,10 +2,10 @@
 
 import Icon from "@/components/ui/Icon"
 import { useUserProfileContext } from "@/context/userProfile"
-import { loginOrRegister } from "@/utils/api"
+import { loginOrRegister, newLoginApi } from "@/utils/api"
 import { useWalletAccount, useWalletNetwork } from "@/utils/wallet"
 import { FC, useCallback, useEffect, useRef, useState } from "react"
-import { useSignTypedData } from "wagmi"
+import { useSignMessage, useSignTypedData } from "wagmi"
 import { WalletState } from "."
 import { ClaimButton } from "@/components/ui/Button/button"
 
@@ -16,6 +16,7 @@ const WalletConnecting: FC<{
   error?: string
   setWalletState: (state: WalletState) => void
   isNewUser: boolean
+  signData: { nonce: string; message: string }
   previousWalletState: WalletState | null
 }> = ({
   imageUrl,
@@ -24,6 +25,7 @@ const WalletConnecting: FC<{
   setWalletState,
   isNewUser,
   previousWalletState,
+  signData,
 }) => {
   const { address, connector } = useWalletAccount()
   const [error, setError] = useState("")
@@ -40,39 +42,40 @@ const WalletConnecting: FC<{
 
   const onSuccess = useCallback(
     async (hashed: string) => {
-      if (!address) return
+      if (!address || !signData.nonce) return
 
-      const res = await loginOrRegister(
+      const res = await newLoginApi(
         address,
         hashed,
-        JSON.stringify({
-          message: {
-            message: "Wits Sign In",
-            URI: "https://wits.win",
-            IssuedAt: now,
-          },
-          primaryType: "Wits",
-          account: address,
-          domain: {
-            name: "WITS Connect",
-            version: "1",
-            chainId: chainId ?? 1,
-            verifyingContract: "0x0000000000000000000000000000000000000000",
-          },
-          types: {
-            EIP712Domain: [
-              { name: "name", type: "string" },
-              { name: "version", type: "string" },
-              { name: "chainId", type: "uint256" },
-              { name: "verifyingContract", type: "address" },
-            ],
-            Unitap: [
-              { name: "message", type: "string" },
-              { name: "URI", type: "string" },
-              { name: "IssuedAt", type: "string" },
-            ],
-          },
-        })
+        signData.nonce,
+        // JSON.stringify({
+        //   message: {
+        //     message: "Wits Sign In",
+        //     URI: "https://wits.win",
+        //     IssuedAt: now,
+        //   },
+        //   primaryType: "Wits",
+        //   account: address,
+        //   domain: {
+        //     name: "WITS Connect",
+        //     version: "1",
+        //     chainId: chainId ?? 1,
+        //     verifyingContract: "0x0000000000000000000000000000000000000000",
+        //   },
+        //   types: {
+        //     EIP712Domain: [
+        //       { name: "name", type: "string" },
+        //       { name: "version", type: "string" },
+        //       { name: "chainId", type: "uint256" },
+        //       { name: "verifyingContract", type: "address" },
+        //     ],
+        //     Unitap: [
+        //       { name: "message", type: "string" },
+        //       { name: "URI", type: "string" },
+        //       { name: "IssuedAt", type: "string" },
+        //     ],
+        //   },
+        // }),
       )
 
       onWalletLogin(res.token, res)
@@ -82,7 +85,7 @@ const WalletConnecting: FC<{
           ? WalletState.AddWalletSuccess
           : isNewUser
             ? WalletState.SetUsername
-            : WalletState.LoggedIn
+            : WalletState.LoggedIn,
       )
     },
     [
@@ -93,38 +96,20 @@ const WalletConnecting: FC<{
       onWalletLogin,
       previousWalletState,
       setWalletState,
-    ]
+    ],
   )
 
-  const { isError, signTypedDataAsync } = useSignTypedData({})
+  const { isError, signMessageAsync } = useSignMessage({})
 
   useEffect(() => {
     if (isMounted.current) return
 
-    if (!address) return
+    if (!address || !signData.nonce) return
 
-    signTypedDataAsync({
-      message: {
-        message: "Wits Sign In",
-        URI: "https://wits.win",
-        IssuedAt: now,
-      },
-      // connector,
-      // account: address,
-      domain: {
-        name: "Wits Connect",
-        version: "1",
-        chainId: chainId ?? 1,
-        verifyingContract: "0x0000000000000000000000000000000000000000",
-      },
-      types: {
-        Unitap: [
-          { name: "message", type: "string" },
-          { name: "URI", type: "string" },
-          { name: "IssuedAt", type: "string" },
-        ],
-      },
-      primaryType: "Unitap",
+    console.log(signData)
+
+    signMessageAsync({
+      message: signData.message,
     })
       .then((res) => onSuccess(res))
       .catch((err) => {
@@ -135,7 +120,7 @@ const WalletConnecting: FC<{
     isMounted.current = true
 
     return () => {}
-  }, [address, chainId, connector, now, onSuccess, signTypedDataAsync])
+  }, [address, signData, chainId, connector, now, onSuccess, signMessageAsync])
 
   if (error)
     return (

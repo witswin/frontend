@@ -1,6 +1,7 @@
 import { UserProfile } from "@/types"
 import { axiosInstance } from "./base"
 import { resolveUserTokenMethod } from "."
+import { Address } from "viem"
 
 export async function checkUsernameValid(username: string, token: string) {
   const response = await axiosInstance.post<{ exists: boolean }>(
@@ -44,6 +45,23 @@ export async function loginOrRegister(
   )
 
   response.data.username = response.data.username ?? `User${response.data?.pk}`
+
+  return response.data
+}
+
+export async function newLoginApi(
+  address: Address,
+  signature: string,
+  nonce: string,
+) {
+  const response = await axiosInstance.post<UserProfile>(
+    "/auth/verify-wallet/",
+    {
+      address,
+      signature,
+      nonce,
+    },
+  )
 
   return response.data
 }
@@ -157,6 +175,14 @@ export const verifyTwitterApi = async (
       oauth_verifier: oauthVerifier,
       oauth_token: oauthToken,
     },
+  })
+
+  return res.data
+}
+
+export const fetchMessageToSign = async (address: Address) => {
+  const res = await axiosInstance.post("/auth/create-message/", {
+    address,
   })
 
   return res.data

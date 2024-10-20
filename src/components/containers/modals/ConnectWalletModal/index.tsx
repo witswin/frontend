@@ -14,6 +14,10 @@ import { parseCookies } from "@/utils/cookies"
 import { useDisconnect } from "wagmi"
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react"
 import { useUserProfileContext } from "@/context/userProfile"
+import { useFastRefresh, useRefreshWithInitial } from "@/utils/hooks/refresh"
+import { fetchMessageToSign } from "@/utils/api"
+import { FAST_INTERVAL } from "@/constants"
+import { useWalletAccount } from "@/utils/wallet"
 
 export enum ConnectionProvider {
   Metamask,
@@ -40,7 +44,7 @@ export const RenderWalletBody: FC<{
   setWalletTitle: (title: string) => void
 }> = ({ setWalletTitle }) => {
   const [walletState, setWalletState] = useState<WalletState>(
-    WalletState.Prompt
+    WalletState.Prompt,
   )
 
   const [previousState, setPreviousState] = useState<WalletState | null>(null)
@@ -50,7 +54,21 @@ export const RenderWalletBody: FC<{
   const [isNewUser, setIsNewUser] = useState(false)
 
   const [walletProvider, setWalletProvider] = useState<ConnectionProvider>(
-    ConnectionProvider.Metamask
+    ConnectionProvider.Metamask,
+  )
+
+  const { address } = useWalletAccount()
+
+  const [signData, setSignData] = useState({ message: "", nonce: "" })
+
+  useRefreshWithInitial(
+    () => {
+      if (!address) return
+
+      fetchMessageToSign(address).then((res) => setSignData(res))
+    },
+    FAST_INTERVAL,
+    [address],
   )
 
   const currentWallet = useMemo(() => {
@@ -105,6 +123,7 @@ export const RenderWalletBody: FC<{
         label={currentWallet.label}
         loadingImage={currentWallet.loadingImage}
         setWalletState={setNewWalletState}
+        signData={signData}
       />
     )
 
