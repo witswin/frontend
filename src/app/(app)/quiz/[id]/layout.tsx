@@ -12,14 +12,15 @@ const QuizLayout: FC<PropsWithChildren & { params: { id: string } }> = async ({
   children,
   params,
 }) => {
-  const cookieStorage = cookies()
+  const cookieStorage = await cookies()
+  const { id } = await params
 
-  const quiz = await fetchQuizApi(Number(params.id))
+  const quiz = await fetchQuizApi(Number(id))
   let enrollment
   try {
     enrollment = await fetchUserQuizEnrollment(
       cookieStorage.get("userToken")?.value!,
-      Number(params.id),
+      Number(id),
     )
   } catch (e) {
     console.log(e)

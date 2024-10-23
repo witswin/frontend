@@ -363,12 +363,12 @@ const QuizContextProvider: FC<
 
             setAnswersHistory(
               answers.map((item: any) =>
-                item.selectedChoice.isCorrect ? item.selectedChoice.id : -1,
+                item.selectedChoice?.isCorrect ? item.selectedChoice.id : -1,
               ),
             )
             setUserAnswersHistory(
               answers.map(
-                (item: { selectedChoice: Choice }) => item.selectedChoice.id,
+                (item: { selectedChoice: Choice }) => item.selectedChoice?.id,
               ),
             )
           }

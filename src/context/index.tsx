@@ -9,7 +9,7 @@ import { cookies } from "next/headers"
 export const WitsProvider: FC<PropsWithChildren> = async ({ children }) => {
   let authProfile: UserProfile | null = null
 
-  const cookieStorage = cookies()
+  const cookieStorage = await cookies()
 
   try {
     if (cookieStorage.has("userToken"))
@@ -20,7 +20,7 @@ export const WitsProvider: FC<PropsWithChildren> = async ({ children }) => {
             Authorization: `Token ${cookieStorage.get("userToken")?.value}`,
           },
           cache: "no-store",
-        }
+        },
       )
         .then((res) => {
           if (!res.ok) throw new Error("Unauthorized")
